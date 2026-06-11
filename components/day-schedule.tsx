@@ -84,7 +84,7 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
               </p>
               <ul className="mt-2 flex flex-wrap gap-2" aria-label={`Orari di ${film.title}`}>
                 {showtimes.map((s) => {
-                  const buyUrl = ticketUrlFor(s.sourceId);
+                  const buyUrl = ticketUrlFor(s.sourceId, film.title);
                   return (
                     <li
                       key={s.sourceId}

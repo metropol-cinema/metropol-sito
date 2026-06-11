@@ -173,7 +173,7 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
                 </h3>
                 <ul className="mt-2 flex flex-wrap gap-2">
                   {showtimes.map((s) => {
-                    const buyUrl = ticketUrlFor(s.sourceId);
+                    const buyUrl = ticketUrlFor(s.sourceId, film.title);
                     return (
                       <li
                         key={s.sourceId}

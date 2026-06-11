@@ -50,7 +50,7 @@ export function FilmCard({ film }: { film: PublicFilm }) {
           {/* Proiezioni */}
           <ul className="mt-3 flex flex-wrap gap-2" aria-label={`Proiezioni di ${film.title}`}>
             {film.showtimes.map((s) => {
-              const buyUrl = ticketUrlFor(s.sourceId);
+              const buyUrl = ticketUrlFor(s.sourceId, film.title);
               return (
                 <li
                   key={s.sourceId}

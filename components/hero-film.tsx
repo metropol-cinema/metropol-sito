@@ -68,7 +68,7 @@ export async function HeroFilm({ film }: { film: PublicFilm }) {
 
           <ul className="mt-4 flex flex-wrap gap-2" aria-label="Prossime proiezioni">
             {nextShowtimes.map((s) => {
-              const buyUrl = ticketUrlFor(s.sourceId);
+              const buyUrl = ticketUrlFor(s.sourceId, film.title);
               return (
                 <li
                   key={s.sourceId}
