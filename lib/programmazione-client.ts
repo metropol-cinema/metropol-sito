@@ -90,8 +90,10 @@ export async function fetchProgrammazioneWeek(
   reference: Date = new Date(),
   opts: Omit<FetchProgrammazioneOptions, 'from' | 'to' | 'days'> = {}
 ): Promise<PublicFilm[]> {
-  const { monday, sunday } = currentWeekRange(reference);
-  return fetchProgrammazione({ ...opts, from: monday, to: sunday });
+  const { sunday } = currentWeekRange(reference);
+  // Niente `from`: l'API parte da adesso, così le proiezioni già passate
+  // della settimana non compaiono (né come hero né nelle card).
+  return fetchProgrammazione({ ...opts, to: sunday });
 }
 
 export function currentWeekRange(d: Date): { monday: string; sunday: string } {

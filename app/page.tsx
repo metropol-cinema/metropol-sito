@@ -14,12 +14,13 @@ import { SITE } from '@/lib/site';
 export const revalidate = 600;
 
 function weekLabel(): string {
-  const { monday, sunday } = currentWeekRange(new Date());
-  const fmt = (iso: string) =>
-    new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'long' }).format(
-      new Date(`${iso}T12:00:00`)
-    );
-  return `${fmt(monday)} – ${fmt(sunday)}`;
+  const { sunday } = currentWeekRange(new Date());
+  const fmt = new Intl.DateTimeFormat('it-IT', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  }).format(new Date(`${sunday}T12:00:00`));
+  return `fino a ${fmt}`;
 }
 
 export default async function HomePage() {
