@@ -10,7 +10,7 @@ export function SiteFooter() {
         <div>
           <h2 className="text-sm font-semibold text-cinema-text">{SITE.association}</h2>
           <p className="mt-3 flex items-start gap-2 text-sm text-cinema-text-subtle">
-            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-cinema-accent" />
+            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-cinema-accent" aria-hidden="true" />
             <span>
               {SITE.venueName}
               <br />
@@ -53,7 +53,7 @@ export function SiteFooter() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm text-cinema-text-subtle hover:text-cinema-text-muted"
               >
-                <Facebook className="h-4 w-4 text-cinema-accent" /> Facebook
+                <Facebook className="h-4 w-4 text-cinema-accent" aria-hidden="true" /> Facebook<span className="sr-only"> (si apre in una nuova scheda)</span>
               </a>
             </li>
             <li>
@@ -63,7 +63,7 @@ export function SiteFooter() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm text-cinema-text-subtle hover:text-cinema-text-muted"
               >
-                <Instagram className="h-4 w-4 text-cinema-accent" /> Instagram
+                <Instagram className="h-4 w-4 text-cinema-accent" aria-hidden="true" /> Instagram<span className="sr-only"> (si apre in una nuova scheda)</span>
               </a>
             </li>
             <li>
@@ -73,7 +73,7 @@ export function SiteFooter() {
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm text-cinema-text-subtle hover:text-cinema-text-muted"
               >
-                <MessageCircle className="h-4 w-4 text-cinema-accent" /> Canale WhatsApp
+                <MessageCircle className="h-4 w-4 text-cinema-accent" aria-hidden="true" /> Canale WhatsApp<span className="sr-only"> (si apre in una nuova scheda)</span>
               </a>
             </li>
           </ul>

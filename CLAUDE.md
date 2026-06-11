@@ -44,6 +44,18 @@ automatico) · `/associazione` · `/info` (statiche).
 ## Convenzioni
 
 - Testi UI in **italiano**; codice/variabili in **inglese**.
+- **Accessibilità (WCAG AA), da mantenere in ogni nuova pagina/componente:**
+  - un solo `h1` per pagina (in home è `sr-only`, l'hero usa `h2`);
+  - icone decorative SEMPRE con `aria-hidden="true"`;
+  - link "Acquista"/esterni: `aria-label` con film+orario e "(si apre in una
+    nuova scheda)";
+  - orari dentro `<time dateTime={iso}>`;
+  - bottoni pieni col testo bianco: usare `bg-cinema-accent-strong` (4.6:1),
+    MAI `bg-cinema-accent` (3.5:1, sotto AA); testo piccolo su chip accent/15:
+    `text-cinema-accent-hover`;
+  - skip-link e `:focus-visible` definiti in `globals.css`; rispettare
+    `prefers-reduced-motion`;
+  - JSON-LD: MovieTheater nel layout, Movie+ScreeningEvent nella scheda film.
 - Date/ore SEMPRE in `Europe/Rome` (l'API è in UTC) — usa gli helper del client.
 - `prices` è **per proiezione**: niente assunzioni di prezzo unico per film.
 - Palette "cinema dark" in `tailwind.config.ts` (token `cinema-*`).

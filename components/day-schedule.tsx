@@ -66,7 +66,7 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-cinema-text-subtle">
-                  <Clapperboard className="h-6 w-6" />
+                  <Clapperboard className="h-6 w-6" aria-hidden="true" />
                 </div>
               )}
             </Link>
@@ -82,7 +82,7 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
                   .filter(Boolean)
                   .join(' · ')}
               </p>
-              <ul className="mt-2 flex flex-wrap gap-2">
+              <ul className="mt-2 flex flex-wrap gap-2" aria-label={`Orari di ${film.title}`}>
                 {showtimes.map((s) => {
                   const buyUrl = ticketUrlFor(s.sourceId);
                   return (
@@ -90,9 +90,9 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
                       key={s.sourceId}
                       className="rounded-lg border border-cinema-border bg-cinema-bg px-3 py-1.5"
                     >
-                      <span className="text-sm font-semibold text-cinema-text">
+                      <time dateTime={s.startsAt} className="text-sm font-semibold text-cinema-text">
                         {formatTimeIt(s.startsAt)}
-                      </span>
+                      </time>
                       {s.prices.length > 0 && (
                         <span className="ml-2 text-xs text-cinema-text-subtle">
                           {s.prices.map((p) => `${p.label} ${formatEuro(p.amount)}`).join(' · ')}
@@ -103,9 +103,10 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
                           href={buyUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="ml-2 inline-flex items-center gap-1 rounded-md bg-cinema-accent/15 px-2 py-0.5 text-xs font-semibold text-cinema-accent hover:bg-cinema-accent/25"
+                          aria-label={`Acquista biglietti per ${film.title}, ore ${formatTimeIt(s.startsAt)} (si apre in una nuova scheda)`}
+                          className="ml-2 inline-flex items-center gap-1 rounded-md bg-cinema-accent/15 px-2 py-0.5 text-xs font-semibold text-cinema-accent-hover hover:bg-cinema-accent/25"
                         >
-                          <Ticket className="h-3 w-3" /> Acquista
+                          <Ticket className="h-3 w-3" aria-hidden="true" /> Acquista
                         </a>
                       )}
                     </li>

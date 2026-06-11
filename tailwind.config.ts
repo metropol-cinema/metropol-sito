@@ -18,6 +18,10 @@ const config: Config = {
           'text-subtle': '#8B949E',
           accent: '#388BFD',
           'accent-hover': '#58A6FF',
+          // Sfondi dei bottoni con testo bianco: contrasto AA ≥ 4.5:1
+          // (#388BFD col bianco è solo 3.5:1).
+          'accent-strong': '#1F6FEB',
+          'accent-strong-hover': '#1857C7',
           success: '#3FB950',
           warning: '#E3B341',
           danger: '#F85149',

@@ -29,17 +29,20 @@ export default function InfoPage() {
       <div className="space-y-10">
         <section id="prezzi">
           <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-cinema-text">
-            <Ticket className="h-5 w-5 text-cinema-accent" /> Biglietti
+            <Ticket className="h-5 w-5 text-cinema-accent" aria-hidden="true" /> Biglietti
           </h2>
           <div className="mt-4 overflow-hidden rounded-xl border border-cinema-border">
             <table className="w-full text-sm">
+              <caption className="sr-only">Prezzi dei biglietti per tipologia</caption>
               <tbody>
                 {PRICES.map((p, i) => (
                   <tr
                     key={p.label}
                     className={i % 2 === 0 ? 'bg-cinema-surface' : 'bg-cinema-surface/40'}
                   >
-                    <td className="px-4 py-3 text-cinema-text-muted">{p.label}</td>
+                    <th scope="row" className="px-4 py-3 text-left font-normal text-cinema-text-muted">
+                      {p.label}
+                    </th>
                     <td className="px-4 py-3 text-right font-semibold text-cinema-text">
                       {formatEuro(p.amount)}
                     </td>
@@ -56,7 +59,7 @@ export default function InfoPage() {
 
         <section id="biglietteria">
           <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-cinema-text">
-            <Clock className="h-5 w-5 text-cinema-accent" /> Biglietteria
+            <Clock className="h-5 w-5 text-cinema-accent" aria-hidden="true" /> Biglietteria
           </h2>
           <p className="mt-3 leading-relaxed text-cinema-text-muted">
             La biglietteria apre circa 30 minuti prima dell&apos;inizio di ogni proiezione. La
@@ -66,7 +69,7 @@ export default function InfoPage() {
 
         <section id="dove-siamo">
           <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-cinema-text">
-            <MapPin className="h-5 w-5 text-cinema-accent" /> Dove siamo
+            <MapPin className="h-5 w-5 text-cinema-accent" aria-hidden="true" /> Dove siamo
           </h2>
           <p className="mt-3 leading-relaxed text-cinema-text-muted">
             {SITE.venueName}
@@ -77,9 +80,9 @@ export default function InfoPage() {
             href={SITE.mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 inline-flex items-center gap-2 rounded-lg bg-cinema-accent px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-cinema-accent-hover"
+            className="mt-3 inline-flex items-center gap-2 rounded-lg bg-cinema-accent-strong px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-cinema-accent-strong-hover"
           >
-            <MapPin className="h-4 w-4" /> Apri in Google Maps
+            <MapPin className="h-4 w-4" aria-hidden="true" /> Apri in Google Maps<span className="sr-only"> (si apre in una nuova scheda)</span>
           </a>
           <p className="mt-4 text-sm leading-relaxed text-cinema-text-subtle">
             La rassegna estiva di agosto si svolge invece al Castello di Villafranca: il luogo è

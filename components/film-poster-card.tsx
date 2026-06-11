@@ -22,7 +22,7 @@ export function FilmPosterCard({ film }: { film: PublicFilm }) {
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-cinema-text-subtle">
-            <Clapperboard className="h-10 w-10" />
+            <Clapperboard className="h-10 w-10" aria-hidden="true" />
           </div>
         )}
       </div>

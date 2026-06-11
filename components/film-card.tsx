@@ -25,7 +25,7 @@ export function FilmCard({ film }: { film: PublicFilm }) {
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center text-cinema-text-subtle">
-              <Clapperboard className="h-8 w-8" />
+              <Clapperboard className="h-8 w-8" aria-hidden="true" />
             </div>
           )}
         </Link>
@@ -48,7 +48,7 @@ export function FilmCard({ film }: { film: PublicFilm }) {
           )}
 
           {/* Proiezioni */}
-          <ul className="mt-3 flex flex-wrap gap-2">
+          <ul className="mt-3 flex flex-wrap gap-2" aria-label={`Proiezioni di ${film.title}`}>
             {film.showtimes.map((s) => {
               const buyUrl = ticketUrlFor(s.sourceId);
               return (
@@ -57,16 +57,17 @@ export function FilmCard({ film }: { film: PublicFilm }) {
                   className="rounded-lg border border-cinema-border bg-cinema-bg px-3 py-2"
                 >
                   <div className="flex items-center gap-1.5 text-sm font-medium text-cinema-text">
-                    <Clock className="h-3.5 w-3.5 text-cinema-accent" />
-                    {formatShowtimeIt(s.startsAt)}
+                    <Clock className="h-3.5 w-3.5 text-cinema-accent" aria-hidden="true" />
+                    <time dateTime={s.startsAt}>{formatShowtimeIt(s.startsAt)}</time>
                     {buyUrl && (
                       <a
                         href={buyUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="ml-1 inline-flex items-center gap-1 rounded-md bg-cinema-accent/15 px-2 py-0.5 text-xs font-semibold text-cinema-accent hover:bg-cinema-accent/25"
+                        aria-label={`Acquista biglietti per ${film.title}, ${formatShowtimeIt(s.startsAt)} (si apre in una nuova scheda)`}
+                        className="ml-1 inline-flex items-center gap-1 rounded-md bg-cinema-accent/15 px-2 py-0.5 text-xs font-semibold text-cinema-accent-hover hover:bg-cinema-accent/25"
                       >
-                        <Ticket className="h-3 w-3" /> Acquista
+                        <Ticket className="h-3 w-3" aria-hidden="true" /> Acquista
                       </a>
                     )}
                   </div>

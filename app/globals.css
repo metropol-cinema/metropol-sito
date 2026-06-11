@@ -9,4 +9,34 @@
   body {
     @apply bg-cinema-bg text-cinema-text antialiased;
   }
+
+  /* Focus sempre visibile per chi naviga da tastiera (tema scuro: l'outline
+     di default può sparire sui fondi blu/neri). */
+  :focus-visible {
+    outline: 2px solid theme('colors.cinema.accent-hover');
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  /* Niente animazioni/transizioni per chi le ha disattivate a livello di OS. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* "Salta al contenuto": invisibile finché non riceve focus da tastiera. */
+  .skip-link {
+    @apply sr-only;
+  }
+  .skip-link:focus-visible {
+    @apply not-sr-only fixed left-4 top-4 z-50 rounded-lg bg-cinema-accent-strong px-4 py-2.5 text-sm font-semibold text-white;
+  }
 }

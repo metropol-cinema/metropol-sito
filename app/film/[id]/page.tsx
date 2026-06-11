@@ -10,6 +10,7 @@ import {
   romeDayKey,
   type PublicFilm,
 } from '@/lib/programmazione-client';
+import { SITE } from '@/lib/site';
 import { ticketUrlFor } from '@/lib/tickets';
 import { fetchTmdbMedia } from '@/lib/tmdb';
 import { formatEuro } from '@/lib/utils';
@@ -63,8 +64,45 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
   }
   const days = [...byDay.entries()].sort(([a], [b]) => a.localeCompare(b));
 
+  // Dati strutturati schema.org: aiutano assistenti vocali e motori di ricerca
+  // a capire film, date e prezzi senza interpretare il layout.
+  const theaterJsonLd = {
+    '@type': 'MovieTheater',
+    name: `${SITE.name} — ${SITE.venueName}`,
+    address: SITE.venueAddress,
+  };
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Movie',
+      name: film.title,
+      ...(film.director ? { director: { '@type': 'Person', name: film.director } } : {}),
+      ...(film.durationMinutes ? { duration: `PT${film.durationMinutes}M` } : {}),
+      ...(film.description ? { description: film.description } : {}),
+    },
+    ...film.showtimes.map((s) => ({
+      '@context': 'https://schema.org',
+      '@type': 'ScreeningEvent',
+      name: `${film.title} al ${SITE.name}`,
+      startDate: s.startsAt,
+      workPresented: { '@type': 'Movie', name: film.title },
+      location: s.venue && s.venue !== DEFAULT_VENUE ? { '@type': 'Place', name: s.venue } : theaterJsonLd,
+      ...(s.prices.length > 0
+        ? {
+            offers: s.prices.map((p) => ({
+              '@type': 'Offer',
+              name: p.label,
+              price: p.amount,
+              priceCurrency: 'EUR',
+            })),
+          }
+        : {}),
+    })),
+  ];
+
   return (
     <main>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {/* Testata con backdrop */}
       <section className="relative overflow-hidden border-b border-cinema-border">
         <div className="absolute inset-0">
@@ -90,7 +128,7 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
               <img src={poster} alt={`Locandina di ${film.title}`} className="w-full" />
             ) : (
               <div className="flex aspect-[2/3] w-full items-center justify-center bg-cinema-surface-2 text-cinema-text-subtle">
-                <Clapperboard className="h-10 w-10" />
+                <Clapperboard className="h-10 w-10" aria-hidden="true" />
               </div>
             )}
           </div>
@@ -142,12 +180,12 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
                         className="rounded-xl border border-cinema-border bg-cinema-surface px-4 py-3"
                       >
                         <div className="flex items-center gap-2">
-                          <span className="text-lg font-bold text-cinema-text">
+                          <time dateTime={s.startsAt} className="text-lg font-bold text-cinema-text">
                             {formatTimeIt(s.startsAt)}
-                          </span>
+                          </time>
                           {s.venue && s.venue !== DEFAULT_VENUE && (
                             <span className="inline-flex items-center gap-1 rounded-md bg-cinema-warning/15 px-2 py-0.5 text-xs font-medium text-cinema-warning">
-                              <MapPin className="h-3 w-3" /> {s.venue}
+                              <MapPin className="h-3 w-3" aria-hidden="true" /> {s.venue}
                             </span>
                           )}
                           {buyUrl && (
@@ -155,9 +193,10 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
                               href={buyUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 rounded-lg bg-cinema-accent px-3 py-1.5 text-sm font-semibold text-white hover:bg-cinema-accent-hover"
+                              aria-label={`Acquista biglietti per ${film.title}, ${formatDayIt(s.startsAt)} ore ${formatTimeIt(s.startsAt)} (si apre in una nuova scheda)`}
+                              className="inline-flex items-center gap-1.5 rounded-lg bg-cinema-accent-strong px-3 py-1.5 text-sm font-semibold text-white hover:bg-cinema-accent-strong-hover"
                             >
-                              <Ticket className="h-4 w-4" /> Acquista
+                              <Ticket className="h-4 w-4" aria-hidden="true" /> Acquista
                             </a>
                           )}
                         </div>

@@ -26,7 +26,7 @@ export default function AssociazionePage() {
       <div className="space-y-10">
         <section id="chi-siamo">
           <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-cinema-text">
-            <Users className="h-5 w-5 text-cinema-accent" /> Chi siamo
+            <Users className="h-5 w-5 text-cinema-accent" aria-hidden="true" /> Chi siamo
           </h2>
           <p className="mt-3 leading-relaxed text-cinema-text-muted">
             Siamo un gruppo di volontarie e volontari uniti dalla passione per il cinema. Gestiamo
@@ -44,7 +44,7 @@ export default function AssociazionePage() {
 
         <section id="tesseramento">
           <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-cinema-text">
-            <Heart className="h-5 w-5 text-cinema-accent" /> Diventare soci
+            <Heart className="h-5 w-5 text-cinema-accent" aria-hidden="true" /> Diventare soci
           </h2>
           <p className="mt-3 leading-relaxed text-cinema-text-muted">
             Associarsi significa sostenere concretamente la vita del cinema e partecipare alle
@@ -56,7 +56,7 @@ export default function AssociazionePage() {
 
         <section id="volontariato">
           <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-cinema-text">
-            <HandHeart className="h-5 w-5 text-cinema-accent" /> Diventare volontari
+            <HandHeart className="h-5 w-5 text-cinema-accent" aria-hidden="true" /> Diventare volontari
           </h2>
           <p className="mt-3 leading-relaxed text-cinema-text-muted">
             Il Metropol vive del tempo di chi se ne prende cura. Se vuoi dare una mano — in cassa,
@@ -68,7 +68,7 @@ export default function AssociazionePage() {
 
         <section id="statuto">
           <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-cinema-text">
-            <ScrollText className="h-5 w-5 text-cinema-accent" /> Dati dell&apos;associazione
+            <ScrollText className="h-5 w-5 text-cinema-accent" aria-hidden="true" /> Dati dell&apos;associazione
           </h2>
           <dl className="mt-3 space-y-1.5 text-sm leading-relaxed text-cinema-text-muted">
             <div>

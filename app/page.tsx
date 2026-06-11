@@ -44,6 +44,10 @@ export default async function HomePage() {
 
   return (
     <main>
+      {/* h1 della pagina per screen reader: l'hero mostra il titolo del film come h2. */}
+      <h1 className="sr-only">
+        Cinema Metropol — film in programmazione a Villafranca di Verona
+      </h1>
       {heroFilm && <HeroFilm film={heroFilm} />}
 
       <div className="container py-10 sm:py-12">
@@ -115,7 +119,7 @@ export default async function HomePage() {
             href="/venerdi"
             className="rounded-xl border border-cinema-border bg-cinema-surface p-5 transition-colors hover:border-cinema-accent/50"
           >
-            <CalendarDays className="h-6 w-6 text-cinema-accent" />
+            <CalendarDays className="h-6 w-6 text-cinema-accent" aria-hidden="true" />
             <h3 className="mt-3 font-semibold text-cinema-text">I Venerdì del Metropol</h3>
             <p className="mt-1 text-sm text-cinema-text-subtle">
               La rassegna del venerdì sera: cinema d&apos;autore a 6&nbsp;€.
@@ -125,7 +129,7 @@ export default async function HomePage() {
             href="/info"
             className="rounded-xl border border-cinema-border bg-cinema-surface p-5 transition-colors hover:border-cinema-accent/50"
           >
-            <MapPin className="h-6 w-6 text-cinema-accent" />
+            <MapPin className="h-6 w-6 text-cinema-accent" aria-hidden="true" />
             <h3 className="mt-3 font-semibold text-cinema-text">Dove siamo e prezzi</h3>
             <p className="mt-1 text-sm text-cinema-text-subtle">
               {SITE.venueName} · {SITE.city}. Biglietteria e info pratiche.

@@ -10,13 +10,13 @@ export function SiteHeader() {
       <div className="container flex h-16 items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-2.5">
           <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-cinema-accent/15 text-cinema-accent">
-            <Film className="h-5 w-5" />
+            <Film className="h-5 w-5" aria-hidden="true" />
           </span>
           <span className="text-lg font-bold tracking-tight text-cinema-text">{SITE.name}</span>
         </Link>
 
         {/* Nav desktop */}
-        <nav className="hidden items-center gap-1 md:flex">
+        <nav aria-label="Navigazione principale" className="hidden items-center gap-1 md:flex">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -31,10 +31,13 @@ export function SiteHeader() {
         {/* Nav mobile */}
         <details className="relative md:hidden">
           <summary className="flex h-9 w-9 cursor-pointer list-none items-center justify-center rounded-lg text-cinema-text-muted hover:bg-cinema-surface [&::-webkit-details-marker]:hidden">
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Menu</span>
+            <Menu className="h-5 w-5" aria-hidden="true" />
+            <span className="sr-only">Apri il menu di navigazione</span>
           </summary>
-          <nav className="absolute right-0 top-11 z-50 w-56 rounded-xl border border-cinema-border bg-cinema-surface p-2 shadow-xl">
+          <nav
+            aria-label="Navigazione principale"
+            className="absolute right-0 top-11 z-50 w-56 rounded-xl border border-cinema-border bg-cinema-surface p-2 shadow-xl"
+          >
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
