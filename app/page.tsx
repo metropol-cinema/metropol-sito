@@ -1,11 +1,13 @@
-import { CalendarDays, Clapperboard, MapPin } from 'lucide-react';
+import { CalendarDays, MapPin } from 'lucide-react';
 import Link from 'next/link';
 
 import { FilmCard } from '@/components/film-card';
+import { FilmPosterCard } from '@/components/film-poster-card';
 import { HeroFilm } from '@/components/hero-film';
 import {
   currentWeekRange,
-  fetchProgrammazioneWeek,
+  fetchProgrammazione,
+  splitWeekUpcoming,
   type PublicFilm,
 } from '@/lib/programmazione-client';
 import { SITE } from '@/lib/site';
@@ -27,14 +29,18 @@ export default async function HomePage() {
   let films: PublicFilm[] = [];
   let error: string | null = null;
   try {
-    films = await fetchProgrammazioneWeek();
+    // Una sola chiamata per tutta la home: settimana + film in arrivo.
+    films = await fetchProgrammazione({ days: 180 });
   } catch (e) {
     error = e instanceof Error ? e.message : 'Errore di caricamento';
   }
 
-  // L'API ordina per prossima proiezione: il primo film è il "film del momento".
-  const heroFilm = films[0] ?? null;
-  const otherFilms = films.slice(1);
+  const { weekFilms, upcomingFilms } = splitWeekUpcoming(films);
+
+  // I film della settimana sono ordinati per prossima proiezione: il primo è
+  // il "film del momento" e diventa l'hero.
+  const heroFilm = weekFilms[0] ?? null;
+  const otherFilms = weekFilms.slice(1);
 
   return (
     <main>
@@ -61,7 +67,7 @@ export default async function HomePage() {
             Impossibile caricare la programmazione.{' '}
             <span className="text-cinema-text-subtle">({error})</span>
           </div>
-        ) : films.length === 0 ? (
+        ) : weekFilms.length === 0 ? (
           <div className="rounded-xl border border-dashed border-cinema-border bg-cinema-surface/50 p-10 text-center text-cinema-text-subtle">
             Nessun film in programmazione questa settimana.
           </div>
@@ -81,18 +87,30 @@ export default async function HomePage() {
           </p>
         )}
 
+        {/* Striscia "Prossimamente": la home non sembra mai vuota. */}
+        {upcomingFilms.length > 0 && (
+          <section className="mt-12">
+            <header className="mb-5 flex items-center justify-between gap-4">
+              <h2 className="text-xl font-bold tracking-tight text-cinema-text sm:text-2xl">
+                Prossimamente
+              </h2>
+              <Link
+                href="/prossimamente"
+                className="shrink-0 rounded-lg border border-cinema-border px-3.5 py-2 text-sm font-medium text-cinema-text-muted hover:bg-cinema-surface"
+              >
+                Vedi tutti
+              </Link>
+            </header>
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5 lg:grid-cols-6">
+              {upcomingFilms.slice(0, 6).map((film) => (
+                <FilmPosterCard key={film.id} film={film} />
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Sezioni di rimando */}
-        <div className="mt-12 grid gap-4 sm:grid-cols-3">
-          <Link
-            href="/prossimamente"
-            className="rounded-xl border border-cinema-border bg-cinema-surface p-5 transition-colors hover:border-cinema-accent/50"
-          >
-            <Clapperboard className="h-6 w-6 text-cinema-accent" />
-            <h3 className="mt-3 font-semibold text-cinema-text">Prossimamente</h3>
-            <p className="mt-1 text-sm text-cinema-text-subtle">
-              I film in arrivo nelle prossime settimane.
-            </p>
-          </Link>
+        <div className="mt-12 grid gap-4 sm:grid-cols-2">
           <Link
             href="/venerdi"
             className="rounded-xl border border-cinema-border bg-cinema-surface p-5 transition-colors hover:border-cinema-accent/50"

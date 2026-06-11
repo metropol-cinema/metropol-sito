@@ -1,14 +1,7 @@
-import { Clapperboard } from 'lucide-react';
 import type { Metadata } from 'next';
-import Link from 'next/link';
 
-import {
-  currentWeekRange,
-  fetchProgrammazione,
-  formatDayIt,
-  romeDayKey,
-  type PublicFilm,
-} from '@/lib/programmazione-client';
+import { FilmPosterCard } from '@/components/film-poster-card';
+import { fetchProgrammazione, splitWeekUpcoming, type PublicFilm } from '@/lib/programmazione-client';
 
 export const revalidate = 600;
 
@@ -27,11 +20,7 @@ export default async function ProssimamentePage() {
   }
 
   // "Prossimamente" = prima proiezione oltre la settimana corrente.
-  const { sunday } = currentWeekRange(new Date());
-  const upcoming = films.filter((f) => {
-    const first = f.showtimes[0];
-    return first && romeDayKey(first.startsAt) > sunday;
-  });
+  const { upcomingFilms: upcoming } = splitWeekUpcoming(films);
 
   return (
     <main className="container py-10 sm:py-12">
@@ -56,39 +45,9 @@ export default async function ProssimamentePage() {
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
-          {upcoming.map((film) => {
-            const first = film.showtimes[0];
-            return (
-              <Link
-                key={film.id}
-                href={`/film/${film.id}`}
-                className="group overflow-hidden rounded-xl border border-cinema-border bg-cinema-surface transition-colors hover:border-cinema-accent/50"
-              >
-                <div className="aspect-[2/3] w-full overflow-hidden bg-cinema-surface-2">
-                  {film.poster ? (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      src={film.poster}
-                      alt={`Locandina di ${film.title}`}
-                      className="h-full w-full object-cover transition-transform group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-cinema-text-subtle">
-                      <Clapperboard className="h-10 w-10" />
-                    </div>
-                  )}
-                </div>
-                <div className="p-3">
-                  <h2 className="line-clamp-2 font-semibold leading-tight text-cinema-text">
-                    {film.title}
-                  </h2>
-                  <p className="mt-1 text-xs capitalize text-cinema-accent">
-                    Dal {formatDayIt(first.startsAt)}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
+          {upcoming.map((film) => (
+            <FilmPosterCard key={film.id} film={film} />
+          ))}
         </div>
       )}
     </main>

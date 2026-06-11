@@ -96,6 +96,25 @@ export async function fetchProgrammazioneWeek(
   return fetchProgrammazione({ ...opts, to: sunday });
 }
 
+/**
+ * Divide la programmazione tra "questa settimana" (proiezioni entro domenica,
+ * già filtrate) e "in arrivo" (film la cui prima proiezione è oltre domenica).
+ * Pensata per la home: una sola chiamata API per hero, card e striscia.
+ */
+export function splitWeekUpcoming(
+  films: PublicFilm[],
+  reference: Date = new Date()
+): { weekFilms: PublicFilm[]; upcomingFilms: PublicFilm[] } {
+  const { sunday } = currentWeekRange(reference);
+  const weekFilms = films
+    .map((f) => ({ ...f, showtimes: f.showtimes.filter((s) => romeDayKey(s.startsAt) <= sunday) }))
+    .filter((f) => f.showtimes.length > 0);
+  const upcomingFilms = films.filter(
+    (f) => f.showtimes[0] && romeDayKey(f.showtimes[0].startsAt) > sunday
+  );
+  return { weekFilms, upcomingFilms };
+}
+
 export function currentWeekRange(d: Date): { monday: string; sunday: string } {
   const day = d.getDay();
   const diffToMonday = (day + 6) % 7;
