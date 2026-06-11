@@ -14,8 +14,12 @@ export interface PublicPrice {
 }
 
 export interface PublicShowtime {
+  /** Id evento Cinebot: serve per il deep-link di acquisto biglietti. */
+  sourceId: number;
   /** Inizio in ISO 8601 UTC. Converti a Europe/Rome per la visualizzazione. */
   startsAt: string;
+  /** Sala/luogo della proiezione (es. il Castello per la rassegna estiva). */
+  venue: string | null;
   prices: PublicPrice[];
 }
 
@@ -126,4 +130,33 @@ export function formatDayIt(startsAtIso: string): string {
     day: 'numeric',
     month: 'long',
   }).format(new Date(startsAtIso));
+}
+
+/** Solo l'orario in ora italiana, es. "21:00". */
+export function formatTimeIt(startsAtIso: string): string {
+  return new Intl.DateTimeFormat('it-IT', {
+    timeZone: 'Europe/Rome',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(startsAtIso));
+}
+
+/** Giorno in Europe/Rome come "YYYY-MM-DD", per raggruppare le proiezioni. */
+export function romeDayKey(startsAtIso: string): string {
+  // en-CA produce direttamente il formato YYYY-MM-DD.
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Rome',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date(startsAtIso));
+}
+
+/** True se la proiezione cade di venerdì (in ora italiana). */
+export function isFridayRome(startsAtIso: string): boolean {
+  return (
+    new Intl.DateTimeFormat('en-US', { timeZone: 'Europe/Rome', weekday: 'short' }).format(
+      new Date(startsAtIso)
+    ) === 'Fri'
+  );
 }

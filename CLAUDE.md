@@ -14,13 +14,32 @@ Next.js 16 (App Router) · React 19 · TypeScript · Tailwind v3 · Vercel.
 ## Dati: read-API della programmazione
 
 - Client: `lib/programmazione-client.ts` — `fetchProgrammazione`,
-  `fetchProgrammazioneWeek`, `formatShowtimeIt`, `formatDayIt`.
+  `fetchProgrammazioneWeek`, helper date/ora (`formatShowtimeIt`, `formatDayIt`,
+  `formatTimeIt`, `romeDayKey`, `isFridayRome`).
 - **Solo server-side** (Server Components / Route Handlers): il token non deve
   finire nel bundle client.
 - Cache: ISR (`export const revalidate = 600`). La programmazione cambia ~1/giorno.
-- Env: `PROGRAMMAZIONE_API_URL`, `PROGRAMMAZIONE_API_TOKEN` (= `CINEBOT_WEBHOOK_TOKEN`).
+- Env: `PROGRAMMAZIONE_API_URL`, `PROGRAMMAZIONE_API_TOKEN`
+  (= `PROGRAMMAZIONE_READ_TOKEN` del gestionale, token dedicato ai consumer di
+  lettura, distinto dal token webhook di Cinebot).
 
 Contratto completo dell'API: nel gestionale, `docs/integrations/programmazione-api.md`.
+
+## Altri servizi
+
+- **TMDB** (`lib/tmdb.ts`): backdrop orizzontali per gli hero + poster
+  ottimizzati. Env `TMDB_API_KEY`, opzionale: senza chiave si usa la locandina
+  data-URI di Cinebot.
+- **Biglietti online** (`lib/tickets.ts`): deep-link alla piattaforma di vendita
+  Cinebot. Env `TICKET_URL_TEMPLATE` con segnaposto `{eventId}` (sostituito col
+  `sourceId` della proiezione). Vuota = i bottoni "Acquista" non compaiono.
+- Dati anagrafici/social dell'associazione: `lib/site.ts` (un posto solo).
+
+## Pagine
+
+`/` (hero stile monitor di sala + settimana) · `/programmazione` (per giorno) ·
+`/film/[id]` · `/prossimamente` · `/venerdi` (rassegna del venerdì, filtro
+automatico) · `/associazione` · `/info` (statiche).
 
 ## Convenzioni
 
@@ -43,5 +62,10 @@ Contratto completo dell'API: nel gestionale, `docs/integrations/programmazione-a
 
 ## Idee successive
 
-- Pagina `/film/[id]` (scheda singola, arricchita con TMDB via `tmdbId`).
-- Filtro per giorno; vista "oggi"; locandina hero del film in evidenza.
+- Fase 2: `/corsi` e `/eventi` (layer editoriale gestito dalla dashboard del
+  gestionale, nuove tabelle + read-API `/api/public/eventi`).
+- Fase 3: `/rassegna-estiva` (Castello di Villafranca, campo `venue` già
+  esposto dall'API), newsletter, SEO/OG/sitemap, switch dominio
+  www.cinemametropol.com da Wix a Vercel.
+- Flag "in evidenza" in dashboard per scegliere il film dell'hero (oggi: il
+  film con la proiezione più vicina).
