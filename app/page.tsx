@@ -1,9 +1,13 @@
 import { CalendarDays, MapPin } from 'lucide-react';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 
 import { FilmCard } from '@/components/film-card';
 import { FilmPosterCard } from '@/components/film-poster-card';
+import { HeroCarousel } from '@/components/hero-carousel';
 import { HeroFilm } from '@/components/hero-film';
+import { HeroUpcoming } from '@/components/hero-upcoming';
+import { MediaSlide } from '@/components/media-slide';
 import {
   currentWeekRange,
   fetchProgrammazione,
@@ -11,6 +15,7 @@ import {
   type PublicFilm,
 } from '@/lib/programmazione-client';
 import { SITE } from '@/lib/site';
+import { fetchSlideshow, type SlideshowItem } from '@/lib/slideshow-client';
 
 // Rigenera la pagina al massimo ogni 10 minuti (la programmazione cambia ~1/giorno).
 export const revalidate = 600;
@@ -23,6 +28,48 @@ function weekLabel(): string {
     month: 'long',
   }).format(new Date(`${sunday}T12:00:00`));
   return `fino a ${fmt}`;
+}
+
+/** Timeline usata quando la dashboard non ne ha (ancora) configurata una. */
+const DEFAULT_TIMELINE: SlideshowItem[] = [
+  {
+    id: 0,
+    kind: 'current_programming',
+    durationSeconds: 30,
+    mediaUrl: null,
+    caption: null,
+    fallbackOnly: false,
+  },
+];
+
+/**
+ * Risolve la timeline "Sito Web → Slideshow" in slide concrete: le slide di
+ * programmazione senza contenuto si saltano; le slide marcate fallbackOnly
+ * compaiono solo se NESSUNA slide di programmazione ha prodotto contenuto.
+ */
+function resolveSlides(
+  items: SlideshowItem[],
+  heroFilm: PublicFilm | null,
+  upcomingFilms: PublicFilm[]
+): Array<{ node: ReactNode; duration: number }> {
+  const resolved: Array<{ item: SlideshowItem; node: ReactNode }> = [];
+  for (const item of items) {
+    let node: ReactNode = null;
+    if (item.kind === 'current_programming' && heroFilm) {
+      node = <HeroFilm film={heroFilm} />;
+    } else if (item.kind === 'future_programming' && upcomingFilms.length > 0) {
+      node = <HeroUpcoming films={upcomingFilms} />;
+    } else if ((item.kind === 'video' || item.kind === 'image') && item.mediaUrl) {
+      node = <MediaSlide kind={item.kind} src={item.mediaUrl} caption={item.caption} />;
+    }
+    if (node) resolved.push({ item, node });
+  }
+  const hasProgramming = resolved.some(
+    (r) => r.item.kind === 'current_programming' || r.item.kind === 'future_programming'
+  );
+  return resolved
+    .filter((r) => !r.item.fallbackOnly || !hasProgramming)
+    .map((r) => ({ node: r.node, duration: r.item.durationSeconds }));
 }
 
 export default async function HomePage() {
@@ -38,17 +85,28 @@ export default async function HomePage() {
   const { weekFilms, upcomingFilms } = splitWeekUpcoming(films);
 
   // I film della settimana sono ordinati per prossima proiezione: il primo è
-  // il "film del momento" e diventa l'hero.
+  // il "film del momento" e apre lo slideshow.
   const heroFilm = weekFilms[0] ?? null;
   const otherFilms = weekFilms.slice(1);
 
+  // Timeline dello slideshow dalla dashboard (null/vuota → default storico).
+  const timeline = await fetchSlideshow();
+  const slides = resolveSlides(
+    timeline && timeline.length > 0 ? timeline : DEFAULT_TIMELINE,
+    heroFilm,
+    upcomingFilms
+  );
+
   return (
     <main>
-      {/* h1 della pagina per screen reader: l'hero mostra il titolo del film come h2. */}
+      {/* h1 della pagina per screen reader: le slide mostrano i titoli come h2. */}
       <h1 className="sr-only">
         Cinema Metropol — film in programmazione a Villafranca di Verona
       </h1>
-      {heroFilm && <HeroFilm film={heroFilm} />}
+      {slides.length === 1 && slides[0].node}
+      {slides.length > 1 && (
+        <HeroCarousel slides={slides.map((s) => s.node)} durations={slides.map((s) => s.duration)} />
+      )}
 
       <div className="container py-10 sm:py-12">
         <header className="mb-6 flex items-center justify-between gap-4">

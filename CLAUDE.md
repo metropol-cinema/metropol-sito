@@ -34,6 +34,13 @@ Contratto completo dell'API: nel gestionale, `docs/integrations/programmazione-a
   Cinebot. Env `TICKET_URL_TEMPLATE` con segnaposto `{eventId}` (sostituito col
   `sourceId` della proiezione). Vuota = i bottoni "Acquista" non compaiono.
 - Dati anagrafici/social dell'associazione: `lib/site.ts` (un posto solo).
+- **Slideshow home** (`lib/slideshow-client.ts`): timeline gestita dalla
+  Dashboard del gestionale (sezione "Sito Web → Slideshow", admin-only) ed
+  esposta da `/api/public/sito-slideshow` (stesso token; URL derivato da
+  PROGRAMMAZIONE_API_URL). Kind: current_programming, future_programming,
+  video, image; slide vuote saltate, `fallbackOnly` solo senza programmazione.
+  Endpoint assente/vuoto → timeline default (solo programmazione corrente).
+  Spec backend: nel gestionale, `docs/specs/sito-web-slideshow.md`.
 
 ## Pagine
 
