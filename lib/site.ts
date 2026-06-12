@@ -28,8 +28,11 @@ export const NAV_LINKS = [
   { href: '/info', label: 'Info e prezzi' },
 ] as const;
 
-/** Sottopagine dell'associazione: linkate nel footer ma non nel menu principale. */
-export const FOOTER_EXTRA_LINKS = [
+/** Sottopagine dell'associazione: linkate da /associazione e nel footer, non nel menu principale. */
+export const ASSOCIATION_LINKS = [
+  { href: '/associazione/chi-siamo', label: 'Chi siamo' },
   { href: '/associazione/storia', label: 'La storia' },
+  { href: '/associazione/come-associarsi', label: 'Come associarsi' },
+  { href: '/associazione/diventa-volontario', label: 'Diventa volontario' },
   { href: '/associazione/statuto', label: 'Statuto e regolamento' },
 ] as const;

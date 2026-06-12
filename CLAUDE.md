@@ -46,10 +46,11 @@ Contratto completo dell'API: nel gestionale, `docs/integrations/programmazione-a
 
 `/` (hero stile monitor di sala + settimana) · `/programmazione` (per giorno) ·
 `/film/[id]` · `/prossimamente` · `/venerdi` (rassegna del venerdì, filtro
-automatico) · `/associazione` · `/associazione/storia` ·
-`/associazione/statuto` (testo in `content.ts` accanto alla pagina) · `/info`
-(statiche; le sottopagine dell'associazione sono linkate nel footer via
-`FOOTER_EXTRA_LINKS`, non nel menu principale).
+automatico) · `/associazione` (hub con card) e sottopagine `/chi-siamo`,
+`/storia`, `/come-associarsi` (modulo PDF in `public/docs/`),
+`/diventa-volontario`, `/statuto` (testo in `content.ts` accanto alla pagina) ·
+`/info` (statiche; le sottopagine dell'associazione sono linkate da
+`ASSOCIATION_LINKS` in hub e footer, non nel menu principale).
 
 ## Convenzioni
 

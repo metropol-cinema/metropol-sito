@@ -1,12 +1,12 @@
 import { Facebook, Instagram, MapPin, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 
-import { FOOTER_EXTRA_LINKS, NAV_LINKS, SITE } from '@/lib/site';
+import { ASSOCIATION_LINKS, NAV_LINKS, SITE } from '@/lib/site';
 
 export function SiteFooter() {
   return (
     <footer className="mt-16 border-t border-cinema-border bg-cinema-surface/40">
-      <div className="container grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="container grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <h2 className="text-sm font-semibold text-cinema-text">{SITE.association}</h2>
           <p className="mt-3 flex items-start gap-2 text-sm text-cinema-text-subtle">
@@ -30,7 +30,23 @@ export function SiteFooter() {
         <nav aria-label="Mappa del sito">
           <h2 className="text-sm font-semibold text-cinema-text">Il cinema</h2>
           <ul className="mt-3 space-y-2">
-            {[...NAV_LINKS, ...FOOTER_EXTRA_LINKS].map((link) => (
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link
+                  href={link.href}
+                  className="text-sm text-cinema-text-subtle hover:text-cinema-text-muted"
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <nav aria-label="Sezioni dell'associazione">
+          <h2 className="text-sm font-semibold text-cinema-text">L&apos;associazione</h2>
+          <ul className="mt-3 space-y-2">
+            {ASSOCIATION_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
