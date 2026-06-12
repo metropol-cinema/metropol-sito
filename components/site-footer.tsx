@@ -1,7 +1,7 @@
 import { Facebook, Instagram, MapPin, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 
-import { NAV_LINKS, SITE } from '@/lib/site';
+import { FOOTER_EXTRA_LINKS, NAV_LINKS, SITE } from '@/lib/site';
 
 export function SiteFooter() {
   return (
@@ -30,7 +30,7 @@ export function SiteFooter() {
         <nav aria-label="Mappa del sito">
           <h2 className="text-sm font-semibold text-cinema-text">Il cinema</h2>
           <ul className="mt-3 space-y-2">
-            {NAV_LINKS.map((link) => (
+            {[...NAV_LINKS, ...FOOTER_EXTRA_LINKS].map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}

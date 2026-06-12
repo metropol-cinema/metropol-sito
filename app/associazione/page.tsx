@@ -1,5 +1,6 @@
-import { HandHeart, Heart, ScrollText, Users } from 'lucide-react';
+import { ArrowRight, HandHeart, Heart, ScrollText, Users } from 'lucide-react';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 import { SITE } from '@/lib/site';
 
@@ -40,6 +41,13 @@ export default function AssociazionePage() {
             all&apos;aperto, con la rassegna di agosto al Castello di Villafranca. Durante
             l&apos;anno organizziamo anche corsi di cinema ed eventi speciali.
           </p>
+          <Link
+            href="/associazione/storia"
+            className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-cinema-accent hover:underline"
+          >
+            Scopri la storia del Metropol, dal 1965 a oggi
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
         </section>
 
         <section id="tesseramento">
@@ -92,6 +100,13 @@ export default function AssociazionePage() {
               </dd>
             </div>
           </dl>
+          <Link
+            href="/associazione/statuto"
+            className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-cinema-accent hover:underline"
+          >
+            Leggi lo statuto e il regolamento interno
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
         </section>
       </div>
     </main>
