@@ -15,8 +15,11 @@ export default async function ProgrammazionePage() {
   let films: PublicFilm[] = [];
   let error: string | null = null;
   try {
-    // Orizzonte di 14 giorni: la settimana corrente e un assaggio della prossima.
-    films = await fetchProgrammazione({ days: 14 });
+    // Orizzonte ampio (come home e "Prossimamente"): mostra tutte le proiezioni
+    // in calendario, anche a settimane di distanza. Durante la chiusura estiva
+    // questo fa comparire la riapertura di settembre invece di una pagina vuota;
+    // in stagione la lista resta corta perché Cinebot carica solo il breve termine.
+    films = await fetchProgrammazione({ days: 180 });
   } catch (e) {
     error = e instanceof Error ? e.message : 'Errore di caricamento';
   }
@@ -30,7 +33,7 @@ export default async function ProgrammazionePage() {
           Programmazione
         </h1>
         <p className="mt-1 text-sm text-cinema-text-subtle">
-          Orari e prezzi delle proiezioni dei prossimi giorni.
+          Orari e prezzi delle proiezioni in calendario.
         </p>
       </header>
 

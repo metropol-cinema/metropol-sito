@@ -1,10 +1,10 @@
-import { Clapperboard, Clock, Ticket } from 'lucide-react';
+import { ArrowRight, Clapperboard } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { PriceLegend, Showtimes } from '@/components/showtimes';
 import type { PublicFilm } from '@/lib/programmazione-client';
-import { formatShowtimeIt } from '@/lib/programmazione-client';
-import { ticketUrlFor } from '@/lib/tickets';
+import { relativeDayIt } from '@/lib/programmazione-client';
 import { fetchTmdbMedia } from '@/lib/tmdb';
 
 /**
@@ -16,6 +16,10 @@ export async function HeroFilm({ film }: { film: PublicFilm }) {
   const media = await fetchTmdbMedia(film.tmdbId);
   const poster = media?.posterUrl ?? film.poster;
   const nextShowtimes = film.showtimes.slice(0, 3);
+  const next = film.showtimes[0];
+  const relative = next ? relativeDayIt(next.startsAt) : null;
+  // "Stasera in sala" se la prossima proiezione è oggi, altrimenti "In sala".
+  const eyebrow = relative === 'Oggi' ? 'Stasera in sala' : 'In sala';
 
   return (
     <section aria-label="Film in evidenza" className="relative overflow-hidden border-b border-cinema-border">
@@ -51,11 +55,12 @@ export async function HeroFilm({ film }: { film: PublicFilm }) {
         </div>
 
         {/* Pannello titolo + orari */}
-        <div className="min-w-0 flex-1 rounded-2xl bg-black/45 p-5 backdrop-blur-sm sm:p-7">
-          <p className="text-xs font-semibold uppercase tracking-widest text-cinema-accent-hover">
-            In sala
+        <div className="min-w-0 flex-1 rounded-2xl border border-white/10 bg-cinema-bg/70 p-5 shadow-2xl backdrop-blur-md sm:p-7">
+          <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-cinema-ticket">
+            <span className="h-px w-6 bg-cinema-ticket/70" aria-hidden="true" />
+            {eyebrow}
           </p>
-          <h2 className="mt-1 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
+          <h2 className="mt-2 text-4xl font-black leading-[1.05] tracking-tight text-white sm:text-6xl">
             {film.title}
           </h2>
           {(film.director || film.durationMinutes) && (
@@ -66,38 +71,23 @@ export async function HeroFilm({ film }: { film: PublicFilm }) {
             </p>
           )}
 
-          <ul className="mt-4 flex flex-wrap gap-2" aria-label="Prossime proiezioni">
-            {nextShowtimes.map((s) => {
-              const buyUrl = ticketUrlFor(s.sourceId, film.title);
-              return (
-                <li
-                  key={s.sourceId}
-                  className="flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-sm font-medium text-white"
-                >
-                  <Clock className="h-4 w-4 text-cinema-accent-hover" aria-hidden="true" />
-                  <time dateTime={s.startsAt}>{formatShowtimeIt(s.startsAt)}</time>
-                  {buyUrl && (
-                    <a
-                      href={buyUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Acquista biglietti per ${film.title}, ${formatShowtimeIt(s.startsAt)} (si apre in una nuova scheda)`}
-                      className="ml-1 inline-flex items-center gap-1 rounded-md bg-cinema-accent-strong px-2 py-1 text-xs font-semibold text-white hover:bg-cinema-accent-strong-hover"
-                    >
-                      <Ticket className="h-3.5 w-3.5" aria-hidden="true" /> Acquista
-                    </a>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+          <Showtimes
+            film={film}
+            showtimes={nextShowtimes}
+            ariaLabel="Prossime proiezioni"
+            withDayInLabel
+            perfBg="#0D1117"
+            className="mt-5"
+          />
+          <PriceLegend showtimes={nextShowtimes} className="mt-2.5 text-cinema-text-muted" />
 
-          <div className="mt-5">
+          <div className="mt-6">
             <Link
               href={`/film/${film.id}`}
-              className="inline-flex items-center gap-2 rounded-lg bg-cinema-accent-strong px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-cinema-accent-strong-hover"
+              className="group inline-flex items-center gap-2 rounded-lg border border-white/20 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:border-cinema-ticket hover:text-cinema-ticket"
             >
               Scheda del film<span className="sr-only">: {film.title}</span>
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
           </div>
         </div>

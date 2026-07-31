@@ -6,8 +6,15 @@ const config: Config = {
   theme: {
     container: { center: true, padding: '1.5rem', screens: { '2xl': '1200px' } },
     extend: {
+      fontFamily: {
+        // Display editoriale (titoli, nomi film, intestazioni): Fraunces.
+        display: ['var(--font-display)', 'Georgia', 'serif'],
+        // Corpo e UI: Inter.
+        sans: ['var(--font-sans)', 'system-ui', '-apple-system', 'sans-serif'],
+      },
       colors: {
-        // Stessa palette "cinema dark" del gestionale, per coerenza visiva.
+        // Palette "cinema dark" condivisa col gestionale, estesa per il sito
+        // pubblico con l'oro "biglietto" (firma visiva dell'azione di acquisto).
         cinema: {
           bg: '#0D1117',
           surface: '#161B22',
@@ -22,6 +29,10 @@ const config: Config = {
           // (#388BFD col bianco è solo 3.5:1).
           'accent-strong': '#1F6FEB',
           'accent-strong-hover': '#1857C7',
+          // Oro "biglietto": azione primaria d'acquisto. Va SEMPRE con testo
+          // scuro (text-cinema-bg) — contrasto ~10:1, ben oltre AA.
+          ticket: '#F4B740',
+          'ticket-hover': '#FFC94D',
           success: '#3FB950',
           warning: '#E3B341',
           danger: '#F85149',

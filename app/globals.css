@@ -7,7 +7,15 @@
     color-scheme: dark;
   }
   body {
-    @apply bg-cinema-bg text-cinema-text antialiased;
+    @apply bg-cinema-bg font-sans text-cinema-text antialiased;
+  }
+
+  /* Identità editoriale: i titoli usano il display serif (Fraunces).
+     Il corpo e la UI restano in Inter (impostato sul body). */
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
   }
 
   /* Focus sempre visibile per chi naviga da tastiera (tema scuro: l'outline
@@ -38,5 +46,58 @@
   }
   .skip-link:focus-visible {
     @apply not-sr-only fixed left-4 top-4 z-50 rounded-lg bg-cinema-accent-strong px-4 py-2.5 text-sm font-semibold text-white;
+  }
+
+  /* ----- Biglietto: la firma visiva del sito --------------------------------
+     Una proiezione acquistabile è un mini-tagliando: orario sul corpo, "Acquista"
+     sul tagliando d'oro, separati da una perforazione con due tacche. Le tacche
+     prendono il colore dello sfondo circostante via --perf-bg (i consumer lo
+     impostano in base al contenitore). Senza link d'acquisto si usa .timechip. */
+  .ticket {
+    @apply relative inline-flex items-stretch;
+    --perf-bg: theme('colors.cinema.bg');
+  }
+  .ticket-body {
+    @apply flex items-center gap-2 rounded-l-xl border border-r-0 border-cinema-border bg-cinema-surface-2 px-3.5 py-2.5;
+  }
+  .ticket-stub {
+    @apply relative flex items-center gap-1.5 rounded-r-xl bg-cinema-ticket px-3.5 py-2.5 font-sans text-sm font-bold text-cinema-bg transition-colors;
+    border-left: 2px dashed rgba(13, 17, 23, 0.35);
+  }
+  .ticket-stub:hover {
+    @apply bg-cinema-ticket-hover;
+  }
+  /* Le due tacche della perforazione (sopra e sotto il bordo tratteggiato). */
+  .ticket-stub::before,
+  .ticket-stub::after {
+    content: '';
+    position: absolute;
+    left: -7px;
+    height: 12px;
+    width: 12px;
+    border-radius: 9999px;
+    background: var(--perf-bg);
+  }
+  .ticket-stub::before {
+    top: -6px;
+  }
+  .ticket-stub::after {
+    bottom: -6px;
+  }
+  /* Orario senza acquisto (es. portale biglietti non configurato). */
+  .timechip {
+    @apply inline-flex items-center gap-2 rounded-xl border border-cinema-border bg-cinema-surface-2 px-3.5 py-2.5;
+  }
+
+  /* Filo "marquee" dorato sotto la testata: un richiamo all'insegna luminosa. */
+  .marquee-rule {
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      theme('colors.cinema.ticket') 18%,
+      theme('colors.cinema.ticket') 82%,
+      transparent
+    );
+    opacity: 0.55;
   }
 }

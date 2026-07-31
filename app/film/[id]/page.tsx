@@ -1,19 +1,18 @@
-import { Clapperboard, MapPin, Ticket } from 'lucide-react';
+import { Clapperboard } from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
+import { PriceLegend, Showtimes } from '@/components/showtimes';
 import {
   fetchProgrammazione,
   formatDayIt,
-  formatTimeIt,
+  relativeDayIt,
   romeDayKey,
   type PublicFilm,
 } from '@/lib/programmazione-client';
 import { SITE } from '@/lib/site';
-import { ticketUrlFor } from '@/lib/tickets';
 import { fetchTmdbMedia } from '@/lib/tmdb';
-import { formatEuro } from '@/lib/utils';
 
 export const revalidate = 600;
 
@@ -157,60 +156,42 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
 
       {/* Proiezioni */}
       <section className="container py-10">
-        <h2 className="text-xl font-bold tracking-tight text-cinema-text sm:text-2xl">
-          Date e orari
-        </h2>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <h2 className="text-xl font-bold tracking-tight text-cinema-text sm:text-2xl">
+            Date e orari
+          </h2>
+          <PriceLegend showtimes={film.showtimes} className="text-sm" />
+        </div>
         {days.length === 0 ? (
           <p className="mt-4 text-sm text-cinema-text-subtle">
             Non ci sono proiezioni in calendario al momento.
           </p>
         ) : (
-          <div className="mt-5 space-y-6">
-            {days.map(([dayKey, showtimes]) => (
-              <div key={dayKey}>
-                <h3 className="font-semibold capitalize text-cinema-text">
-                  {formatDayIt(showtimes[0].startsAt)}
-                </h3>
-                <ul className="mt-2 flex flex-wrap gap-2">
-                  {showtimes.map((s) => {
-                    const buyUrl = ticketUrlFor(s.sourceId, film.title);
-                    return (
-                      <li
-                        key={s.sourceId}
-                        className="rounded-xl border border-cinema-border bg-cinema-surface px-4 py-3"
-                      >
-                        <div className="flex items-center gap-2">
-                          <time dateTime={s.startsAt} className="text-lg font-bold text-cinema-text">
-                            {formatTimeIt(s.startsAt)}
-                          </time>
-                          {s.venue && s.venue !== DEFAULT_VENUE && (
-                            <span className="inline-flex items-center gap-1 rounded-md bg-cinema-warning/15 px-2 py-0.5 text-xs font-medium text-cinema-warning">
-                              <MapPin className="h-3 w-3" aria-hidden="true" /> {s.venue}
-                            </span>
-                          )}
-                          {buyUrl && (
-                            <a
-                              href={buyUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              aria-label={`Acquista biglietti per ${film.title}, ${formatDayIt(s.startsAt)} ore ${formatTimeIt(s.startsAt)} (si apre in una nuova scheda)`}
-                              className="inline-flex items-center gap-1.5 rounded-lg bg-cinema-accent-strong px-3 py-1.5 text-sm font-semibold text-white hover:bg-cinema-accent-strong-hover"
-                            >
-                              <Ticket className="h-4 w-4" aria-hidden="true" /> Acquista
-                            </a>
-                          )}
-                        </div>
-                        {s.prices.length > 0 && (
-                          <div className="mt-1.5 text-xs text-cinema-text-subtle">
-                            {s.prices.map((p) => `${p.label} ${formatEuro(p.amount)}`).join(' · ')}
-                          </div>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
+          <div className="mt-6 space-y-7">
+            {days.map(([dayKey, showtimes]) => {
+              const relative = relativeDayIt(showtimes[0].startsAt);
+              return (
+                <div key={dayKey}>
+                  <h3 className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 font-semibold capitalize text-cinema-text">
+                    {relative && (
+                      <span className="rounded-md bg-cinema-ticket/15 px-2 py-0.5 text-sm font-semibold not-italic text-cinema-ticket">
+                        {relative}
+                      </span>
+                    )}
+                    {formatDayIt(showtimes[0].startsAt)}
+                  </h3>
+                  <Showtimes
+                    film={film}
+                    showtimes={showtimes}
+                    size="lg"
+                    showVenue
+                    withDayInLabel
+                    perfBg="#0D1117"
+                    className="mt-3"
+                  />
+                </div>
+              );
+            })}
           </div>
         )}
       </section>

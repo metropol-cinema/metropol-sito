@@ -162,6 +162,21 @@ export function formatTimeIt(startsAtIso: string): string {
   }).format(new Date(startsAtIso));
 }
 
+/**
+ * Etichetta relativa "Oggi" / "Domani" se la proiezione cade oggi o domani
+ * (in ora italiana), altrimenti null. Per dare risalto a cosa si può vedere
+ * stasera senza far calcolare le date all'utente.
+ */
+export function relativeDayIt(startsAtIso: string, reference: Date = new Date()): 'Oggi' | 'Domani' | null {
+  const key = romeDayKey(startsAtIso);
+  const todayKey = romeDayKey(reference.toISOString());
+  if (key === todayKey) return 'Oggi';
+  const tomorrow = new Date(reference);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  if (key === romeDayKey(tomorrow.toISOString())) return 'Domani';
+  return null;
+}
+
 /** Giorno in Europe/Rome come "YYYY-MM-DD", per raggruppare le proiezioni. */
 export function romeDayKey(startsAtIso: string): string {
   // en-CA produce direttamente il formato YYYY-MM-DD.

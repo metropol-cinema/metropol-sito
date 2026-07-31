@@ -1,10 +1,9 @@
-import { Clapperboard, Ticket } from 'lucide-react';
+import { Clapperboard } from 'lucide-react';
 import Link from 'next/link';
 
+import { PriceLegend, Showtimes } from '@/components/showtimes';
 import type { PublicFilm, PublicShowtime } from '@/lib/programmazione-client';
-import { formatDayIt, formatTimeIt, romeDayKey } from '@/lib/programmazione-client';
-import { ticketUrlFor } from '@/lib/tickets';
-import { formatEuro } from '@/lib/utils';
+import { formatDayIt, relativeDayIt, romeDayKey } from '@/lib/programmazione-client';
 
 interface DayEntry {
   film: PublicFilm;
@@ -42,16 +41,24 @@ export function groupByDay(films: PublicFilm[]): Array<{ dayKey: string; entries
 
 /** Programmazione di un giorno: riga per film con orari, prezzi e acquisto. */
 export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayEntry[] }) {
+  const firstStart = entries[0].showtimes[0].startsAt;
+  const relative = relativeDayIt(firstStart);
+
   return (
     <section>
-      <h2 className="text-lg font-bold capitalize tracking-tight text-cinema-text sm:text-xl">
-        {formatDayIt(entries[0].showtimes[0].startsAt)}
+      <h2 className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 text-lg font-bold capitalize tracking-tight text-cinema-text sm:text-xl">
+        {relative && (
+          <span className="rounded-md bg-cinema-ticket/15 px-2 py-0.5 text-sm font-semibold not-italic text-cinema-ticket sm:text-base">
+            {relative}
+          </span>
+        )}
+        {formatDayIt(firstStart)}
       </h2>
       <div className="mt-3 space-y-3">
         {entries.map(({ film, showtimes }) => (
           <article
             key={`${dayKey}-${film.id}`}
-            className="flex gap-4 rounded-xl border border-cinema-border bg-cinema-surface p-4"
+            className="flex gap-4 rounded-2xl border border-cinema-border bg-cinema-surface p-4 transition-colors hover:border-cinema-ticket/40"
           >
             <Link
               href={`/film/${film.id}`}
@@ -73,7 +80,7 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
 
             <div className="min-w-0 flex-1">
               <h3 className="font-semibold leading-tight">
-                <Link href={`/film/${film.id}`} className="text-cinema-text hover:text-cinema-accent-hover">
+                <Link href={`/film/${film.id}`} className="text-cinema-text hover:text-cinema-ticket">
                   {film.title}
                 </Link>
               </h3>
@@ -82,37 +89,8 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
                   .filter(Boolean)
                   .join(' · ')}
               </p>
-              <ul className="mt-2 flex flex-wrap gap-2" aria-label={`Orari di ${film.title}`}>
-                {showtimes.map((s) => {
-                  const buyUrl = ticketUrlFor(s.sourceId, film.title);
-                  return (
-                    <li
-                      key={s.sourceId}
-                      className="rounded-lg border border-cinema-border bg-cinema-bg px-3 py-1.5"
-                    >
-                      <time dateTime={s.startsAt} className="text-sm font-semibold text-cinema-text">
-                        {formatTimeIt(s.startsAt)}
-                      </time>
-                      {s.prices.length > 0 && (
-                        <span className="ml-2 text-xs text-cinema-text-subtle">
-                          {s.prices.map((p) => `${p.label} ${formatEuro(p.amount)}`).join(' · ')}
-                        </span>
-                      )}
-                      {buyUrl && (
-                        <a
-                          href={buyUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          aria-label={`Acquista biglietti per ${film.title}, ore ${formatTimeIt(s.startsAt)} (si apre in una nuova scheda)`}
-                          className="ml-2 inline-flex items-center gap-1 rounded-md bg-cinema-accent/15 px-2 py-0.5 text-xs font-semibold text-cinema-accent-hover hover:bg-cinema-accent/25"
-                        >
-                          <Ticket className="h-3 w-3" aria-hidden="true" /> Acquista
-                        </a>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
+              <Showtimes film={film} showtimes={showtimes} showVenue className="mt-2.5" perfBg="#161B22" />
+              <PriceLegend showtimes={showtimes} className="mt-2" />
             </div>
           </article>
         ))}

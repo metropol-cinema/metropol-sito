@@ -7,12 +7,16 @@ import { NAV_LINKS, SITE } from '@/lib/site';
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-cinema-border bg-cinema-bg/85 backdrop-blur">
+      {/* Filo "marquee" dorato: richiamo all'insegna luminosa del cinema. */}
+      <div className="h-0.5 w-full marquee-rule" aria-hidden="true" />
       <div className="container flex h-16 items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-2.5">
-          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-cinema-accent/15 text-cinema-accent">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-cinema-ticket text-cinema-bg shadow-sm">
             <Film className="h-5 w-5" aria-hidden="true" />
           </span>
-          <span className="text-lg font-bold tracking-tight text-cinema-text">{SITE.name}</span>
+          <span className="font-display text-xl font-bold tracking-tight text-cinema-text">
+            {SITE.name}
+          </span>
         </Link>
 
         {/* Nav desktop */}
