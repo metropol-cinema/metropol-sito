@@ -3,6 +3,7 @@ import { Fraunces, Inter } from 'next/font/google';
 
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
+import { jsonLdScript } from '@/lib/json-ld';
 import { SITE } from '@/lib/site';
 import './globals.css';
 
@@ -44,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="flex min-h-screen flex-col font-sans">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(theaterJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdScript(theaterJsonLd) }}
         />
         <a href="#contenuto" className="skip-link">
           Salta al contenuto

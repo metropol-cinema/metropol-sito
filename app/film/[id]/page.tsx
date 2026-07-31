@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 import { PriceLegend, Showtimes } from '@/components/showtimes';
+import { jsonLdScript } from '@/lib/json-ld';
 import {
   fetchProgrammazione,
   formatDayIt,
@@ -101,7 +102,7 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
 
   return (
     <main>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }} />
       {/* Testata con backdrop */}
       <section className="relative overflow-hidden border-b border-cinema-border">
         <div className="absolute inset-0">

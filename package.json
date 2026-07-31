@@ -2,6 +2,10 @@
   "name": "metropol-sito",
   "version": "0.1.0",
   "private": true,
+  "overrides": {
+    "sharp": "^0.35.3",
+    "postcss": "^8.5.25"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +15,7 @@
   "dependencies": {
     "clsx": "^2.1.1",
     "lucide-react": "^0.475.0",
-    "next": "^16.2.4",
+    "next": "^16.2.12",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "tailwind-merge": "^3.0.1"
@@ -22,8 +26,8 @@
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.21.0",
-    "eslint-config-next": "^16.2.4",
-    "postcss": "^8.5.3",
+    "eslint-config-next": "^16.2.12",
+    "postcss": "^8.5.25",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3"
   }
