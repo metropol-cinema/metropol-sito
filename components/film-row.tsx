@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { AgeBadge } from '@/components/age-badge';
 import { MetaLine } from '@/components/meta-line';
 import { PriceLegend, Showtimes } from '@/components/showtimes';
+import { ageRatingFor } from '@/lib/age-rating';
 import type { PublicFilm } from '@/lib/programmazione-client';
 import { fetchTmdbDetails } from '@/lib/tmdb';
 
@@ -16,6 +17,7 @@ export async function FilmRow({ film }: { film: PublicFilm }) {
   const details = await fetchTmdbDetails(film.tmdbId);
   const poster = details?.posterUrl ?? film.poster;
   const description = film.description ?? details?.overview ?? null;
+  const ageRating = ageRatingFor(film.ageRating);
 
   const meta = [
     film.director,
@@ -59,7 +61,7 @@ export async function FilmRow({ film }: { film: PublicFilm }) {
           </h3>
 
           <MetaLine items={meta} className="mt-2.5">
-            {details?.ageRating && <AgeBadge rating={details.ageRating} />}
+            {ageRating && <AgeBadge rating={ageRating} />}
           </MetaLine>
 
           {description && (

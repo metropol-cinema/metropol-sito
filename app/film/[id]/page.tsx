@@ -8,6 +8,7 @@ import { Gallery } from '@/components/gallery';
 import { MetaLine } from '@/components/meta-line';
 import { PriceLegend, Showtimes } from '@/components/showtimes';
 import { Trailer } from '@/components/trailer';
+import { ageRatingFor } from '@/lib/age-rating';
 import { jsonLdScript } from '@/lib/json-ld';
 import {
   fetchProgrammazione,
@@ -74,6 +75,9 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
   // sovrascrivibile a mano); TMDB è solo la riserva.
   const trailerId = youtubeIdFrom(film.trailerUrl) ?? youtubeIdFrom(details?.trailerKey);
   const gallery = details?.gallery ?? [];
+  // L'età consigliata la decide il gestionale (TMDB all'import o a mano in
+  // dashboard): qui non si calcola nulla.
+  const ageRating = ageRatingFor(film.ageRating);
 
   // Proiezioni raggruppate per giorno.
   const byDay = new Map<string, typeof film.showtimes>();
@@ -111,7 +115,7 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
       ...(details?.posterUrl ? { image: details.posterUrl } : {}),
       ...(details?.genres.length ? { genre: details.genres } : {}),
       ...(details?.releaseYear ? { datePublished: String(details.releaseYear) } : {}),
-      ...(details?.ageRating ? { contentRating: details.ageRating.code } : {}),
+      ...(ageRating ? { contentRating: ageRating.code } : {}),
       ...(trailerId
         ? {
             trailer: {
@@ -192,9 +196,9 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
 
             <MetaLine items={meta} className="mt-4" />
 
-            {details?.ageRating && (
+            {ageRating && (
               <p className="mt-4">
-                <AgeBadge rating={details.ageRating} showLabel />
+                <AgeBadge rating={ageRating} showLabel />
               </p>
             )}
 

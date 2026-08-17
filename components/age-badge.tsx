@@ -16,23 +16,18 @@ export function AgeBadge({
   showLabel?: boolean;
   className?: string;
 }) {
-  const full = rating.note ? `${rating.label} (${rating.note})` : rating.label;
-
   return (
-    <span className={cn('inline-flex items-center gap-2', className)} title={full}>
+    <span className={cn('inline-flex items-center gap-2', className)} title={rating.label}>
       <span
         aria-hidden="true"
         className="inline-flex min-w-[1.9rem] items-center justify-center rounded border border-cinema-ticket/70 px-1.5 py-0.5 font-utility text-xs font-bold tracking-wide text-cinema-ticket"
       >
         {rating.code}
       </span>
-      <span className="sr-only">Età consigliata: {full}.</span>
+      <span className="sr-only">Età consigliata: {rating.label}.</span>
       {showLabel && (
         <span aria-hidden="true" className="text-sm text-cinema-text-muted">
           {rating.label}
-          {rating.note && (
-            <span className="text-cinema-text-subtle"> ({rating.note})</span>
-          )}
         </span>
       )}
     </span>

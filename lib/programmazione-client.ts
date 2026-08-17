@@ -36,6 +36,12 @@ export interface PublicFilm {
    * con override manuale dell'Admin. Può essere null.
    */
   trailerUrl: string | null;
+  /**
+   * Età consigliata (classificazione italiana: "T", "6+", "12+", "14+", "18+").
+   * La decide il gestionale — TMDB all'import, o a mano in dashboard quando
+   * TMDB non ce l'ha. null = nessuna, e allora non si mostra niente.
+   */
+  ageRating: string | null;
   /** Locandina come data-URI `data:image/jpeg;base64,…`, o null. */
   poster: string | null;
   showtimes: PublicShowtime[];

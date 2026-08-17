@@ -1,14 +1,13 @@
 /**
  * Arricchimento del film da TMDB: backdrop per gli hero, poster ottimizzato,
- * generi, tagline, anno, età consigliata, fotogallery e trailer di riserva.
+ * generi, tagline, anno, fotogallery e trailer di riserva. L'età consigliata NON
+ * si prende da qui: arriva dalla read-API, dove è correggibile a mano.
  * SOLO server-side. Degrada con grazia: senza TMDB_API_KEY o senza tmdbId
  * ritorna null e il sito resta su locandina e testi di Cinebot.
  *
- * Una sola richiesta per film (`append_to_response`): immagini, classificazioni
- * e video arrivano insieme ai dettagli.
+ * Una sola richiesta per film (`append_to_response`): immagini e video arrivano
+ * insieme ai dettagli.
  */
-
-import { resolveAgeRating, type AgeRating } from '@/lib/age-rating';
 
 export interface TmdbImage {
   /** Versione a piena larghezza, per il lightbox. */
@@ -27,7 +26,6 @@ export interface TmdbDetails {
   overview: string | null;
   releaseYear: number | null;
   genres: string[];
-  ageRating: AgeRating | null;
   /** Fotogrammi di scena, senza testo sovrimpresso quando possibile. */
   gallery: TmdbImage[];
   /** Chiave YouTube del trailer, italiano se disponibile. */
@@ -61,7 +59,6 @@ interface RawMovie {
   release_date?: string | null;
   genres?: Array<{ name?: string }>;
   images?: { backdrops?: RawImage[] };
-  release_dates?: { results?: Array<{ iso_3166_1?: string; release_dates?: Array<{ certification?: string }> }> };
   videos?: { results?: RawVideo[] };
 }
 
@@ -104,7 +101,7 @@ export async function fetchTmdbDetails(tmdbId: string | null): Promise<TmdbDetai
   const url = new URL(`https://api.themoviedb.org/3/movie/${encodeURIComponent(tmdbId)}`);
   url.searchParams.set('api_key', key);
   url.searchParams.set('language', 'it-IT');
-  url.searchParams.set('append_to_response', 'images,release_dates,videos');
+  url.searchParams.set('append_to_response', 'images,videos');
   // Le immagini sono filtrate per lingua: `null` = fotogrammi senza testo.
   url.searchParams.set('include_image_language', 'it,en,null');
   url.searchParams.set('include_video_language', 'it,en');
@@ -123,7 +120,6 @@ export async function fetchTmdbDetails(tmdbId: string | null): Promise<TmdbDetai
       overview: json.overview?.trim() || null,
       releaseYear: json.release_date ? Number.parseInt(json.release_date.slice(0, 4), 10) : null,
       genres: (json.genres ?? []).map((g) => g.name).filter((n): n is string => Boolean(n)),
-      ageRating: resolveAgeRating(json.release_dates?.results ?? []),
       gallery: pickGallery(json.images?.backdrops ?? [], backdrop),
       trailerKey: pickTrailer(json.videos?.results ?? []),
     };

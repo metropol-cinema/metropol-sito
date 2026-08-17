@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { AgeBadge } from '@/components/age-badge';
 import { MetaLine } from '@/components/meta-line';
 import { PriceLegend, Showtimes } from '@/components/showtimes';
+import { ageRatingFor } from '@/lib/age-rating';
 import type { PublicFilm } from '@/lib/programmazione-client';
 import { formatDayIt, relativeDayIt } from '@/lib/programmazione-client';
 import { fetchTmdbDetails } from '@/lib/tmdb';
@@ -21,6 +22,7 @@ import { fetchTmdbDetails } from '@/lib/tmdb';
 export async function HeroFilm({ film, priority = false }: { film: PublicFilm; priority?: boolean }) {
   const details = await fetchTmdbDetails(film.tmdbId);
   const poster = details?.posterUrl ?? film.poster;
+  const ageRating = ageRatingFor(film.ageRating);
   const next = film.showtimes[0];
   const relative = next ? relativeDayIt(next.startsAt) : null;
 
@@ -90,7 +92,7 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
           )}
 
           <MetaLine items={meta} className="mt-4">
-            {details?.ageRating && <AgeBadge rating={details.ageRating} />}
+            {ageRating && <AgeBadge rating={ageRating} />}
           </MetaLine>
 
           <Showtimes
