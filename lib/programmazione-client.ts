@@ -31,6 +31,11 @@ export interface PublicFilm {
   description: string | null;
   durationMinutes: number | null;
   tmdbId: string | null;
+  /**
+   * Trailer YouTube scelto dal gestionale: cercato su TMDB preferendo l'italiano,
+   * con override manuale dell'Admin. Può essere null.
+   */
+  trailerUrl: string | null;
   /** Locandina come data-URI `data:image/jpeg;base64,…`, o null. */
   poster: string | null;
   showtimes: PublicShowtime[];
@@ -115,15 +120,30 @@ export function splitWeekUpcoming(
   return { weekFilms, upcomingFilms };
 }
 
-export function currentWeekRange(d: Date): { monday: string; sunday: string } {
-  const day = d.getDay();
-  const diffToMonday = (day + 6) % 7;
-  const monday = new Date(d);
-  monday.setDate(d.getDate() - diffToMonday);
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
-  const fmt = (x: Date) => x.toISOString().slice(0, 10);
-  return { monday: fmt(monday), sunday: fmt(sunday) };
+/** Somma giorni a una chiave `YYYY-MM-DD` restando sul calendario civile. */
+export function addDaysToKey(dayKey: string, delta: number): string {
+  // Mezzogiorno UTC: nessun cambio d'ora può far scivolare il giorno.
+  const d = new Date(`${dayKey}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() + delta);
+  return d.toISOString().slice(0, 10);
+}
+
+/**
+ * Lunedì e domenica della settimana corrente, come chiavi `YYYY-MM-DD`.
+ * Calcolata sul giorno **italiano**: tra mezzanotte e le 2 il server (UTC) è
+ * ancora al giorno prima, e senza questo la settimana slitterebbe.
+ */
+export function currentWeekRange(d: Date = new Date()): { monday: string; sunday: string } {
+  const today = romeDayKey(d.toISOString());
+  const weekday = new Date(`${today}T12:00:00Z`).getUTCDay(); // 0 = domenica
+  const monday = addDaysToKey(today, -((weekday + 6) % 7));
+  return { monday, sunday: addDaysToKey(monday, 6) };
+}
+
+/** Le 7 chiavi giorno della settimana corrente, da lunedì a domenica. */
+export function weekDays(reference: Date = new Date()): string[] {
+  const { monday } = currentWeekRange(reference);
+  return Array.from({ length: 7 }, (_, i) => addDaysToKey(monday, i));
 }
 
 /** "gio 11 giu · 21:00" in ora italiana. */

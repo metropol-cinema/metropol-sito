@@ -28,22 +28,23 @@ export default function DiventaVolontarioPage() {
       </nav>
 
       <header className="mb-10">
-        <h1 className="text-2xl font-bold tracking-tight text-cinema-text sm:text-3xl">
+        <p className="eyebrow">L&apos;associazione</p>
+        <h1 className="mt-3 text-4xl font-black leading-[0.95] text-cinema-text sm:text-5xl">
           Diventa volontario
         </h1>
-        <p className="mt-3 leading-relaxed text-cinema-text-muted">
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
           Qui all&apos;Associazione Culturale Metropol siamo tutti volontari, che prestano
           gratuitamente il loro tempo per ogni iniziativa. Il Metropol vive del tempo di chi se ne
           prende cura.
         </p>
       </header>
 
-      <div className="space-y-10">
+      <div className="space-y-12">
         <section id="cosa-puoi-fare">
-          <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-cinema-text">
-            <HandHeart className="h-5 w-5 text-cinema-accent" aria-hidden="true" /> Cosa puoi fare
+          <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
+            <HandHeart className="h-5 w-5 text-cinema-ticket" aria-hidden="true" /> Cosa puoi fare
           </h2>
-          <p className="mt-3 leading-relaxed text-cinema-text-muted">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             C&apos;è spazio per tutte le disponibilità, anche poche ore al mese:
           </p>
           <ul className="mt-3 list-disc space-y-1.5 pl-5 leading-relaxed text-cinema-text-muted">
@@ -55,17 +56,17 @@ export default function DiventaVolontarioPage() {
         </section>
 
         <section id="come-fare">
-          <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-cinema-text">
-            <Mail className="h-5 w-5 text-cinema-accent" aria-hidden="true" /> Vuoi essere dei
+          <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
+            <Mail className="h-5 w-5 text-cinema-ticket" aria-hidden="true" /> Vuoi essere dei
             nostri?
           </h2>
-          <p className="mt-3 leading-relaxed text-cinema-text-muted">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             Vieni a parlarne con noi in cinema prima di una proiezione, scrivici sui nostri{' '}
             <a
               href={SITE.social.instagram}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-cinema-accent hover:underline"
+              className="text-cinema-ticket hover:underline"
             >
               canali social<span className="sr-only"> (si apre in una nuova scheda)</span>
             </a>{' '}
@@ -81,7 +82,7 @@ export default function DiventaVolontarioPage() {
                 <p className="font-semibold text-cinema-text">{contact.name}</p>
                 <a
                   href={`mailto:${contact.email}`}
-                  className="mt-1 flex items-center gap-1.5 break-all text-sm text-cinema-accent hover:underline"
+                  className="mt-1 flex items-center gap-1.5 break-all text-sm text-cinema-ticket hover:underline"
                 >
                   <Mail className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                   {contact.email}
@@ -92,14 +93,14 @@ export default function DiventaVolontarioPage() {
         </section>
 
         <section id="tutele">
-          <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-cinema-text">
-            <ShieldCheck className="h-5 w-5 text-cinema-accent" aria-hidden="true" /> Le tutele
+          <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
+            <ShieldCheck className="h-5 w-5 text-cinema-ticket" aria-hidden="true" /> Le tutele
           </h2>
-          <p className="mt-3 leading-relaxed text-cinema-text-muted">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             Durante lo svolgimento della propria attività ogni volontario è coperto da una polizza
             assicurativa per responsabilità civile. Ruoli e doveri dei soci volontari sono
             descritti nel{' '}
-            <Link href="/associazione/statuto" className="text-cinema-accent hover:underline">
+            <Link href="/associazione/statuto" className="text-cinema-ticket hover:underline">
               regolamento interno
             </Link>
             .

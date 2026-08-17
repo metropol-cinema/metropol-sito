@@ -3,7 +3,11 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
+import { AgeBadge } from '@/components/age-badge';
+import { Gallery } from '@/components/gallery';
+import { MetaLine } from '@/components/meta-line';
 import { PriceLegend, Showtimes } from '@/components/showtimes';
+import { Trailer } from '@/components/trailer';
 import { jsonLdScript } from '@/lib/json-ld';
 import {
   fetchProgrammazione,
@@ -13,7 +17,8 @@ import {
   type PublicFilm,
 } from '@/lib/programmazione-client';
 import { SITE } from '@/lib/site';
-import { fetchTmdbMedia } from '@/lib/tmdb';
+import { fetchTmdbDetails } from '@/lib/tmdb';
+import { youtubeIdFrom } from '@/lib/youtube';
 
 export const revalidate = 600;
 
@@ -41,6 +46,16 @@ export async function generateMetadata({
   };
 }
 
+/** Intestazione di sezione della scheda: occhiello d'oro + titolo. */
+function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) {
+  return (
+    <header className="mb-6">
+      <p className="eyebrow">{eyebrow}</p>
+      <h2 className="mt-2 text-2xl font-black leading-none text-cinema-text sm:text-3xl">{title}</h2>
+    </header>
+  );
+}
+
 export default async function FilmPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   let film: PublicFilm | null = null;
@@ -51,8 +66,14 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
   }
   if (!film) notFound();
 
-  const media = await fetchTmdbMedia(film.tmdbId);
-  const poster = media?.posterUrl ?? film.poster;
+  const details = await fetchTmdbDetails(film.tmdbId);
+  const poster = details?.posterUrl ?? film.poster;
+  const description = film.description ?? details?.overview ?? null;
+
+  // Trailer: comanda quello scelto in dashboard (già preferito in italiano e
+  // sovrascrivibile a mano); TMDB è solo la riserva.
+  const trailerId = youtubeIdFrom(film.trailerUrl) ?? youtubeIdFrom(details?.trailerKey);
+  const gallery = details?.gallery ?? [];
 
   // Proiezioni raggruppate per giorno.
   const byDay = new Map<string, typeof film.showtimes>();
@@ -63,6 +84,14 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
     else byDay.set(key, [s]);
   }
   const days = [...byDay.entries()].sort(([a], [b]) => a.localeCompare(b));
+
+  const meta = [
+    film.director ? `Regia di ${film.director}` : null,
+    film.durationMinutes ? `${film.durationMinutes} minuti` : null,
+    details?.releaseYear ? String(details.releaseYear) : null,
+    details?.genres.join(', ') || null,
+    film.distributor,
+  ];
 
   // Dati strutturati schema.org: aiutano assistenti vocali e motori di ricerca
   // a capire film, date e prezzi senza interpretare il layout.
@@ -78,7 +107,21 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
       name: film.title,
       ...(film.director ? { director: { '@type': 'Person', name: film.director } } : {}),
       ...(film.durationMinutes ? { duration: `PT${film.durationMinutes}M` } : {}),
-      ...(film.description ? { description: film.description } : {}),
+      ...(description ? { description } : {}),
+      ...(details?.posterUrl ? { image: details.posterUrl } : {}),
+      ...(details?.genres.length ? { genre: details.genres } : {}),
+      ...(details?.releaseYear ? { datePublished: String(details.releaseYear) } : {}),
+      ...(details?.ageRating ? { contentRating: details.ageRating.code } : {}),
+      ...(trailerId
+        ? {
+            trailer: {
+              '@type': 'VideoObject',
+              name: `Trailer di ${film.title}`,
+              embedUrl: `https://www.youtube-nocookie.com/embed/${trailerId}`,
+              ...(details?.backdropUrl ? { thumbnailUrl: details.backdropUrl } : {}),
+            },
+          }
+        : {}),
     },
     ...film.showtimes.map((s) => ({
       '@context': 'https://schema.org',
@@ -86,7 +129,8 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
       name: `${film.title} al ${SITE.name}`,
       startDate: s.startsAt,
       workPresented: { '@type': 'Movie', name: film.title },
-      location: s.venue && s.venue !== DEFAULT_VENUE ? { '@type': 'Place', name: s.venue } : theaterJsonLd,
+      location:
+        s.venue && s.venue !== DEFAULT_VENUE ? { '@type': 'Place', name: s.venue } : theaterJsonLd,
       ...(s.prices.length > 0
         ? {
             offers: s.prices.map((p) => ({
@@ -103,26 +147,28 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
   return (
     <main>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }} />
-      {/* Testata con backdrop */}
-      <section className="relative overflow-hidden border-b border-cinema-border">
-        <div className="absolute inset-0">
-          {media?.backdropUrl ? (
+
+      {/* Testata con il fotogramma del film alle spalle */}
+      <section className="grain beam relative isolate overflow-hidden border-b border-cinema-border">
+        <div className="absolute inset-0 -z-10">
+          {details?.backdropUrl ? (
             <Image
-              src={media.backdropUrl}
+              src={details.backdropUrl}
               alt=""
               fill
               priority
               sizes="100vw"
-              className="object-cover opacity-40"
+              className="scale-105 object-cover object-top opacity-55"
             />
           ) : (
-            <div className="h-full w-full bg-gradient-to-br from-cinema-accent/15 via-cinema-bg to-cinema-bg" />
+            <div className="h-full w-full bg-[radial-gradient(80%_60%_at_50%_0%,rgba(244,183,64,0.16),transparent_70%)]" />
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-cinema-bg via-cinema-bg/70 to-cinema-bg/40" />
+          <div className="absolute inset-0 vignette" />
+          <div className="absolute inset-0 bg-gradient-to-t from-cinema-bg via-cinema-bg/75 to-cinema-bg/25" />
         </div>
 
-        <div className="container relative flex flex-col gap-6 py-10 sm:flex-row sm:items-end sm:gap-8 sm:py-14">
-          <div className="w-40 shrink-0 self-center overflow-hidden rounded-xl border border-white/10 shadow-2xl sm:w-56 sm:self-auto">
+        <div className="container flex flex-col gap-6 py-12 sm:flex-row sm:items-end sm:gap-9 sm:py-16">
+          <div className="w-36 shrink-0 self-center overflow-hidden rounded-xl border border-cinema-ticket/25 shadow-2xl shadow-black/70 sm:w-56 sm:self-auto">
             {poster ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={poster} alt={`Locandina di ${film.title}`} className="w-full" />
@@ -134,21 +180,27 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
           </div>
 
           <div className="min-w-0 flex-1">
-            <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl">
+            <h1 className="text-4xl font-black leading-[0.95] text-cinema-text drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)] sm:text-6xl">
               {film.title}
             </h1>
-            <p className="mt-3 text-sm text-cinema-text-muted">
-              {[
-                film.director ? `Regia di ${film.director}` : null,
-                film.durationMinutes ? `${film.durationMinutes} minuti` : null,
-                film.distributor,
-              ]
-                .filter(Boolean)
-                .join(' · ')}
-            </p>
-            {film.description && (
-              <p className="mt-4 max-w-3xl text-base leading-relaxed text-cinema-text-muted">
-                {film.description}
+
+            {details?.tagline && (
+              <p className="mt-3 max-w-2xl font-display text-lg italic text-cinema-text-muted">
+                {details.tagline}
+              </p>
+            )}
+
+            <MetaLine items={meta} className="mt-4" />
+
+            {details?.ageRating && (
+              <p className="mt-4">
+                <AgeBadge rating={details.ageRating} showLabel />
+              </p>
+            )}
+
+            {description && (
+              <p className="mt-5 max-w-3xl text-base leading-relaxed text-cinema-text-muted">
+                {description}
               </p>
             )}
           </div>
@@ -156,26 +208,25 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
       </section>
 
       {/* Proiezioni */}
-      <section className="container py-10">
-        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-          <h2 className="text-xl font-bold tracking-tight text-cinema-text sm:text-2xl">
-            Date e orari
-          </h2>
-          <PriceLegend showtimes={film.showtimes} className="text-sm" />
+      <section className="container py-12">
+        <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+          <SectionHeading eyebrow="Quando si vede" title="Date e orari" />
+          <PriceLegend showtimes={film.showtimes} className="mb-7 text-sm" />
         </div>
+
         {days.length === 0 ? (
-          <p className="mt-4 text-sm text-cinema-text-subtle">
+          <p className="text-sm text-cinema-text-subtle">
             Non ci sono proiezioni in calendario al momento.
           </p>
         ) : (
-          <div className="mt-6 space-y-7">
+          <div className="space-y-8">
             {days.map(([dayKey, showtimes]) => {
               const relative = relativeDayIt(showtimes[0].startsAt);
               return (
                 <div key={dayKey}>
-                  <h3 className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 font-semibold capitalize text-cinema-text">
+                  <h3 className="flex flex-wrap items-center gap-x-3 gap-y-1 font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-text-muted">
                     {relative && (
-                      <span className="rounded-md bg-cinema-ticket/15 px-2 py-0.5 text-sm font-semibold not-italic text-cinema-ticket">
+                      <span className="rounded bg-cinema-ticket px-2 py-0.5 font-bold text-cinema-bg">
                         {relative}
                       </span>
                     )}
@@ -187,8 +238,8 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
                     size="lg"
                     showVenue
                     withDayInLabel
-                    perfBg="#0D1117"
-                    className="mt-3"
+                    perfBg="#0B0B0D"
+                    className="mt-4"
                   />
                 </div>
               );
@@ -196,6 +247,33 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
           </div>
         )}
       </section>
+
+      {/* Trailer — assente se né la dashboard né TMDB ne hanno uno */}
+      {trailerId && (
+        <section className="container pb-12">
+          <SectionHeading eyebrow="In anteprima" title="Trailer" />
+          <div className="max-w-4xl">
+            <Trailer
+              youtubeId={trailerId}
+              title={film.title}
+              posterUrl={details?.backdropUrl ?? null}
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Fotogallery — sotto le due immagini non vale una sezione */}
+      {gallery.length >= 2 && (
+        <section className="pb-16">
+          <div className="container">
+            <SectionHeading eyebrow="Dal film" title="Fotogallery" />
+          </div>
+          {/* A tutta larghezza: la striscia scorre oltre il bordo del contenuto. */}
+          <div className="container">
+            <Gallery images={gallery} title={film.title} />
+          </div>
+        </section>
+      )}
     </main>
   );
 }

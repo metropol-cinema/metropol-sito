@@ -106,7 +106,10 @@ export function Showtimes({
                 <span className="ticket-body">
                   <time
                     dateTime={s.startsAt}
-                    className={cn('font-display font-bold tabular-nums text-cinema-text', lg ? 'text-xl' : 'text-base')}
+                    className={cn(
+                      'font-display font-black tabular-nums text-cinema-text',
+                      lg ? 'text-2xl' : 'text-lg'
+                    )}
                   >
                     {time}
                   </time>
@@ -126,7 +129,10 @@ export function Showtimes({
               <span className="timechip">
                 <time
                   dateTime={s.startsAt}
-                  className={cn('font-display font-bold tabular-nums text-cinema-text', lg ? 'text-xl' : 'text-base')}
+                  className={cn(
+                    'font-display font-black tabular-nums text-cinema-text',
+                    lg ? 'text-2xl' : 'text-lg'
+                  )}
                 >
                   {time}
                 </time>
@@ -134,7 +140,7 @@ export function Showtimes({
             )}
 
             {elsewhere && (
-              <span className="inline-flex w-fit items-center gap-1 rounded-md bg-cinema-warning/15 px-2 py-0.5 text-xs font-medium text-cinema-warning">
+              <span className="inline-flex w-fit items-center gap-1 rounded-md bg-cinema-curtain/25 px-2 py-0.5 font-utility text-xs font-semibold text-cinema-curtain-light">
                 <MapPin className="h-3 w-3" aria-hidden="true" /> {s.venue}
               </span>
             )}

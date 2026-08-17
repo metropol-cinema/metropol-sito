@@ -8,22 +8,38 @@
   }
   body {
     @apply bg-cinema-bg font-sans text-cinema-text antialiased;
+    /* Il nero non è mai piatto: in alto un alone caldo, come la luce che
+       filtra dalla cabina di proiezione. */
+    background-image: radial-gradient(
+      120% 60% at 50% -10%,
+      rgba(244, 183, 64, 0.07),
+      transparent 60%
+    );
+    background-attachment: fixed;
   }
 
-  /* Identità editoriale: i titoli usano il display serif (Fraunces).
-     Il corpo e la UI restano in Inter (impostato sul body). */
+  /* Identità editoriale: i titoli usano il display serif (Fraunces) con
+     l'asse ottico alto — alto contrasto, da locandina. */
   h1,
   h2,
   h3 {
     @apply font-display;
+    font-variation-settings: 'SOFT' 0, 'WONK' 1, 'opsz' 120;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
   }
 
   /* Focus sempre visibile per chi naviga da tastiera (tema scuro: l'outline
-     di default può sparire sui fondi blu/neri). */
+     di default può sparire sui fondi neri). */
   :focus-visible {
-    outline: 2px solid theme('colors.cinema.accent-hover');
-    outline-offset: 2px;
+    outline: 2px solid theme('colors.cinema.ticket');
+    outline-offset: 3px;
     border-radius: 2px;
+  }
+
+  ::selection {
+    background: theme('colors.cinema.ticket');
+    color: theme('colors.cinema.bg');
   }
 
   /* Niente animazioni/transizioni per chi le ha disattivate a livello di OS. */
@@ -35,6 +51,10 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
+    }
+    .grain::after,
+    .beam::before {
+      display: none;
     }
   }
 }
@@ -48,6 +68,17 @@
     @apply not-sr-only fixed left-4 top-4 z-50 rounded-lg bg-cinema-accent-strong px-4 py-2.5 text-sm font-semibold text-white;
   }
 
+  /* ----- Occhiello ---------------------------------------------------------
+     Etichetta breve sopra un titolo, in Archivo maiuscolo spaziato: le lettere
+     mobili del quadro orario appeso in cassa. */
+  .eyebrow {
+    @apply flex items-center gap-3 font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply h-px w-7 shrink-0 bg-cinema-ticket/60;
+  }
+
   /* ----- Biglietto: la firma visiva del sito --------------------------------
      Una proiezione acquistabile è un mini-tagliando: orario sul corpo, "Acquista"
      sul tagliando d'oro, separati da una perforazione con due tacche. Le tacche
@@ -58,14 +89,17 @@
     --perf-bg: theme('colors.cinema.bg');
   }
   .ticket-body {
-    @apply flex items-center gap-2 rounded-l-xl border border-r-0 border-cinema-border bg-cinema-surface-2 px-3.5 py-2.5;
+    @apply flex items-center gap-2 rounded-l-xl border border-r-0 border-cinema-border-strong bg-cinema-surface-2 px-3.5 py-2.5;
   }
   .ticket-stub {
-    @apply relative flex items-center gap-1.5 rounded-r-xl bg-cinema-ticket px-3.5 py-2.5 font-sans text-sm font-bold text-cinema-bg transition-colors;
-    border-left: 2px dashed rgba(13, 17, 23, 0.35);
+    @apply relative flex items-center gap-1.5 rounded-r-xl bg-cinema-ticket px-3.5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-bg;
+    border-left: 2px dashed rgba(11, 11, 13, 0.4);
+    transition: background-color 150ms ease, transform 150ms ease;
   }
   .ticket-stub:hover {
     @apply bg-cinema-ticket-hover;
+    /* Il tagliando si "stacca" di un pelo: il gesto dello strappo. */
+    transform: translateX(1px);
   }
   /* Le due tacche della perforazione (sopra e sotto il bordo tratteggiato). */
   .ticket-stub::before,
@@ -86,7 +120,7 @@
   }
   /* Orario senza acquisto (es. portale biglietti non configurato). */
   .timechip {
-    @apply inline-flex items-center gap-2 rounded-xl border border-cinema-border bg-cinema-surface-2 px-3.5 py-2.5;
+    @apply inline-flex items-center gap-2 rounded-xl border border-cinema-border-strong bg-cinema-surface-2 px-3.5 py-2.5;
   }
 
   /* Filo "marquee" dorato sotto la testata: un richiamo all'insegna luminosa. */
@@ -99,5 +133,47 @@
       transparent
     );
     opacity: 0.55;
+  }
+}
+
+@layer utilities {
+  /* ----- Atmosfera di proiezione -------------------------------------------
+     .grain  → grana pellicola generata da SVG (nessuna immagine scaricata)
+     .beam   → fascio obliquo di luce dalla cabina, appena percepibile
+     .vignette → i bordi del fotogramma che si spengono
+     Tutte decorative: pointer-events: none, e spente da reduced-motion. */
+  .grain {
+    position: relative;
+  }
+  .grain::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.12;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .beam {
+    position: relative;
+  }
+  .beam::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: linear-gradient(
+      104deg,
+      transparent 38%,
+      rgba(244, 183, 64, 0.06) 46%,
+      rgba(255, 255, 255, 0.05) 50%,
+      rgba(244, 183, 64, 0.05) 54%,
+      transparent 62%
+    );
+  }
+
+  .vignette {
+    box-shadow: inset 0 0 140px 40px rgba(5, 5, 6, 0.85);
   }
 }

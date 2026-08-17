@@ -1,6 +1,10 @@
 /**
  * Slide media dello slideshow in home: video (autoplay muto in loop) o
  * immagine a tutta larghezza, con didascalia opzionale sovrimpressa.
+ *
+ * Compare SOLO quando in settimana non c'è nessun film (la regola è applicata
+ * dalla home): è il fondale che riempie la parete quando non c'è un manifesto
+ * da appendere.
  */
 export function MediaSlide({
   kind,
@@ -12,7 +16,7 @@ export function MediaSlide({
   caption: string | null;
 }) {
   return (
-    <div className="relative h-[360px] overflow-hidden border-b border-cinema-border sm:h-[480px]">
+    <div className="grain relative isolate h-[24rem] overflow-hidden border-b border-cinema-border sm:h-[34rem]">
       {kind === 'video' ? (
         <video
           src={src}
@@ -22,7 +26,7 @@ export function MediaSlide({
           playsInline
           // Decorativo: l'eventuale messaggio sta nella caption testuale.
           aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
         />
       ) : (
         // Host arbitrario configurato dalla dashboard: <img> semplice.
@@ -30,12 +34,16 @@ export function MediaSlide({
         <img
           src={src}
           alt={caption ?? ''}
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
         />
       )}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 vignette" />
+
       {caption && (
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-6 pt-16 sm:p-8">
-          <p className="container text-xl font-bold text-white sm:text-3xl">{caption}</p>
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-cinema-bg via-cinema-bg/70 to-transparent pb-8 pt-24 sm:pb-12">
+          <p className="container text-2xl font-black leading-tight text-cinema-text sm:text-5xl">
+            {caption}
+          </p>
         </div>
       )}
     </div>

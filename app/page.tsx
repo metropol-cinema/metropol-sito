@@ -2,12 +2,15 @@ import { CalendarDays, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
-import { FilmCard } from '@/components/film-card';
-import { FilmPosterCard } from '@/components/film-poster-card';
+import { FilmRow } from '@/components/film-row';
 import { HeroCarousel } from '@/components/hero-carousel';
+import { HeroClosed } from '@/components/hero-closed';
 import { HeroFilm } from '@/components/hero-film';
 import { HeroUpcoming } from '@/components/hero-upcoming';
 import { MediaSlide } from '@/components/media-slide';
+import { LoadError } from '@/components/page-header';
+import { PosterGrid } from '@/components/poster-grid';
+import { WeekRail } from '@/components/week-rail';
 import {
   currentWeekRange,
   fetchProgrammazione,
@@ -20,56 +23,99 @@ import { fetchSlideshow, type SlideshowItem } from '@/lib/slideshow-client';
 // Rigenera la pagina al massimo ogni 10 minuti (la programmazione cambia ~1/giorno).
 export const revalidate = 600;
 
-function weekLabel(): string {
-  const { sunday } = currentWeekRange(new Date());
-  const fmt = new Intl.DateTimeFormat('it-IT', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  }).format(new Date(`${sunday}T12:00:00`));
-  return `fino a ${fmt}`;
+/** Quante slide al massimo nell'hero: oltre, il carosello smette di essere leggibile. */
+const MAX_HERO_SLIDES = 5;
+
+interface Slide {
+  node: ReactNode;
+  duration: number;
 }
 
-/** Timeline usata quando la dashboard non ne ha (ancora) configurata una. */
-const DEFAULT_TIMELINE: SlideshowItem[] = [
-  {
-    id: 0,
-    kind: 'current_programming',
-    durationSeconds: 30,
-    mediaUrl: null,
-    caption: null,
-    fallbackOnly: false,
-  },
-];
+function weekLabel(): string {
+  const { monday, sunday } = currentWeekRange();
+  const day = (key: string, withMonth: boolean) =>
+    new Intl.DateTimeFormat('it-IT', {
+      timeZone: 'UTC',
+      day: 'numeric',
+      ...(withMonth ? { month: 'long' } : {}),
+    }).format(new Date(`${key}T12:00:00Z`));
+  return `${day(monday, false)} — ${day(sunday, true)}`;
+}
 
 /**
- * Risolve la timeline "Sito Web → Slideshow" in slide concrete: le slide di
- * programmazione senza contenuto si saltano; le slide marcate fallbackOnly
- * compaiono solo se NESSUNA slide di programmazione ha prodotto contenuto.
+ * Le slide dell'hero, secondo una regola sola:
+ *
+ * - se questa settimana si proietta, l'hero sono **i film della settimana**,
+ *   uno per slide, in ordine di proiezione più vicina;
+ * - se la settimana è vuota si passa alle riserve, in quest'ordine: i video e
+ *   le immagini caricati in dashboard (Sito Web → Slideshow), poi i film in
+ *   arrivo, poi il pannello "la sala riposa".
+ *
+ * Il flag `fallbackOnly` delle slide media non serve più a decidere: la regola
+ * la applica il sito, così un video caricato una volta non copre mai il film in
+ * programmazione per dimenticanza.
  */
-function resolveSlides(
-  items: SlideshowItem[],
-  heroFilm: PublicFilm | null,
-  upcomingFilms: PublicFilm[]
-): Array<{ node: ReactNode; duration: number }> {
-  const resolved: Array<{ item: SlideshowItem; node: ReactNode }> = [];
-  for (const item of items) {
-    let node: ReactNode = null;
-    if (item.kind === 'current_programming' && heroFilm) {
-      node = <HeroFilm film={heroFilm} />;
-    } else if (item.kind === 'future_programming' && upcomingFilms.length > 0) {
-      node = <HeroUpcoming films={upcomingFilms} />;
-    } else if ((item.kind === 'video' || item.kind === 'image') && item.mediaUrl) {
-      node = <MediaSlide kind={item.kind} src={item.mediaUrl} caption={item.caption} />;
-    }
-    if (node) resolved.push({ item, node });
+function buildHeroSlides(
+  weekFilms: PublicFilm[],
+  upcomingFilms: PublicFilm[],
+  timeline: SlideshowItem[]
+): Slide[] {
+  if (weekFilms.length > 0) {
+    return weekFilms.slice(0, MAX_HERO_SLIDES).map((film, i) => ({
+      node: <HeroFilm key={film.id} film={film} priority={i === 0} />,
+      duration: 12,
+    }));
   }
-  const hasProgramming = resolved.some(
-    (r) => r.item.kind === 'current_programming' || r.item.kind === 'future_programming'
+
+  const media = timeline
+    .filter((item) => (item.kind === 'video' || item.kind === 'image') && item.mediaUrl)
+    .map((item) => ({
+      node: (
+        <MediaSlide
+          key={item.id}
+          kind={item.kind as 'video' | 'image'}
+          src={item.mediaUrl as string}
+          caption={item.caption}
+        />
+      ),
+      duration: item.durationSeconds,
+    }));
+  if (media.length > 0) return media.slice(0, MAX_HERO_SLIDES);
+
+  if (upcomingFilms.length > 0) {
+    return [{ node: <HeroUpcoming films={upcomingFilms} />, duration: 15 }];
+  }
+
+  return [{ node: <HeroClosed />, duration: 15 }];
+}
+
+function SectionHeading({
+  eyebrow,
+  title,
+  action,
+}: {
+  eyebrow: string;
+  title: string;
+  action?: { href: string; label: string };
+}) {
+  return (
+    <header className="mb-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+      <div>
+        <p className="eyebrow">{eyebrow}</p>
+        <h2 className="mt-2 text-3xl font-black leading-none text-cinema-text sm:text-4xl">
+          {title}
+        </h2>
+      </div>
+      {action && (
+        <Link
+          href={action.href}
+          className="shrink-0 border-b border-cinema-border-strong pb-1 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket hover:text-cinema-ticket"
+        >
+          {action.label}
+        </Link>
+      )}
+    </header>
   );
-  return resolved
-    .filter((r) => !r.item.fallbackOnly || !hasProgramming)
-    .map((r) => ({ node: r.node, duration: r.item.durationSeconds }));
 }
 
 export default async function HomePage() {
@@ -83,19 +129,8 @@ export default async function HomePage() {
   }
 
   const { weekFilms, upcomingFilms } = splitWeekUpcoming(films);
-
-  // I film della settimana sono ordinati per prossima proiezione: il primo è
-  // il "film del momento" e apre lo slideshow.
-  const heroFilm = weekFilms[0] ?? null;
-  const otherFilms = weekFilms.slice(1);
-
-  // Timeline dello slideshow dalla dashboard (null/vuota → default storico).
-  const timeline = await fetchSlideshow();
-  const slides = resolveSlides(
-    timeline && timeline.length > 0 ? timeline : DEFAULT_TIMELINE,
-    heroFilm,
-    upcomingFilms
-  );
+  const timeline = (await fetchSlideshow()) ?? [];
+  const slides = buildHeroSlides(weekFilms, upcomingFilms, timeline);
 
   return (
     <main>
@@ -103,93 +138,72 @@ export default async function HomePage() {
       <h1 className="sr-only">
         Cinema Metropol — film in programmazione a Villafranca di Verona
       </h1>
-      {slides.length === 1 && slides[0].node}
-      {slides.length > 1 && (
-        <HeroCarousel slides={slides.map((s) => s.node)} durations={slides.map((s) => s.duration)} />
+
+      {slides.length === 1 ? (
+        slides[0].node
+      ) : (
+        <HeroCarousel
+          slides={slides.map((s) => s.node)}
+          durations={slides.map((s) => s.duration)}
+        />
       )}
 
-      <div className="container py-10 sm:py-12">
-        <header className="mb-6 flex items-center justify-between gap-4">
-          <div>
-            <h2 className="text-xl font-bold tracking-tight text-cinema-text sm:text-2xl">
-              In programmazione questa settimana
-            </h2>
-            <p className="mt-1 text-sm text-cinema-text-subtle">{weekLabel()}</p>
-          </div>
-          <Link
-            href="/programmazione"
-            className="hidden shrink-0 rounded-lg border border-cinema-border px-3.5 py-2 text-sm font-medium text-cinema-text-muted hover:bg-cinema-surface sm:block"
-          >
-            Vedi per giorno
-          </Link>
-        </header>
+      {weekFilms.length > 0 && <WeekRail films={weekFilms} />}
 
+      <div className="container py-12 sm:py-16">
         {error ? (
-          <div className="rounded-xl border border-cinema-danger/40 bg-cinema-danger/10 p-6 text-sm text-cinema-text-muted">
-            Impossibile caricare la programmazione.{' '}
-            <span className="text-cinema-text-subtle">({error})</span>
-          </div>
-        ) : weekFilms.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-cinema-border bg-cinema-surface/50 p-10 text-center text-cinema-text-subtle">
-            Nessun film in programmazione questa settimana.
-          </div>
-        ) : otherFilms.length > 0 ? (
-          <div className="grid gap-4 sm:gap-5 lg:grid-cols-2">
-            {otherFilms.map((film) => (
-              <FilmCard key={film.id} film={film} />
-            ))}
-          </div>
-        ) : (
-          <p className="text-sm text-cinema-text-subtle">
-            Tutti gli orari del film in evidenza sono qui sopra — oppure{' '}
-            <Link href="/programmazione" className="text-cinema-accent hover:underline">
-              guarda la programmazione per giorno
-            </Link>
-            .
-          </p>
-        )}
-
-        {/* Striscia "Prossimamente": la home non sembra mai vuota. */}
-        {upcomingFilms.length > 0 && (
-          <section className="mt-12">
-            <header className="mb-5 flex items-center justify-between gap-4">
-              <h2 className="text-xl font-bold tracking-tight text-cinema-text sm:text-2xl">
-                Prossimamente
-              </h2>
-              <Link
-                href="/prossimamente"
-                className="shrink-0 rounded-lg border border-cinema-border px-3.5 py-2 text-sm font-medium text-cinema-text-muted hover:bg-cinema-surface"
-              >
-                Vedi tutti
-              </Link>
-            </header>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5 lg:grid-cols-6">
-              {upcomingFilms.slice(0, 6).map((film) => (
-                <FilmPosterCard key={film.id} film={film} />
+          <LoadError error={error} />
+        ) : weekFilms.length > 0 ? (
+          <section>
+            <SectionHeading
+              eyebrow={weekLabel()}
+              title="Questa settimana"
+              action={{ href: '/programmazione', label: 'Giorno per giorno' }}
+            />
+            <div className="space-y-5">
+              {weekFilms.map((film) => (
+                <FilmRow key={film.id} film={film} />
               ))}
             </div>
+          </section>
+        ) : null}
+
+        {/* "Prossimamente": i film oltre la domenica. Quando la settimana è
+            vuota è già l'hero, quindi qui non si ripete. */}
+        {upcomingFilms.length > 0 && weekFilms.length > 0 && (
+          <section className="mt-16">
+            <SectionHeading
+              eyebrow="In arrivo al Metropol"
+              title="Prossimamente"
+              action={{ href: '/prossimamente', label: 'Vedi tutti' }}
+            />
+            <PosterGrid films={upcomingFilms.slice(0, 6)} />
           </section>
         )}
 
         {/* Sezioni di rimando */}
-        <div className="mt-12 grid gap-4 sm:grid-cols-2">
+        <div className="mt-16 grid gap-4 sm:grid-cols-2">
           <Link
             href="/venerdi"
-            className="rounded-xl border border-cinema-border bg-cinema-surface p-5 transition-colors hover:border-cinema-accent/50"
+            className="group rounded-2xl border border-cinema-border bg-cinema-surface p-6 transition-colors hover:border-cinema-ticket/50"
           >
-            <CalendarDays className="h-6 w-6 text-cinema-accent" aria-hidden="true" />
-            <h3 className="mt-3 font-semibold text-cinema-text">I Venerdì del Metropol</h3>
-            <p className="mt-1 text-sm text-cinema-text-subtle">
+            <CalendarDays className="h-6 w-6 text-cinema-ticket" aria-hidden="true" />
+            <h2 className="mt-4 text-xl font-bold text-cinema-text transition-colors group-hover:text-cinema-ticket">
+              I Venerdì del Metropol
+            </h2>
+            <p className="mt-1.5 text-sm leading-relaxed text-cinema-text-subtle">
               La rassegna del venerdì sera: cinema d&apos;autore a 6&nbsp;€.
             </p>
           </Link>
           <Link
             href="/info"
-            className="rounded-xl border border-cinema-border bg-cinema-surface p-5 transition-colors hover:border-cinema-accent/50"
+            className="group rounded-2xl border border-cinema-border bg-cinema-surface p-6 transition-colors hover:border-cinema-ticket/50"
           >
-            <MapPin className="h-6 w-6 text-cinema-accent" aria-hidden="true" />
-            <h3 className="mt-3 font-semibold text-cinema-text">Dove siamo e prezzi</h3>
-            <p className="mt-1 text-sm text-cinema-text-subtle">
+            <MapPin className="h-6 w-6 text-cinema-ticket" aria-hidden="true" />
+            <h2 className="mt-4 text-xl font-bold text-cinema-text transition-colors group-hover:text-cinema-ticket">
+              Dove siamo e prezzi
+            </h2>
+            <p className="mt-1.5 text-sm leading-relaxed text-cinema-text-subtle">
               {SITE.venueName} · {SITE.city}. Biglietteria e info pratiche.
             </p>
           </Link>

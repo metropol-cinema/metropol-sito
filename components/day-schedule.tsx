@@ -1,6 +1,7 @@
 import { Clapperboard } from 'lucide-react';
 import Link from 'next/link';
 
+import { MetaLine } from '@/components/meta-line';
 import { PriceLegend, Showtimes } from '@/components/showtimes';
 import type { PublicFilm, PublicShowtime } from '@/lib/programmazione-client';
 import { formatDayIt, relativeDayIt, romeDayKey } from '@/lib/programmazione-client';
@@ -45,31 +46,34 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
   const relative = relativeDayIt(firstStart);
 
   return (
-    <section>
-      <h2 className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1 text-lg font-bold capitalize tracking-tight text-cinema-text sm:text-xl">
+    // L'id è la chiave giorno: il quadro settimana in home ci punta direttamente.
+    <section id={dayKey} className="scroll-mt-28">
+      <h2 className="flex flex-wrap items-center gap-x-3 gap-y-1 font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-text-muted">
         {relative && (
-          <span className="rounded-md bg-cinema-ticket/15 px-2 py-0.5 text-sm font-semibold not-italic text-cinema-ticket sm:text-base">
+          <span className="rounded bg-cinema-ticket px-2 py-0.5 font-bold text-cinema-bg">
             {relative}
           </span>
         )}
         {formatDayIt(firstStart)}
       </h2>
-      <div className="mt-3 space-y-3">
+      <div className="mt-4 space-y-4">
         {entries.map(({ film, showtimes }) => (
           <article
             key={`${dayKey}-${film.id}`}
-            className="flex gap-4 rounded-2xl border border-cinema-border bg-cinema-surface p-4 transition-colors hover:border-cinema-ticket/40"
+            className="group flex gap-5 rounded-2xl border border-cinema-border bg-cinema-surface p-5 transition-colors hover:border-cinema-ticket/45"
           >
             <Link
               href={`/film/${film.id}`}
-              className="h-28 w-[4.5rem] shrink-0 overflow-hidden rounded-lg bg-cinema-surface-2"
+              tabIndex={-1}
+              aria-hidden="true"
+              className="h-36 w-24 shrink-0 overflow-hidden rounded-xl bg-cinema-surface-2 shadow-lg shadow-black/40"
             >
               {film.poster ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={film.poster}
-                  alt={`Locandina di ${film.title}`}
-                  className="h-full w-full object-cover"
+                  alt=""
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-cinema-text-subtle">
@@ -79,18 +83,26 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
             </Link>
 
             <div className="min-w-0 flex-1">
-              <h3 className="font-semibold leading-tight">
-                <Link href={`/film/${film.id}`} className="text-cinema-text hover:text-cinema-ticket">
+              <h3 className="text-xl font-black leading-tight sm:text-2xl">
+                <Link
+                  href={`/film/${film.id}`}
+                  className="text-cinema-text transition-colors hover:text-cinema-ticket"
+                >
                   {film.title}
                 </Link>
               </h3>
-              <p className="mt-0.5 text-xs text-cinema-text-subtle">
-                {[film.director, film.durationMinutes ? `${film.durationMinutes}′` : null]
-                  .filter(Boolean)
-                  .join(' · ')}
-              </p>
-              <Showtimes film={film} showtimes={showtimes} showVenue className="mt-2.5" perfBg="#161B22" />
-              <PriceLegend showtimes={showtimes} className="mt-2" />
+              <MetaLine
+                items={[film.director, film.durationMinutes ? `${film.durationMinutes}′` : null]}
+                className="mt-1.5"
+              />
+              <Showtimes
+                film={film}
+                showtimes={showtimes}
+                showVenue
+                className="mt-4"
+                perfBg="#131316"
+              />
+              <PriceLegend showtimes={showtimes} className="mt-2.5" />
             </div>
           </article>
         ))}

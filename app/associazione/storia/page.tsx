@@ -44,10 +44,11 @@ export default function StoriaPage() {
       </nav>
 
       <header className="mb-10">
-        <h1 className="text-2xl font-bold tracking-tight text-cinema-text sm:text-3xl">
+        <p className="eyebrow">L&apos;associazione</p>
+        <h1 className="mt-3 text-4xl font-black leading-[0.95] text-cinema-text sm:text-5xl">
           La storia del Cinema Metropol
         </h1>
-        <p className="mt-3 leading-relaxed text-cinema-text-muted">
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
           Sessant&apos;anni di grande schermo a Villafranca di Verona: dal glorioso cinema di via
           Pace alla rinascita come associazione di volontariato.
         </p>
@@ -70,12 +71,12 @@ export default function StoriaPage() {
         ))}
       </ol>
 
-      <div className="space-y-10">
+      <div className="space-y-12">
         <section id="il-metropol-di-via-pace">
-          <h2 className="text-xl font-bold tracking-tight text-cinema-text">
+          <h2 className="text-2xl font-black text-cinema-text">
             Il glorioso Metropol di via Pace
           </h2>
-          <figure className="mt-4 rounded-xl border border-cinema-border bg-cinema-surface p-5 sm:p-6">
+          <figure className="mt-4 rounded-2xl border border-cinema-border bg-cinema-surface p-6 sm:p-6">
             <blockquote className="space-y-3 text-sm leading-relaxed text-cinema-text-muted">
               <p>
                 «Era il 22 dicembre 1965 quando, con la proiezione del film &ldquo;Sette uomini
@@ -105,12 +106,12 @@ export default function StoriaPage() {
         </section>
 
         <section id="la-rinascita">
-          <h2 className="text-xl font-bold tracking-tight text-cinema-text">La rinascita</h2>
-          <p className="mt-3 leading-relaxed text-cinema-text-muted">
+          <h2 className="text-2xl font-black text-cinema-text">La rinascita</h2>
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             La storia del Cinema Metropol, inteso come luogo dove godere dei film sul grande
             schermo, non terminò però quel giorno, come riportano le cronache.
           </p>
-          <p className="mt-3 leading-relaxed text-cinema-text-muted">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             Il 29 luglio del 2014, con atto notarile, una quindicina di appassionati cinefili dà
             vita all&apos;Associazione Culturale Metropol (in ricordo del glorioso cinema), senza
             scopo di lucro, con l&apos;intento primario di trovare un luogo dove riportare una sala
@@ -119,18 +120,18 @@ export default function StoriaPage() {
             attori. A presidente dell&apos;Associazione fu eletto Mauro Sorio, che ricoprì la
             carica fino a settembre del 2022.
           </p>
-          <p className="mt-3 leading-relaxed text-cinema-text-muted">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             Il luogo, grazie a un accordo con l&apos;Amministrazione comunale di quel tempo guidata
             da Mario Faccioli, fu individuato nella nuova sala polifunzionale &ldquo;Alida
             Ferrarini&rdquo; in piazzetta Villafranchetta, che può ospitare sino a 450 persone.
             Riportando così, dopo 14 anni, il cinema a Villafranca.
           </p>
-          <p className="mt-3 leading-relaxed text-cinema-text-muted">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             Dopo un breve esperimento nel Natale del 2016, le proiezioni iniziarono con regolarità
             nei fine settimana della primavera del 2017, per poi continuare sino a oggi, da ottobre
             ad aprile, con una appendice estiva al Castello scaligero.
           </p>
-          <p className="mt-3 leading-relaxed text-cinema-text-muted">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             Da allora molta strada è stata fatta grazie al prezioso lavoro di circa 40 volontari
             (biglietteria, proiezionisti, servizio in sala) che si alternano nei sette spettacoli
             che ogni fine settimana offre il Cinema Metropol, rinunciando al loro tempo libero per

@@ -54,10 +54,11 @@ export default function StatutoPage() {
       </nav>
 
       <header className="mb-10">
-        <h1 className="text-2xl font-bold tracking-tight text-cinema-text sm:text-3xl">
+        <p className="eyebrow">L&apos;associazione</p>
+        <h1 className="mt-3 text-4xl font-black leading-[0.95] text-cinema-text sm:text-5xl">
           Statuto e regolamento interno
         </h1>
-        <p className="mt-3 leading-relaxed text-cinema-text-muted">
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
           I documenti che regolano la vita dell&apos;{SITE.association}: lo statuto, che ne
           definisce finalità e organi, e il regolamento interno, che ne disciplina
           l&apos;organizzazione operativa.
@@ -67,7 +68,7 @@ export default function StatutoPage() {
       <section id="statuto" aria-labelledby="statuto-titolo">
         <h2
           id="statuto-titolo"
-          className="border-b border-cinema-border pb-3 text-xl font-bold tracking-tight text-cinema-text"
+          className="border-b border-cinema-border pb-3 text-2xl font-black text-cinema-text"
         >
           Lo statuto
         </h2>
@@ -79,13 +80,13 @@ export default function StatutoPage() {
       <section id="regolamento" aria-labelledby="regolamento-titolo" className="mt-14">
         <h2
           id="regolamento-titolo"
-          className="border-b border-cinema-border pb-3 text-xl font-bold tracking-tight text-cinema-text"
+          className="border-b border-cinema-border pb-3 text-2xl font-black text-cinema-text"
         >
           Regolamento interno
         </h2>
         {REGOLAMENTO.map((chapter) => (
           <section key={chapter.id} id={chapter.id} className="mt-8">
-            <h3 className="text-lg font-bold tracking-tight text-cinema-text">{chapter.title}</h3>
+            <h3 className="font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-ticket">{chapter.title}</h3>
             {chapter.articles.map((article) => (
               <ArticleSection key={article.id} article={article} level={4} />
             ))}

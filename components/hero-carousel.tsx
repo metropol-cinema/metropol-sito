@@ -1,83 +1,125 @@
 'use client';
 
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
+import Fade from 'embla-carousel-fade';
 import { ChevronLeft, ChevronRight, Pause, Play } from 'lucide-react';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
 
 interface HeroCarouselProps {
   /** Slide già renderizzate (Server Components passati come children). */
   slides: ReactNode[];
-  /** Permanenza di ogni slide in secondi (allineata a `slides`). */
+  /** Permanenza di ogni slide in secondi, allineata a `slides`. */
   durations: number[];
 }
 
 /**
- * Carosello della home: ruota le slide della timeline "Sito Web → Slideshow".
- * Accessibile: pausabile (WCAG 2.2.2), navigabile da tastiera, parte fermo per
- * chi ha prefers-reduced-motion.
+ * Il carosello dell'hero: una slide per film della settimana.
+ * Il cambio è una dissolvenza lenta — un cambio bobina, non uno scorrimento.
+ *
+ * Accessibile: pausabile (WCAG 2.2.2), navigabile da tastiera e con swipe, si
+ * ferma quando il focus entra in una slide, e non parte affatto per chi ha
+ * chiesto meno animazioni. Le slide non attive sono `inert`, così i loro link
+ * non finiscono nel percorso di tabulazione.
  */
 export function HeroCarousel({ slides, durations }: HeroCarouselProps) {
-  const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
+  const autoplay = useMemo(
+    () =>
+      Autoplay({
+        // Ogni slide ha la sua permanenza (la timeline la decide la dashboard).
+        delay: (scrollSnaps) => scrollSnaps.map((_, i) => (durations[i] ?? 10) * 1000),
+        stopOnInteraction: false,
+        stopOnMouseEnter: false,
+        stopOnFocusIn: true,
+      }),
+    [durations]
+  );
+
+  // duration: la lunghezza della dissolvenza. Abbastanza lunga da leggersi come
+  // un cambio bobina, abbastanza corta da non tenere due titoli sovrapposti.
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, duration: 26 }, [Fade(), autoplay]);
+  const [selected, setSelected] = useState(0);
+  const [playing, setPlaying] = useState(true);
 
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) setPaused(true);
-  }, []);
+    if (!emblaApi) return;
+    const sync = () => setSelected(emblaApi.selectedScrollSnap());
+    const syncPlaying = () => setPlaying(autoplay.isPlaying());
+    sync();
+    emblaApi.on('select', sync).on('autoplay:play', syncPlaying).on('autoplay:stop', syncPlaying);
+    return () => {
+      emblaApi.off('select', sync).off('autoplay:play', syncPlaying).off('autoplay:stop', syncPlaying);
+    };
+  }, [emblaApi, autoplay]);
 
+  // Chi ha disattivato le animazioni si vede la prima slide, ferma.
   useEffect(() => {
-    if (paused || slides.length < 2) return;
-    const ms = (durations[index] ?? 10) * 1000;
-    const timer = setTimeout(() => setIndex((i) => (i + 1) % slides.length), ms);
-    return () => clearTimeout(timer);
-  }, [index, paused, slides.length, durations]);
+    if (!emblaApi) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) autoplay.stop();
+  }, [emblaApi, autoplay]);
 
-  const go = (delta: number) => setIndex((i) => (i + delta + slides.length) % slides.length);
+  const toggle = useCallback(() => {
+    if (autoplay.isPlaying()) autoplay.stop();
+    else autoplay.play();
+  }, [autoplay]);
 
   return (
-    <section aria-roledescription="carosello" aria-label="In evidenza" className="relative">
-      {slides.map((slide, i) => (
-        <div
-          key={i}
-          hidden={i !== index}
-          role="group"
-          aria-roledescription="slide"
-          aria-label={`Slide ${i + 1} di ${slides.length}`}
-        >
-          {slide}
+    <section aria-roledescription="carosello" aria-label="Film in evidenza" className="relative">
+      <div className="overflow-hidden" ref={emblaRef}>
+        <div className="flex">
+          {slides.map((slide, i) => (
+            <div
+              key={i}
+              className="min-w-0 flex-[0_0_100%]"
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`${i + 1} di ${slides.length}`}
+              aria-hidden={i !== selected}
+              inert={i !== selected}
+            >
+              {slide}
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
 
       {slides.length > 1 && (
-        <div className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5 rounded-full bg-black/60 px-2 py-1.5 backdrop-blur-sm">
+        <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1 rounded-full border border-white/10 bg-black/65 px-1.5 py-1.5 backdrop-blur-sm">
           <button
             type="button"
-            onClick={() => go(-1)}
-            aria-label="Slide precedente"
-            className="flex h-8 w-8 items-center justify-center rounded-full text-white hover:bg-white/15"
+            onClick={() => emblaApi?.scrollPrev()}
+            aria-label="Film precedente"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-white transition-colors hover:bg-white/15"
           >
             <ChevronLeft className="h-4 w-4" aria-hidden="true" />
           </button>
           <button
             type="button"
-            onClick={() => setPaused((p) => !p)}
-            aria-label={paused ? 'Riprendi lo scorrimento automatico' : 'Metti in pausa lo scorrimento automatico'}
-            className="flex h-8 w-8 items-center justify-center rounded-full text-white hover:bg-white/15"
+            onClick={toggle}
+            aria-label={
+              playing ? 'Metti in pausa lo scorrimento automatico' : 'Riprendi lo scorrimento automatico'
+            }
+            className="flex h-8 w-8 items-center justify-center rounded-full text-white transition-colors hover:bg-white/15"
           >
-            {paused ? (
-              <Play className="h-4 w-4" aria-hidden="true" />
-            ) : (
+            {playing ? (
               <Pause className="h-4 w-4" aria-hidden="true" />
+            ) : (
+              <Play className="h-4 w-4" aria-hidden="true" />
             )}
           </button>
           <button
             type="button"
-            onClick={() => go(1)}
-            aria-label="Slide successiva"
-            className="flex h-8 w-8 items-center justify-center rounded-full text-white hover:bg-white/15"
+            onClick={() => emblaApi?.scrollNext()}
+            aria-label="Film successivo"
+            className="flex h-8 w-8 items-center justify-center rounded-full text-white transition-colors hover:bg-white/15"
           >
             <ChevronRight className="h-4 w-4" aria-hidden="true" />
           </button>
-          <span className="px-1 text-xs font-medium tabular-nums text-white" aria-hidden="true">
-            {index + 1}/{slides.length}
+          <span
+            aria-hidden="true"
+            className="px-1.5 font-utility text-xs font-semibold tabular-nums text-white"
+          >
+            {selected + 1}/{slides.length}
           </span>
         </div>
       )}

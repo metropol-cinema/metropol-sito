@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { DaySchedule, groupByDay } from '@/components/day-schedule';
+import { EmptyState, LoadError, PageHeader } from '@/components/page-header';
 import { fetchProgrammazione, isFridayRome, type PublicFilm } from '@/lib/programmazione-client';
 
 export const revalidate = 600;
@@ -28,29 +29,27 @@ export default async function VenerdiPage() {
 
   return (
     <main className="container py-10 sm:py-12">
-      <header className="mb-8 max-w-3xl">
-        <h1 className="text-2xl font-bold tracking-tight text-cinema-text sm:text-3xl">
-          I Venerdì del Metropol
-        </h1>
-        <p className="mt-3 leading-relaxed text-cinema-text-muted">
-          Il venerdì sera è il nostro appuntamento con il cinema d&apos;autore: film di qualità,
-          storie da scoprire e titoli che difficilmente trovano spazio nei grandi circuiti.
-          Una rassegna pensata per chi ama il cinema, con biglietto a prezzo ridotto.
-        </p>
-      </header>
+      <PageHeader
+        eyebrow="La rassegna d'autore"
+        title="I Venerdì del Metropol"
+        lead={
+          <p>
+            Il venerdì sera è il nostro appuntamento con il cinema d&apos;autore: film di qualità,
+            storie da scoprire e titoli che difficilmente trovano spazio nei grandi circuiti. Una
+            rassegna pensata per chi ama il cinema, con biglietto a prezzo ridotto.
+          </p>
+        }
+      />
 
       {error ? (
-        <div className="rounded-xl border border-cinema-danger/40 bg-cinema-danger/10 p-6 text-sm text-cinema-text-muted">
-          Impossibile caricare la programmazione.{' '}
-          <span className="text-cinema-text-subtle">({error})</span>
-        </div>
+        <LoadError error={error} />
       ) : days.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-cinema-border bg-cinema-surface/50 p-10 text-center text-cinema-text-subtle">
+        <EmptyState>
           I prossimi venerdì non sono ancora in calendario: seguici sui social per gli annunci
           della rassegna.
-        </div>
+        </EmptyState>
       ) : (
-        <div className="space-y-10">
+        <div className="space-y-12">
           {days.map(({ dayKey, entries }) => (
             <DaySchedule key={dayKey} dayKey={dayKey} entries={entries} />
           ))}

@@ -21,15 +21,16 @@ export default function InfoPage() {
   return (
     <main className="container max-w-3xl py-10 sm:py-12">
       <header className="mb-10">
-        <h1 className="text-2xl font-bold tracking-tight text-cinema-text sm:text-3xl">
+        <p className="eyebrow">Prima di venire</p>
+        <h1 className="mt-3 text-4xl font-black leading-[0.95] text-cinema-text sm:text-5xl">
           Info e prezzi
         </h1>
       </header>
 
-      <div className="space-y-10">
+      <div className="space-y-12">
         <section id="prezzi">
-          <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-cinema-text">
-            <Ticket className="h-5 w-5 text-cinema-accent" aria-hidden="true" /> Biglietti
+          <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
+            <Ticket className="h-5 w-5 text-cinema-ticket" aria-hidden="true" /> Biglietti
           </h2>
           <div className="mt-4 overflow-hidden rounded-xl border border-cinema-border">
             <table className="w-full text-sm">
@@ -58,20 +59,20 @@ export default function InfoPage() {
         </section>
 
         <section id="biglietteria">
-          <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-cinema-text">
-            <Clock className="h-5 w-5 text-cinema-accent" aria-hidden="true" /> Biglietteria
+          <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
+            <Clock className="h-5 w-5 text-cinema-ticket" aria-hidden="true" /> Biglietteria
           </h2>
-          <p className="mt-3 leading-relaxed text-cinema-text-muted">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             La biglietteria apre circa 30 minuti prima dell&apos;inizio di ogni proiezione. La
             tessera socio si può richiedere direttamente in cassa.
           </p>
         </section>
 
         <section id="dove-siamo">
-          <h2 className="flex items-center gap-2.5 text-xl font-bold tracking-tight text-cinema-text">
-            <MapPin className="h-5 w-5 text-cinema-accent" aria-hidden="true" /> Dove siamo
+          <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
+            <MapPin className="h-5 w-5 text-cinema-ticket" aria-hidden="true" /> Dove siamo
           </h2>
-          <p className="mt-3 leading-relaxed text-cinema-text-muted">
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             {SITE.venueName}
             <br />
             {SITE.venueAddress}
@@ -80,7 +81,7 @@ export default function InfoPage() {
             href={SITE.mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 inline-flex items-center gap-2 rounded-lg bg-cinema-accent-strong px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-cinema-accent-strong-hover"
+            className="mt-3 inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-bg transition-colors hover:bg-cinema-ticket-hover"
           >
             <MapPin className="h-4 w-4" aria-hidden="true" /> Apri in Google Maps<span className="sr-only"> (si apre in una nuova scheda)</span>
           </a>

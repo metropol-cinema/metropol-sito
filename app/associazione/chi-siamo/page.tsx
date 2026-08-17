@@ -75,20 +75,21 @@ export default function ChiSiamoPage() {
       </nav>
 
       <header className="mb-10">
-        <h1 className="text-2xl font-bold tracking-tight text-cinema-text sm:text-3xl">
+        <p className="eyebrow">L&apos;associazione</p>
+        <h1 className="mt-3 text-4xl font-black leading-[0.95] text-cinema-text sm:text-5xl">
           Chi siamo
         </h1>
-        <p className="mt-3 leading-relaxed text-cinema-text-muted">
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
           Siamo un gruppo di volontari animati dalla passione per il cinema. Il nostro intento è
           creare un luogo ideale dove ognuno possa condividere la propria conoscenza
           cinematografica, partecipare attivamente alle iniziative o anche, più semplicemente,
           godersi un buon film.
         </p>
-        <p className="mt-3 leading-relaxed text-cinema-text-muted">
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
           L&apos;Associazione, senza scopo di lucro, è aperta a tutte le persone che vogliono
           dedicare parte del proprio tempo per trasmettere la loro passione agli altri.
         </p>
-        <p className="mt-3 leading-relaxed text-cinema-text-muted">
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
           Al fine di sviluppare iniziative che promuovano il cinema come mezzo espressivo,
           l&apos;Associazione Metropol auspica e incoraggia la collaborazione con altre
           associazioni o enti, sia pubblici che privati.
@@ -96,7 +97,7 @@ export default function ChiSiamoPage() {
       </header>
 
       <section id="ruoli-associativi">
-        <h2 className="text-xl font-bold tracking-tight text-cinema-text">Ruoli associativi</h2>
+        <h2 className="text-2xl font-black text-cinema-text">Ruoli associativi</h2>
         <ul className="mt-4 grid gap-3 sm:grid-cols-2">
           {ROLES.map((person) => (
             <li
@@ -109,7 +110,7 @@ export default function ChiSiamoPage() {
               <p className="mt-1.5 font-semibold text-cinema-text">{person.name}</p>
               <a
                 href={`mailto:${person.email}`}
-                className="mt-1.5 flex items-center gap-1.5 break-all text-sm text-cinema-accent hover:underline"
+                className="mt-1.5 flex items-center gap-1.5 break-all text-sm text-cinema-ticket hover:underline"
               >
                 <Mail className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                 {person.email}
@@ -123,7 +124,7 @@ export default function ChiSiamoPage() {
             <p className="mt-1.5 font-semibold text-cinema-text">{PROBIVIRI.names}</p>
             <a
               href={`mailto:${PROBIVIRI.email}`}
-              className="mt-1.5 flex items-center gap-1.5 break-all text-sm text-cinema-accent hover:underline"
+              className="mt-1.5 flex items-center gap-1.5 break-all text-sm text-cinema-ticket hover:underline"
             >
               <Mail className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               {PROBIVIRI.email}

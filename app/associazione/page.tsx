@@ -54,15 +54,16 @@ export default function AssociazionePage() {
   return (
     <main className="container max-w-3xl py-10 sm:py-12">
       <header className="mb-10">
-        <h1 className="text-2xl font-bold tracking-tight text-cinema-text sm:text-3xl">
+        <p className="eyebrow">Chi tiene aperta la sala</p>
+        <h1 className="mt-3 text-4xl font-black leading-[0.95] text-cinema-text sm:text-5xl">
           L&apos;Associazione
         </h1>
-        <p className="mt-3 leading-relaxed text-cinema-text-muted">
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
           Il Cinema Metropol è gestito dall&apos;{SITE.association}, una realtà di volontariato che
           tiene viva la sala cinematografica di {SITE.city}: uno spazio di comunità dove il cinema
           si guarda insieme, sul grande schermo.
         </p>
-        <p className="mt-3 leading-relaxed text-cinema-text-muted">
+        <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
           La stagione cinematografica va indicativamente da ottobre a maggio, con proiezioni nel
           fine settimana e la rassegna d&apos;autore del venerdì. In estate il cinema si sposta
           all&apos;aperto, con la rassegna di agosto al Castello di Villafranca. Durante
@@ -76,13 +77,13 @@ export default function AssociazionePage() {
             <li key={section.href} className="last:sm:col-span-2">
               <Link
                 href={section.href}
-                className="group flex h-full flex-col rounded-xl border border-cinema-border bg-cinema-surface p-5 transition-colors hover:border-cinema-accent/60 hover:bg-cinema-surface-2"
+                className="group flex h-full flex-col rounded-2xl border border-cinema-border bg-cinema-surface p-6 transition-colors hover:border-cinema-ticket/60 hover:bg-cinema-surface-2"
               >
                 <span className="flex items-center gap-2.5 font-bold tracking-tight text-cinema-text">
-                  <section.icon className="h-5 w-5 text-cinema-accent" aria-hidden="true" />
+                  <section.icon className="h-5 w-5 text-cinema-ticket" aria-hidden="true" />
                   {section.label}
                   <ArrowRight
-                    className="ml-auto h-4 w-4 text-cinema-text-subtle transition-transform group-hover:translate-x-0.5 group-hover:text-cinema-accent"
+                    className="ml-auto h-4 w-4 text-cinema-text-subtle transition-transform group-hover:translate-x-0.5 group-hover:text-cinema-ticket"
                     aria-hidden="true"
                   />
                 </span>
@@ -96,7 +97,7 @@ export default function AssociazionePage() {
       </nav>
 
       <section id="dati" className="mt-12">
-        <h2 className="text-xl font-bold tracking-tight text-cinema-text">
+        <h2 className="text-2xl font-black text-cinema-text">
           Dati dell&apos;associazione
         </h2>
         <dl className="mt-3 space-y-1.5 text-sm leading-relaxed text-cinema-text-muted">
@@ -115,7 +116,7 @@ export default function AssociazionePage() {
           <div>
             <dt className="inline font-medium text-cinema-text">PEC: </dt>
             <dd className="inline">
-              <a href={`mailto:${SITE.pec}`} className="text-cinema-accent hover:underline">
+              <a href={`mailto:${SITE.pec}`} className="text-cinema-ticket hover:underline">
                 {SITE.pec}
               </a>
             </dd>

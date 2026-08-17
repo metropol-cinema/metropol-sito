@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { DaySchedule, groupByDay } from '@/components/day-schedule';
+import { EmptyState, LoadError, PageHeader } from '@/components/page-header';
 import { fetchProgrammazione, type PublicFilm } from '@/lib/programmazione-client';
 
 export const revalidate = 600;
@@ -28,26 +29,21 @@ export default async function ProgrammazionePage() {
 
   return (
     <main className="container py-10 sm:py-12">
-      <header className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight text-cinema-text sm:text-3xl">
-          Programmazione
-        </h1>
-        <p className="mt-1 text-sm text-cinema-text-subtle">
-          Orari e prezzi delle proiezioni in calendario.
-        </p>
-      </header>
+      <PageHeader
+        eyebrow="Giorno per giorno"
+        title="Programmazione"
+        lead={<p>Tutte le proiezioni in calendario, con orari, sala e prezzi.</p>}
+      />
 
       {error ? (
-        <div className="rounded-xl border border-cinema-danger/40 bg-cinema-danger/10 p-6 text-sm text-cinema-text-muted">
-          Impossibile caricare la programmazione.{' '}
-          <span className="text-cinema-text-subtle">({error})</span>
-        </div>
+        <LoadError error={error} />
       ) : days.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-cinema-border bg-cinema-surface/50 p-10 text-center text-cinema-text-subtle">
-          Nessuna proiezione in calendario nei prossimi giorni.
-        </div>
+        <EmptyState>
+          Nessuna proiezione in calendario nei prossimi giorni. Il nuovo programma esce qui appena
+          è pronto.
+        </EmptyState>
       ) : (
-        <div className="space-y-10">
+        <div className="space-y-12">
           {days.map(({ dayKey, entries }) => (
             <DaySchedule key={dayKey} dayKey={dayKey} entries={entries} />
           ))}
