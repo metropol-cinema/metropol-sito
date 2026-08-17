@@ -40,13 +40,36 @@ const theaterJsonLd = {
   sameAs: [SITE.social.facebook, SITE.social.instagram],
 };
 
+const DESCRIPTION =
+  'Il cinema della comunità di Villafranca di Verona: film in programmazione, rassegne, corsi ed eventi della Sala "Alida Ferrarini".';
+
+/**
+ * Base per gli URL assoluti delle anteprime di condivisione. Su Vercel arriva
+ * dal progetto, quindi il giorno dello switch a www.cinemametropol.com si
+ * aggiorna da sé senza toccare il codice.
+ */
+const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
+  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+  : 'http://localhost:3000';
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: 'Cinema Metropol · Villafranca di Verona',
     template: '%s · Cinema Metropol',
   },
-  description:
-    'Il cinema della comunità di Villafranca di Verona: film in programmazione, rassegne, corsi ed eventi della Sala "Alida Ferrarini".',
+  description: DESCRIPTION,
+  // L'immagine di anteprima è app/opengraph-image.png (il marchio a colori):
+  // Next la aggancia da sola, qui restano solo i testi che l'accompagnano.
+  openGraph: {
+    type: 'website',
+    locale: 'it_IT',
+    siteName: SITE.association,
+    title: 'Cinema Metropol · Villafranca di Verona',
+    description: DESCRIPTION,
+    url: '/',
+  },
+  twitter: { card: 'summary_large_image' },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

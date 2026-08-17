@@ -46,24 +46,36 @@ Contratto completo dell'API: nel gestionale, `docs/integrations/programmazione-a
 - **Slideshow home** (`lib/slideshow-client.ts`): timeline gestita dalla
   Dashboard del gestionale (sezione "Sito Web → Slideshow", admin-only) ed
   esposta da `/api/public/sito-slideshow` (stesso token; URL derivato da
-  PROGRAMMAZIONE_API_URL). Il sito ne usa **solo** le slide `video`/`image`
-  (mediaUrl, durationSeconds, caption): l'ordine dell'hero non lo decide più la
-  timeline, vedi "Regola dell'hero" qui sotto. Il flag `fallbackOnly` non viene
-  più letto. Spec backend: nel gestionale, `docs/specs/sito-web-slideshow.md`.
+  PROGRAMMAZIONE_API_URL). **È la timeline a comandare la fascia hero**: vedi
+  "L'hero" qui sotto. Spec backend: nel gestionale,
+  `docs/specs/sito-web-slideshow.md`.
 
-## Regola dell'hero (home)
+## L'hero (home)
 
-Una sola regola, applicata da `buildHeroSlides` in `app/page.tsx`:
+**La fascia hero è la timeline di "Sito Web → Slideshow"**, nell'ordine deciso
+in dashboard. `planHero` in `app/page.tsx` traduce ogni riga in slide:
 
-1. **Ci sono film in settimana** (proiezioni fino a domenica) → l'hero è il
-   carosello di quei film, uno per slide, max 5, ordinati per proiezione più
-   vicina. Le slide video/immagine **non compaiono**.
-2. **Settimana vuota** → si scende lungo le riserve, in quest'ordine:
-   video/immagini della dashboard → `HeroUpcoming` coi film in arrivo →
-   `HeroClosed` ("il proiettore riposa").
+| Riga della timeline | Diventa |
+| --- | --- |
+| `current_programming` | **una slide per film della settimana** (non una sola), in ordine di proiezione più vicina |
+| `future_programming`  | il pannello `HeroUpcoming` coi film in arrivo |
+| `video` / `image`     | la slide media caricata |
 
-"Prossimamente" resta una sezione a sé sotto la settimana; a settimana vuota è
-già l'hero e quindi non si ripete.
+Regole di contorno:
+
+- una riga senza contenuto si salta (niente film in settimana, nessun media);
+- `fallbackOnly` = "solo come riserva": compare solo se **nessuna** riga di
+  programmazione ha prodotto contenuto. È così che si tiene un video di scorta
+  senza che copra il film in cartellone — se il flag è spento, il video sta
+  dove l'hai messo, anche prima dei film;
+- massimo `MAX_HERO_SLIDES` slide in totale;
+- timeline assente o vuota → `DEFAULT_TIMELINE` (programmazione + prossimamente);
+- niente da mostrare → `HeroClosed`, "il proiettore riposa";
+- `priority` va solo alla prima slide: il backdrop è l'immagine più pesante
+  della pagina.
+
+La sezione "Prossimamente" sotto la settimana non si ripete se la timeline la
+mette già nell'hero (`upcomingInHero`).
 
 Sotto l'hero c'è il **quadro settimana** (`components/week-rail.tsx`): lunedì →
 domenica, i giorni con proiezione accesi in oro con gli orari, gli altri spenti.
@@ -97,6 +109,13 @@ automatico) · `/associazione` (hub con card) e sottopagine `/chi-siamo`,
   - JSON-LD: MovieTheater nel layout, Movie+ScreeningEvent nella scheda film.
 - Date/ore SEMPRE in `Europe/Rome` (l'API è in UTC) — usa gli helper del client.
 - `prices` è **per proiezione**: niente assunzioni di prezzo unico per film.
+- **Marchio**: `public/loghi/metropol-marchio-bianco.png` (versione
+  monocromatica) in testata e piè di pagina — sul nero è quella giusta e porta
+  già il nome per esteso, quindi niente wordmark accanto.
+  `metropol-logo-colori.png` è il marchio da carta intestata (nero + petrolio
+  `#3898B0`): serve solo a comporre `app/opengraph-image.png`, l'anteprima di
+  condivisione. `app/icon.png` è la bobina del marchio, ritagliata per colore.
+  Il petrolio **non** entra nella palette del sito: l'accento resta l'oro.
 - Palette **"sala buia, insegna d'oro"** in `tailwind.config.ts` (token
   `cinema-*`): nero caldo `#0B0B0D`, oro dell'insegna `#F4B740` come colore
   d'azione, rosso sipario `#8C1D18` per le proiezioni fuori sala (Castello). Il

@@ -1,4 +1,5 @@
 import { Menu } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { NAV_LINKS, SITE } from '@/lib/site';
@@ -10,22 +11,17 @@ export function SiteHeader() {
       {/* Filo "marquee" dorato: richiamo all'insegna luminosa del cinema. */}
       <div className="h-0.5 w-full marquee-rule" aria-hidden="true" />
       <div className="container flex h-[4.5rem] items-center justify-between gap-4">
-        <Link href="/" className="flex items-center gap-3">
-          {/* La targa dell'insegna: una M d'oro, come sopra la biglietteria. */}
-          <span
-            aria-hidden="true"
-            className="flex h-10 w-10 items-center justify-center rounded-md bg-cinema-ticket font-display text-2xl font-black leading-none text-cinema-bg shadow-lg shadow-cinema-ticket/20"
-          >
-            M
-          </span>
-          <span className="leading-none">
-            <span className="block font-display text-xl font-black tracking-tight text-cinema-text">
-              {SITE.name}
-            </span>
-            <span className="mt-1 hidden font-utility text-[0.6rem] font-semibold uppercase tracking-marquee text-cinema-text-subtle sm:block">
-              {SITE.city}
-            </span>
-          </span>
+        {/* Il marchio dell'associazione, nella versione monocromatica bianca:
+            sul nero della sala è quella giusta, e porta già il nome per esteso. */}
+        <Link href="/" className="flex shrink-0 items-center">
+          <Image
+            src="/loghi/metropol-marchio-bianco.png"
+            alt={`${SITE.association} — home`}
+            width={631}
+            height={196}
+            priority
+            className="h-10 w-auto sm:h-12"
+          />
         </Link>
 
         {/* Nav desktop */}

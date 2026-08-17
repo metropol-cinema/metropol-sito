@@ -1,4 +1,5 @@
 import { Facebook, Instagram, MapPin, MessageCircle } from 'lucide-react';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { ASSOCIATION_LINKS, NAV_LINKS, SITE } from '@/lib/site';
@@ -9,7 +10,17 @@ export function SiteFooter() {
       <div className="h-px w-full marquee-rule" aria-hidden="true" />
       <div className="container grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4">
         <div>
-          <h2 className="font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket">{SITE.association}</h2>
+          {/* Il marchio porta già "Associazione Culturale Metropol": è
+              l'intestazione di questa colonna, non un logo in più. */}
+          <h2>
+            <Image
+              src="/loghi/metropol-marchio-bianco.png"
+              alt={SITE.association}
+              width={631}
+              height={196}
+              className="h-10 w-auto opacity-90"
+            />
+          </h2>
           <p className="mt-3 flex items-start gap-2 text-sm text-cinema-text-subtle">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-cinema-ticket" aria-hidden="true" />
             <span>
