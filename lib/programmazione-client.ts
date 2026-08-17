@@ -87,6 +87,8 @@ export async function fetchProgrammazione(
     method: 'GET',
     headers: { accept: 'application/json' },
     signal: opts.signal,
+    // Finestra ISR. Il gestionale può farla cadere prima chiamando
+    // /api/revalidate quando cambia qualcosa.
     next: { revalidate: opts.revalidate ?? 600 },
   });
 
