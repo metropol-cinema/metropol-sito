@@ -1,7 +1,7 @@
 import { Clock, MapPin, Ticket } from 'lucide-react';
 import type { Metadata } from 'next';
 
-import { SITE } from '@/lib/site';
+import { BOX_OFFICE_NOTE, SITE, TICKET_PRICES } from '@/lib/site';
 import { formatEuro } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -9,13 +9,6 @@ export const metadata: Metadata = {
   description:
     'Prezzi dei biglietti, orari della biglietteria e come raggiungere il Cinema Metropol di Villafranca di Verona.',
 };
-
-const PRICES = [
-  { label: 'Intero (sabato, domenica e festivi)', amount: 7.5 },
-  { label: 'Intero (venerdì e rassegne)', amount: 6 },
-  { label: 'Ridotto Under 18', amount: 6 },
-  { label: 'Ridotto soci tesserati', amount: 6 },
-];
 
 export default function InfoPage() {
   return (
@@ -36,7 +29,7 @@ export default function InfoPage() {
             <table className="w-full text-sm">
               <caption className="sr-only">Prezzi dei biglietti per tipologia</caption>
               <tbody>
-                {PRICES.map((p, i) => (
+                {TICKET_PRICES.map((p, i) => (
                   <tr
                     key={p.label}
                     className={i % 2 === 0 ? 'bg-cinema-surface' : 'bg-cinema-surface/40'}
@@ -63,8 +56,7 @@ export default function InfoPage() {
             <Clock className="h-5 w-5 text-cinema-ticket" aria-hidden="true" /> Biglietteria
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
-            La biglietteria apre circa 30 minuti prima dell&apos;inizio di ogni proiezione. La
-            tessera socio si può richiedere direttamente in cassa.
+            {BOX_OFFICE_NOTE} La tessera socio si può richiedere direttamente in cassa.
           </p>
         </section>
 

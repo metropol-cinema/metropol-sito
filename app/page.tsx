@@ -1,4 +1,4 @@
-import { CalendarDays, MapPin } from 'lucide-react';
+import { Clock, MapPin, Ticket } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
@@ -16,8 +16,9 @@ import {
   splitWeekUpcoming,
   type PublicFilm,
 } from '@/lib/programmazione-client';
-import { SITE } from '@/lib/site';
+import { BOX_OFFICE_NOTE, SITE, TICKET_PRICES } from '@/lib/site';
 import { fetchSlideshow, type SlideshowItem } from '@/lib/slideshow-client';
+import { formatEuro } from '@/lib/utils';
 
 // Rigenera la pagina al massimo ogni 10 minuti (la programmazione cambia ~1/giorno).
 export const revalidate = 600;
@@ -233,32 +234,69 @@ export default async function HomePage() {
           </section>
         )}
 
-        {/* Sezioni di rimando */}
+        {/* Le due domande che arrivano sempre in cassa: quanto costa, e dove
+            siete. La risposta sta qui, non dietro un link. */}
         <div className="mt-16 grid gap-4 sm:grid-cols-2">
-          <Link
-            href="/venerdi"
-            className="group rounded-2xl border border-cinema-border bg-cinema-surface p-6 transition-colors hover:border-cinema-ticket/50"
+          <section
+            aria-labelledby="prezzi-titolo"
+            className="rounded-2xl border border-cinema-border bg-cinema-surface p-6"
           >
-            <CalendarDays className="h-6 w-6 text-cinema-ticket" aria-hidden="true" />
-            <h2 className="mt-4 text-xl font-bold text-cinema-text transition-colors group-hover:text-cinema-ticket">
-              I Venerdì del Metropol
+            <Ticket className="h-6 w-6 text-cinema-ticket" aria-hidden="true" />
+            <h2 id="prezzi-titolo" className="mt-4 text-xl font-bold text-cinema-text">
+              Prezzi dei biglietti
             </h2>
-            <p className="mt-1.5 text-sm leading-relaxed text-cinema-text-subtle">
-              La rassegna del venerdì sera: cinema d&apos;autore a 6&nbsp;€.
+            <dl className="mt-4 space-y-2 text-sm">
+              {TICKET_PRICES.map((price) => (
+                <div
+                  key={price.label}
+                  className="flex items-baseline justify-between gap-4 border-b border-cinema-border/60 pb-2 last:border-0 last:pb-0"
+                >
+                  <dt className="text-cinema-text-muted">{price.label}</dt>
+                  <dd className="shrink-0 font-display font-black tabular-nums text-cinema-text">
+                    {formatEuro(price.amount)}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+            <p className="mt-4 text-xs leading-relaxed text-cinema-text-subtle">
+              Per eventi e proiezioni speciali fa fede il prezzo indicato accanto all&apos;orario.
             </p>
-          </Link>
-          <Link
-            href="/info"
-            className="group rounded-2xl border border-cinema-border bg-cinema-surface p-6 transition-colors hover:border-cinema-ticket/50"
+            <Link
+              href="/info#prezzi"
+              className="mt-4 inline-block border-b border-cinema-border-strong pb-0.5 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket hover:text-cinema-ticket"
+            >
+              Info e prezzi
+            </Link>
+          </section>
+
+          <section
+            aria-labelledby="dove-titolo"
+            className="rounded-2xl border border-cinema-border bg-cinema-surface p-6"
           >
             <MapPin className="h-6 w-6 text-cinema-ticket" aria-hidden="true" />
-            <h2 className="mt-4 text-xl font-bold text-cinema-text transition-colors group-hover:text-cinema-ticket">
-              Dove siamo e prezzi
+            <h2 id="dove-titolo" className="mt-4 text-xl font-bold text-cinema-text">
+              Dove siamo
             </h2>
-            <p className="mt-1.5 text-sm leading-relaxed text-cinema-text-subtle">
-              {SITE.venueName} · {SITE.city}. Biglietteria e info pratiche.
+            <address className="mt-4 not-italic leading-relaxed text-cinema-text-muted">
+              {SITE.venueName}
+              <br />
+              {SITE.venueAddress}
+            </address>
+            <p className="mt-4 flex items-start gap-2 text-sm leading-relaxed text-cinema-text-subtle">
+              <Clock className="mt-0.5 h-4 w-4 shrink-0 text-cinema-ticket" aria-hidden="true" />
+              {BOX_OFFICE_NOTE}
             </p>
-          </Link>
+            <a
+              href={SITE.mapsUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-5 inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-4 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-bg transition-colors hover:bg-cinema-ticket-hover"
+            >
+              <MapPin className="h-4 w-4" aria-hidden="true" />
+              Apri in Google Maps
+              <span className="sr-only"> (si apre in una nuova scheda)</span>
+            </a>
+          </section>
         </div>
       </div>
     </main>

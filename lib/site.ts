@@ -20,6 +20,23 @@ export const SITE = {
   },
 } as const;
 
+/**
+ * Listino di riferimento, mostrato in home e in /info. I prezzi VERI di una
+ * singola proiezione arrivano dalla read-API (`prices` è per proiezione e può
+ * variare): questo è il prezzario generale, non una promessa sul singolo
+ * spettacolo.
+ */
+export const TICKET_PRICES = [
+  { label: 'Intero (sabato, domenica e festivi)', amount: 7.5 },
+  { label: 'Intero (venerdì e rassegne)', amount: 6 },
+  { label: 'Ridotto Under 18', amount: 6 },
+  { label: 'Ridotto soci tesserati', amount: 6 },
+] as const;
+
+/** Quanto prima dell'inizio apre la cassa. */
+export const BOX_OFFICE_NOTE =
+  'La biglietteria apre circa 30 minuti prima dell\'inizio di ogni proiezione.';
+
 export const NAV_LINKS = [
   { href: '/programmazione', label: 'Programmazione' },
   { href: '/prossimamente', label: 'Prossimamente' },
