@@ -4,10 +4,10 @@ import Link from 'next/link';
 
 import { AgeBadge } from '@/components/age-badge';
 import { MetaLine } from '@/components/meta-line';
-import { PriceLegend, Showtimes } from '@/components/showtimes';
+import { PriceLegend, ShowtimesByDay } from '@/components/showtimes';
 import { ageRatingFor } from '@/lib/age-rating';
 import type { PublicFilm } from '@/lib/programmazione-client';
-import { formatDayIt, relativeDayIt } from '@/lib/programmazione-client';
+import { relativeDayIt } from '@/lib/programmazione-client';
 import { fetchTmdbDetails } from '@/lib/tmdb';
 
 /**
@@ -26,14 +26,16 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
   const next = film.showtimes[0];
   const relative = next ? relativeDayIt(next.startsAt) : null;
 
-  // Quando si può vedere: "Stasera" / "Domani", altrimenti il giorno per esteso.
-  const when = next
-    ? relative === 'Oggi'
+  // Occhiello: solo il "quando" relativo. La data precisa sta sopra ogni
+  // gruppo di orari — metterne una sola qui era falso appena il film aveva
+  // proiezioni in giorni diversi.
+  const when = !next
+    ? 'In programmazione'
+    : relative === 'Oggi'
       ? 'Stasera in sala'
       : relative === 'Domani'
         ? 'Domani in sala'
-        : formatDayIt(next.startsAt)
-    : 'In programmazione';
+        : 'In sala questa settimana';
 
   const meta = [
     film.director ? `Regia di ${film.director}` : null,
@@ -95,17 +97,17 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
             {ageRating && <AgeBadge rating={ageRating} />}
           </MetaLine>
 
-          <Showtimes
+          {/* Due giorni al massimo: l'hero deve restare leggibile a colpo
+              d'occhio, il resto sta nella scheda del film. */}
+          <ShowtimesByDay
             film={film}
-            showtimes={film.showtimes.slice(0, 3)}
-            ariaLabel={`Prossime proiezioni di ${film.title}`}
+            maxDays={2}
             size="lg"
             showVenue
-            withDayInLabel
             perfBg="#0B0B0D"
             className="mt-7"
           />
-          <PriceLegend showtimes={film.showtimes.slice(0, 3)} className="mt-3 text-cinema-text-muted" />
+          <PriceLegend showtimes={film.showtimes} className="mt-3 text-cinema-text-muted" />
 
           <Link
             href={`/film/${film.id}`}

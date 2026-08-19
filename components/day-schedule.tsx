@@ -2,9 +2,9 @@ import { Clapperboard } from 'lucide-react';
 import Link from 'next/link';
 
 import { MetaLine } from '@/components/meta-line';
-import { PriceLegend, Showtimes } from '@/components/showtimes';
+import { DayLabel, PriceLegend, Showtimes } from '@/components/showtimes';
 import type { PublicFilm, PublicShowtime } from '@/lib/programmazione-client';
-import { formatDayIt, relativeDayIt, romeDayKey } from '@/lib/programmazione-client';
+import { romeDayKey } from '@/lib/programmazione-client';
 
 interface DayEntry {
   film: PublicFilm;
@@ -43,18 +43,12 @@ export function groupByDay(films: PublicFilm[]): Array<{ dayKey: string; entries
 /** Programmazione di un giorno: riga per film con orari, prezzi e acquisto. */
 export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayEntry[] }) {
   const firstStart = entries[0].showtimes[0].startsAt;
-  const relative = relativeDayIt(firstStart);
 
   return (
     // L'id è la chiave giorno: il quadro settimana in home ci punta direttamente.
     <section id={dayKey} className="scroll-mt-28">
-      <h2 className="flex flex-wrap items-center gap-x-3 gap-y-1 font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-text-muted">
-        {relative && (
-          <span className="rounded bg-cinema-ticket px-2 py-0.5 font-bold text-cinema-bg">
-            {relative}
-          </span>
-        )}
-        {formatDayIt(firstStart)}
+      <h2>
+        <DayLabel startsAt={firstStart} />
       </h2>
       <div className="mt-4 space-y-4">
         {entries.map(({ film, showtimes }) => (

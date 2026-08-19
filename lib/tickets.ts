@@ -9,9 +9,13 @@
  *   https://ticket.cinebot.it/metropol/{eventId}/{titolo}
  * Finché la env non è configurata, i bottoni "Acquista" non compaiono.
  */
-export function ticketUrlFor(sourceId: number, title?: string): string | null {
+export function ticketUrlFor(sourceId: number | null, title?: string): string | null {
   const template = process.env.TICKET_URL_TEMPLATE;
   if (!template || !template.includes('{eventId}')) return null;
+  // Proiezione creata a mano in dashboard: non ha un evento sulla piattaforma
+  // di vendita, quindi niente bottone "Acquista" — meglio nessun link che uno
+  // che porta a una pagina inesistente.
+  if (sourceId == null) return null;
   return template
     .replaceAll('{eventId}', String(sourceId))
     .replaceAll('{titolo}', slugify(title ?? ''));

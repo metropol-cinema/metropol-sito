@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { AgeBadge } from '@/components/age-badge';
 import { MetaLine } from '@/components/meta-line';
-import { PriceLegend, Showtimes } from '@/components/showtimes';
+import { PriceLegend, ShowtimesByDay } from '@/components/showtimes';
 import { ageRatingFor } from '@/lib/age-rating';
 import type { PublicFilm } from '@/lib/programmazione-client';
 import { fetchTmdbDetails } from '@/lib/tmdb';
@@ -71,7 +71,7 @@ export async function FilmRow({ film }: { film: PublicFilm }) {
           )}
 
           <div className="mt-auto pt-5">
-            <Showtimes film={film} showVenue perfBg="#131316" size="lg" />
+            <ShowtimesByDay film={film} showVenue perfBg="#131316" size="lg" />
             <PriceLegend showtimes={film.showtimes} className="mt-2.5" />
             <Link
               href={`/film/${film.id}`}

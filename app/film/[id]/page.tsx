@@ -6,25 +6,16 @@ import { notFound } from 'next/navigation';
 import { AgeBadge } from '@/components/age-badge';
 import { Gallery } from '@/components/gallery';
 import { MetaLine } from '@/components/meta-line';
-import { PriceLegend, Showtimes } from '@/components/showtimes';
+import { PriceLegend, ShowtimesByDay, groupShowtimesByDay } from '@/components/showtimes';
 import { Trailer } from '@/components/trailer';
 import { ageRatingFor } from '@/lib/age-rating';
 import { jsonLdScript } from '@/lib/json-ld';
-import {
-  fetchProgrammazione,
-  formatDayIt,
-  relativeDayIt,
-  romeDayKey,
-  type PublicFilm,
-} from '@/lib/programmazione-client';
-import { SITE } from '@/lib/site';
+import { fetchProgrammazione, type PublicFilm } from '@/lib/programmazione-client';
+import { SITE, isHomeVenue } from '@/lib/site';
 import { fetchTmdbDetails } from '@/lib/tmdb';
 import { youtubeIdFrom } from '@/lib/youtube';
 
 export const revalidate = 600;
-
-/** La sala "di casa": la mostriamo solo quando la proiezione è altrove. */
-const DEFAULT_VENUE = 'Cinema Metropol';
 
 async function findFilm(id: string): Promise<PublicFilm | null> {
   const numericId = Number.parseInt(id, 10);
@@ -79,15 +70,7 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
   // dashboard): qui non si calcola nulla.
   const ageRating = ageRatingFor(film.ageRating);
 
-  // Proiezioni raggruppate per giorno.
-  const byDay = new Map<string, typeof film.showtimes>();
-  for (const s of film.showtimes) {
-    const key = romeDayKey(s.startsAt);
-    const list = byDay.get(key);
-    if (list) list.push(s);
-    else byDay.set(key, [s]);
-  }
-  const days = [...byDay.entries()].sort(([a], [b]) => a.localeCompare(b));
+  const days = groupShowtimesByDay(film.showtimes);
 
   const meta = [
     film.director ? `Regia di ${film.director}` : null,
@@ -133,8 +116,7 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
       name: `${film.title} al ${SITE.name}`,
       startDate: s.startsAt,
       workPresented: { '@type': 'Movie', name: film.title },
-      location:
-        s.venue && s.venue !== DEFAULT_VENUE ? { '@type': 'Place', name: s.venue } : theaterJsonLd,
+      location: s.venue && !isHomeVenue(s.venue) ? { '@type': 'Place', name: s.venue } : theaterJsonLd,
       ...(s.prices.length > 0
         ? {
             offers: s.prices.map((p) => ({
@@ -223,32 +205,7 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
             Non ci sono proiezioni in calendario al momento.
           </p>
         ) : (
-          <div className="space-y-8">
-            {days.map(([dayKey, showtimes]) => {
-              const relative = relativeDayIt(showtimes[0].startsAt);
-              return (
-                <div key={dayKey}>
-                  <h3 className="flex flex-wrap items-center gap-x-3 gap-y-1 font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-text-muted">
-                    {relative && (
-                      <span className="rounded bg-cinema-ticket px-2 py-0.5 font-bold text-cinema-bg">
-                        {relative}
-                      </span>
-                    )}
-                    {formatDayIt(showtimes[0].startsAt)}
-                  </h3>
-                  <Showtimes
-                    film={film}
-                    showtimes={showtimes}
-                    size="lg"
-                    showVenue
-                    withDayInLabel
-                    perfBg="#0B0B0D"
-                    className="mt-4"
-                  />
-                </div>
-              );
-            })}
-          </div>
+          <ShowtimesByDay film={film} size="lg" showVenue perfBg="#0B0B0D" className="space-y-8" />
         )}
       </section>
 

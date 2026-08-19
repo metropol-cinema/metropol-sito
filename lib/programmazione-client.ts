@@ -14,8 +14,12 @@ export interface PublicPrice {
 }
 
 export interface PublicShowtime {
-  /** Id evento Cinebot: serve per il deep-link di acquisto biglietti. */
-  sourceId: number;
+  /**
+   * Id evento Cinebot, per il deep-link di acquisto biglietti.
+   * **null** per le proiezioni create a mano in dashboard: non esistono su
+   * Cinebot, quindi non sono acquistabili online.
+   */
+  sourceId: number | null;
   /** Inizio in ISO 8601 UTC. Converti a Europe/Rome per la visualizzazione. */
   startsAt: string;
   /** Sala/luogo della proiezione (es. il Castello per la rassegna estiva). */

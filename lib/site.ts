@@ -36,3 +36,15 @@ export const ASSOCIATION_LINKS = [
   { href: '/associazione/diventa-volontario', label: 'Diventa volontario' },
   { href: '/associazione/statuto', label: 'Statuto e regolamento' },
 ] as const;
+
+/**
+ * True se la proiezione è nella sala di casa. Cinebot scrive il nome in modi
+ * diversi ("Sala Ferrarini", "Sala Alida Ferrarini", "Cinema Metropol"): il
+ * luogo va detto SOLO quando si proietta altrove — d'estate al Castello —
+ * altrimenti il segnale che conta si perde tra le ripetizioni.
+ */
+export function isHomeVenue(venue: string | null | undefined): boolean {
+  if (!venue) return true;
+  const v = venue.toLowerCase();
+  return v.includes('metropol') || v.includes('ferrarini');
+}

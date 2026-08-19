@@ -2,12 +2,10 @@ import { MapPin, Ticket } from 'lucide-react';
 import type { CSSProperties } from 'react';
 
 import type { PublicFilm, PublicPrice, PublicShowtime } from '@/lib/programmazione-client';
-import { formatDayIt, formatTimeIt } from '@/lib/programmazione-client';
+import { formatDayIt, formatTimeIt, relativeDayIt, romeDayKey } from '@/lib/programmazione-client';
+import { isHomeVenue } from '@/lib/site';
 import { ticketUrlFor } from '@/lib/tickets';
 import { cn, formatEuro } from '@/lib/utils';
-
-/** La sala "di casa": mostriamo il luogo solo quando la proiezione è altrove. */
-const DEFAULT_VENUE = 'Cinema Metropol';
 
 function priceText(prices: PublicPrice[]): string {
   return prices.map((p) => `${p.label} ${formatEuro(p.amount)}`).join(' · ');
@@ -95,12 +93,12 @@ export function Showtimes({
         const buyUrl = ticketUrlFor(s.sourceId, film.title);
         const time = formatTimeIt(s.startsAt);
         const when = withDayInLabel ? `${formatDayIt(s.startsAt)} ore ${time}` : `ore ${time}`;
-        const elsewhere = showVenue && s.venue && s.venue !== DEFAULT_VENUE;
+        const elsewhere = showVenue && s.venue && !isHomeVenue(s.venue);
         // Mostra il prezzo sul singolo orario solo se NON è comune a tutto il film.
         const ownPrice = !perFilmCommon && s.prices.length > 0 ? priceText(s.prices) : null;
 
         return (
-          <li key={s.sourceId} className="flex flex-col gap-1">
+          <li key={s.sourceId ?? s.startsAt} className="flex flex-col gap-1">
             {buyUrl ? (
               <div className="ticket" style={perfBg ? ({ '--perf-bg': perfBg } as CSSProperties) : undefined}>
                 <span className="ticket-body">
@@ -149,5 +147,106 @@ export function Showtimes({
         );
       })}
     </ul>
+  );
+}
+
+/** Etichetta del giorno: "Oggi" / "Domani" in evidenza, poi la data per esteso. */
+export function DayLabel({ startsAt, className }: { startsAt: string; className?: string }) {
+  const relative = relativeDayIt(startsAt);
+  return (
+    <p
+      className={cn(
+        'flex flex-wrap items-center gap-x-2.5 gap-y-1 font-utility text-xs font-semibold uppercase tracking-marquee',
+        className
+      )}
+    >
+      {relative && (
+        <span className="rounded bg-cinema-ticket px-2 py-0.5 font-bold text-cinema-bg">
+          {relative}
+        </span>
+      )}
+      <span className={relative ? 'text-cinema-text-muted' : 'text-cinema-ticket'}>
+        {formatDayIt(startsAt)}
+      </span>
+    </p>
+  );
+}
+
+/** Proiezioni raggruppate per giorno italiano, in ordine cronologico. */
+export function groupShowtimesByDay(
+  showtimes: PublicShowtime[]
+): Array<{ dayKey: string; showtimes: PublicShowtime[] }> {
+  const byDay = new Map<string, PublicShowtime[]>();
+  for (const s of showtimes) {
+    const key = romeDayKey(s.startsAt);
+    const list = byDay.get(key);
+    if (list) list.push(s);
+    else byDay.set(key, [s]);
+  }
+  return [...byDay.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([dayKey, list]) => ({
+      dayKey,
+      showtimes: [...list].sort((a, b) => a.startsAt.localeCompare(b.startsAt)),
+    }));
+}
+
+/**
+ * Gli orari con il giorno scritto sopra, un blocco per data.
+ *
+ * Serve ovunque un film abbia proiezioni in più giorni: una fila piatta di
+ * orari ("18:30 21:00 20:00") sembra tutta dello stesso giorno e lascia il
+ * lettore a indovinare — che è esattamente l'informazione che sta cercando.
+ *
+ * `maxDays` taglia i giorni in più dove lo spazio è poco (l'hero); quelli
+ * lasciati fuori vengono contati, non nascosti in silenzio.
+ */
+export function ShowtimesByDay({
+  film,
+  showtimes,
+  maxDays,
+  size = 'md',
+  showVenue = false,
+  perfBg,
+  className,
+}: {
+  film: PublicFilm;
+  showtimes?: PublicShowtime[];
+  maxDays?: number;
+  size?: 'md' | 'lg';
+  showVenue?: boolean;
+  perfBg?: string;
+  className?: string;
+}) {
+  const days = groupShowtimesByDay(showtimes ?? film.showtimes);
+  const shown = maxDays ? days.slice(0, maxDays) : days;
+  const nascosti = days.length - shown.length;
+
+  if (shown.length === 0) return null;
+
+  return (
+    <div className={cn('space-y-4', className)}>
+      {shown.map(({ dayKey, showtimes: ofDay }) => (
+        <div key={dayKey}>
+          <DayLabel startsAt={ofDay[0].startsAt} />
+          <Showtimes
+            film={film}
+            showtimes={ofDay}
+            size={size}
+            showVenue={showVenue}
+            perfBg={perfBg}
+            withDayInLabel
+            ariaLabel={`Orari di ${film.title} — ${formatDayIt(ofDay[0].startsAt)}`}
+            className="mt-2.5"
+          />
+        </div>
+      ))}
+
+      {nascosti > 0 && (
+        <p className="font-utility text-xs uppercase tracking-wider text-cinema-text-subtle">
+          e {nascosti === 1 ? 'un altro giorno' : `altri ${nascosti} giorni`} in programma
+        </p>
+      )}
+    </div>
   );
 }
