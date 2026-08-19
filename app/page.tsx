@@ -9,7 +9,6 @@ import { HeroFilm } from '@/components/hero-film';
 import { HeroUpcoming } from '@/components/hero-upcoming';
 import { MediaSlide } from '@/components/media-slide';
 import { LoadError } from '@/components/page-header';
-import { PosterGrid } from '@/components/poster-grid';
 import {
   currentWeekRange,
   fetchProgrammazione,
@@ -74,7 +73,7 @@ function planHero(
   timeline: SlideshowItem[],
   weekFilms: PublicFilm[],
   upcomingFilms: PublicFilm[]
-): { specs: SlideSpec[]; upcomingInHero: boolean } {
+): SlideSpec[] {
   const resolved: Array<{ item: SlideshowItem; specs: SlideSpec[] }> = [];
 
   for (const item of timeline) {
@@ -99,10 +98,7 @@ function planHero(
   );
   const visibili = resolved.filter((r) => !r.item.fallbackOnly || !haProgrammazione);
 
-  return {
-    specs: visibili.flatMap((r) => r.specs).slice(0, MAX_HERO_SLIDES),
-    upcomingInHero: visibili.some((r) => r.item.kind === 'future_programming'),
-  };
+  return visibili.flatMap((r) => r.specs).slice(0, MAX_HERO_SLIDES);
 }
 
 /**
@@ -171,7 +167,7 @@ export default async function HomePage() {
 
   const { weekFilms, upcomingFilms } = splitWeekUpcoming(films);
   const timeline = await fetchSlideshow();
-  const { specs, upcomingInHero } = planHero(
+  const specs = planHero(
     timeline && timeline.length > 0 ? timeline : DEFAULT_TIMELINE,
     weekFilms,
     upcomingFilms
@@ -221,19 +217,6 @@ export default async function HomePage() {
           </section>
         ) : null}
 
-        {/* "Prossimamente": i film oltre la domenica. Se la timeline lo mostra
-            già nell'hero, qui non si ripete. */}
-        {upcomingFilms.length > 0 && !upcomingInHero && (
-          <section className="mt-16">
-            <SectionHeading
-              eyebrow="In arrivo al Metropol"
-              title="Prossimamente"
-              action={{ href: '/prossimamente', label: 'Vedi tutti' }}
-            />
-            <PosterGrid films={upcomingFilms.slice(0, 6)} />
-          </section>
-        )}
-
         {/* Le due domande che arrivano sempre in cassa: quanto costa, e dove
             siete. La risposta sta qui, non dietro un link. */}
         <div className="mt-16 grid gap-4 sm:grid-cols-2">
@@ -258,7 +241,11 @@ export default async function HomePage() {
                 </div>
               ))}
             </dl>
-            <p className="mt-4 text-xs leading-relaxed text-cinema-text-subtle">
+            <p className="mt-4 flex items-start gap-2 text-sm leading-relaxed text-cinema-text-muted">
+              <Clock className="mt-0.5 h-4 w-4 shrink-0 text-cinema-ticket" aria-hidden="true" />
+              {BOX_OFFICE_NOTE}
+            </p>
+            <p className="mt-3 text-xs leading-relaxed text-cinema-text-subtle">
               Per eventi e proiezioni speciali fa fede il prezzo indicato accanto all&apos;orario.
             </p>
             <Link
@@ -282,9 +269,11 @@ export default async function HomePage() {
               <br />
               {SITE.venueAddress}
             </address>
-            <p className="mt-4 flex items-start gap-2 text-sm leading-relaxed text-cinema-text-subtle">
-              <Clock className="mt-0.5 h-4 w-4 shrink-0 text-cinema-ticket" aria-hidden="true" />
-              {BOX_OFFICE_NOTE}
+            {/* Serve a spiegare il "Castello Scaligero" che compare accanto a
+                certi orari: d'estate non si proietta qui. */}
+            <p className="mt-4 text-sm leading-relaxed text-cinema-text-subtle">
+              D&apos;estate la rassegna si sposta al Castello di Villafranca: quando succede, il
+              luogo è indicato accanto all&apos;orario.
             </p>
             <a
               href={SITE.mapsUrl}
