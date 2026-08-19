@@ -49,11 +49,11 @@ export function FilmPosterCard({
       >
         {film.title}
       </h3>
-      {first && (
-        <p className="mt-1 font-utility text-[0.68rem] font-semibold uppercase tracking-wider text-cinema-ticket">
-          Dal {formatDayIt(first.startsAt)}
-        </p>
-      )}
+      {/* Un film annunciato può non avere ancora orari: meglio dirlo che
+          lasciare la riga vuota. */}
+      <p className="mt-1 font-utility text-[0.68rem] font-semibold uppercase tracking-wider text-cinema-ticket">
+        {first ? `Dal ${formatDayIt(first.startsAt)}` : 'Date in arrivo'}
+      </p>
     </Link>
   );
 }

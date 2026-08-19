@@ -2,9 +2,12 @@ import { Facebook, Instagram, MapPin, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { ASSOCIATION_LINKS, NAV_LINKS, SITE } from '@/lib/site';
+import { visibleNavLinks } from '@/lib/nav';
+import { ASSOCIATION_LINKS, SITE } from '@/lib/site';
 
-export function SiteFooter() {
+export async function SiteFooter() {
+  const navLinks = await visibleNavLinks();
+
   return (
     <footer className="mt-10 border-t border-cinema-border bg-cinema-surface/30">
       <div className="h-px w-full marquee-rule" aria-hidden="true" />
@@ -42,7 +45,7 @@ export function SiteFooter() {
         <nav aria-label="Mappa del sito">
           <h2 className="font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket">Il cinema</h2>
           <ul className="mt-4 space-y-2.5">
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}

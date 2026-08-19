@@ -2,10 +2,13 @@ import { Menu } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { NAV_LINKS, SITE } from '@/lib/site';
+import { visibleNavLinks } from '@/lib/nav';
+import { SITE } from '@/lib/site';
 
 /** Header sticky con nav. Su mobile il menu è un <details> CSS-only (niente JS). */
-export function SiteHeader() {
+export async function SiteHeader() {
+  const navLinks = await visibleNavLinks();
+
   return (
     <header className="sticky top-0 z-40 border-b border-cinema-border bg-cinema-bg/90 backdrop-blur-md">
       {/* Filo "marquee" dorato: richiamo all'insegna luminosa del cinema. */}
@@ -26,7 +29,7 @@ export function SiteHeader() {
 
         {/* Nav desktop */}
         <nav aria-label="Navigazione principale" className="hidden items-center gap-1 md:flex">
-          {NAV_LINKS.map((link) => (
+          {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -47,7 +50,7 @@ export function SiteHeader() {
             aria-label="Navigazione principale"
             className="absolute right-0 top-12 z-50 w-60 rounded-xl border border-cinema-border bg-cinema-surface p-2 shadow-2xl shadow-black/60"
           >
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}

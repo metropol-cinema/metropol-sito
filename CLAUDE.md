@@ -90,8 +90,8 @@ giorno, es. `/programmazione#2026-08-22`.
 
 ## Pagine
 
-`/` (hero stile monitor di sala + settimana) · `/programmazione` (per giorno) ·
-`/film/[id]` · `/prossimamente` · `/venerdi` (rassegna del venerdì, filtro
+`/` (hero + settimana) · `/programmazione` (per giorno) ·
+`/film/[id]` · `/prossimamente` (solo film marcati, vedi sotto) · `/venerdi` (rassegna del venerdì, filtro
 automatico) · `/associazione` (hub con card) e sottopagine `/chi-siamo`,
 `/storia`, `/come-associarsi` (modulo PDF in `public/docs/`),
 `/diventa-volontario`, `/statuto` (testo in `content.ts` accanto alla pagina) ·
@@ -113,6 +113,15 @@ automatico) · `/associazione` (hub con card) e sottopagine `/chi-siamo`,
   - skip-link e `:focus-visible` definiti in `globals.css`; rispettare
     `prefers-reduced-motion`;
   - JSON-LD: MovieTheater nel layout, Movie+ScreeningEvent nella scheda film.
+- **"Prossimamente" non è automatico**: sono i film con `showInUpcoming` acceso
+  in dashboard (Programmazione → interruttore "prossimam."). Due conseguenze da
+  ricordare:
+  1. un film marcato arriva dall'API **anche senza proiezioni**, quindi
+     `film.showtimes` può essere `[]` — mai dare per scontato `showtimes[0]`;
+  2. la voce di menu "Prossimamente" compare solo se esiste almeno un film
+     marcato (`lib/nav.ts`, `visibleNavLinks()`): header e footer sono per
+     questo Server Component **async**. Se la read-API non risponde la voce
+     resta nascosta, il menu non è il posto dove segnalare un guasto.
 - Date/ore SEMPRE in `Europe/Rome` (l'API è in UTC) — usa gli helper del client.
 - `prices` è **per proiezione**: niente assunzioni di prezzo unico per film.
 - **Marchio**: `public/loghi/metropol-marchio-bianco.png` (versione

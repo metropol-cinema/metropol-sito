@@ -46,8 +46,15 @@ export interface PublicFilm {
    * TMDB non ce l'ha. null = nessuna, e allora non si mostra niente.
    */
   ageRating: string | null;
+  /** Il film va mostrato nella sezione "Prossimamente". Scelta dell'Admin in
+   *  dashboard, non una regola sulle date. */
+  showInUpcoming: boolean;
   /** Locandina come data-URI `data:image/jpeg;base64,…`, o null. */
   poster: string | null;
+  /**
+   * **Può essere vuoto**: i film marcati "Prossimamente" escono dall'API anche
+   * prima di avere una data. Non dare per scontato `showtimes[0]`.
+   */
   showtimes: PublicShowtime[];
 }
 
@@ -114,9 +121,13 @@ export async function fetchProgrammazioneWeek(
 }
 
 /**
- * Divide la programmazione tra "questa settimana" (proiezioni entro domenica,
- * già filtrate) e "in arrivo" (film la cui prima proiezione è oltre domenica).
- * Pensata per la home: una sola chiamata API per hero, card e striscia.
+ * Divide la programmazione tra "questa settimana" (proiezioni entro domenica)
+ * e "prossimamente".
+ *
+ * La settimana si calcola dalle date; **"prossimamente" no**: sono i film che
+ * l'Admin ha marcato in dashboard, con o senza date. Prima era automatico
+ * ("prima proiezione oltre domenica"), ma così non si poteva né escludere un
+ * film né annunciarne uno di cui non si hanno ancora gli orari.
  */
 export function splitWeekUpcoming(
   films: PublicFilm[],
@@ -126,9 +137,7 @@ export function splitWeekUpcoming(
   const weekFilms = films
     .map((f) => ({ ...f, showtimes: f.showtimes.filter((s) => romeDayKey(s.startsAt) <= sunday) }))
     .filter((f) => f.showtimes.length > 0);
-  const upcomingFilms = films.filter(
-    (f) => f.showtimes[0] && romeDayKey(f.showtimes[0].startsAt) > sunday
-  );
+  const upcomingFilms = films.filter((f) => f.showInUpcoming);
   return { weekFilms, upcomingFilms };
 }
 

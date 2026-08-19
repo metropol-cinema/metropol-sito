@@ -28,15 +28,15 @@ export default async function ProssimamentePage() {
       <PageHeader
         eyebrow="In arrivo al Metropol"
         title="Prossimamente"
-        lead={<p>I film già in calendario per le settimane dopo questa.</p>}
+        lead={<p>I film che abbiamo scelto di annunciare, con o senza date.</p>}
       />
 
       {error ? (
         <LoadError error={error} />
       ) : upcoming.length === 0 ? (
         <EmptyState>
-          Le prossime uscite non sono ancora in calendario: torna a trovarci, o seguici sui social
-          per gli annunci.
+          Non ci sono ancora annunci: torna a trovarci, o seguici sui social per sapere in anteprima
+          cosa arriva.
         </EmptyState>
       ) : (
         <PosterGrid films={upcoming} prominent />
