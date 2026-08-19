@@ -95,6 +95,7 @@ giorno, es. `/programmazione#2026-08-22`.
 automatico) · `/associazione` (hub con card) e sottopagine `/chi-siamo`,
 `/storia`, `/come-associarsi` (modulo PDF in `public/docs/`),
 `/diventa-volontario`, `/statuto` (testo in `content.ts` accanto alla pagina) ·
+`/corsi` e `/corsi/[slug]` (corsi di cinema, vedi sotto) ·
 `/info` (statiche; le sottopagine dell'associazione sono linkate da
 `ASSOCIATION_LINKS` in hub e footer, non nel menu principale).
 
@@ -122,6 +123,19 @@ automatico) · `/associazione` (hub con card) e sottopagine `/chi-siamo`,
      marcato (`lib/nav.ts`, `visibleNavLinks()`): header e footer sono per
      questo Server Component **async**. Se la read-API non risponde la voce
      resta nascosta, il menu non è il posto dove segnalare un guasto.
+- **Corsi** (`lib/corsi-client.ts`, read-API `/api/public/corsi` del gestionale,
+  contratto in `docs/integrations/corsi-api.md`):
+  - `/corsi` con **un solo** corso pubblicato È la pagina del corso, non un
+    elenco di una voce; con più corsi diventa l'indice;
+  - `menuFrom`/`menuTo` accendono e spengono **solo la voce di menu**: la
+    pagina resta raggiungibile finché il corso è pubblicato, così i link già
+    condivisi non si rompono;
+  - il pagamento è di Stripe e vive **nel gestionale**. Il sito ha solo
+    `/api/corsi/checkout`, un ponte che tiene la chiamata sullo stesso dominio
+    (dal browser sarebbe cross-origin): non conosce chiavi e non manda prezzi,
+    che il gestionale legge dal database;
+  - `/corsi/grazie` è il ritorno da Stripe e **non interroga Stripe**:
+    l'iscrizione la registra il webhook, l'unica fonte attendibile.
 - Date/ore SEMPRE in `Europe/Rome` (l'API è in UTC) — usa gli helper del client.
 - `prices` è **per proiezione**: niente assunzioni di prezzo unico per film.
 - **Marchio**: `public/loghi/metropol-marchio-bianco.png` (versione
