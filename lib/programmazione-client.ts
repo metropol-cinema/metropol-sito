@@ -152,12 +152,6 @@ export function currentWeekRange(d: Date = new Date()): { monday: string; sunday
   return { monday, sunday: addDaysToKey(monday, 6) };
 }
 
-/** Le 7 chiavi giorno della settimana corrente, da lunedì a domenica. */
-export function weekDays(reference: Date = new Date()): string[] {
-  const { monday } = currentWeekRange(reference);
-  return Array.from({ length: 7 }, (_, i) => addDaysToKey(monday, i));
-}
-
 /** "gio 11 giu · 21:00" in ora italiana. */
 export function formatShowtimeIt(startsAtIso: string): string {
   const d = new Date(startsAtIso);

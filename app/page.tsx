@@ -10,7 +10,6 @@ import { HeroUpcoming } from '@/components/hero-upcoming';
 import { MediaSlide } from '@/components/media-slide';
 import { LoadError } from '@/components/page-header';
 import { PosterGrid } from '@/components/poster-grid';
-import { WeekRail } from '@/components/week-rail';
 import {
   currentWeekRange,
   fetchProgrammazione,
@@ -197,7 +196,11 @@ export default async function HomePage() {
         />
       )}
 
-      {weekFilms.length > 0 && <WeekRail films={weekFilms} />}
+      {/* Filo dell'insegna: separa l'hero dal contenuto. Prima lo faceva il
+          bordo del quadro settimana, tolto perché ripeteva le stesse date che
+          stanno già sopra gli orari di ogni film — e con proiezioni solo nel
+          fine settimana mostrava quattro caselle spente su sette. */}
+      <div className="h-px w-full marquee-rule" aria-hidden="true" />
 
       <div className="container py-12 sm:py-16">
         {error ? (

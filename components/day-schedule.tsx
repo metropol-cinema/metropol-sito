@@ -45,7 +45,8 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
   const firstStart = entries[0].showtimes[0].startsAt;
 
   return (
-    // L'id è la chiave giorno: il quadro settimana in home ci punta direttamente.
+    // L'id è la chiave giorno: permalink condivisibile a un singolo giorno
+    // (es. /programmazione#2026-08-22).
     <section id={dayKey} className="scroll-mt-28">
       <h2>
         <DayLabel startsAt={firstStart} />

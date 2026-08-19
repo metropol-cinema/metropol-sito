@@ -77,10 +77,16 @@ Regole di contorno:
 La sezione "Prossimamente" sotto la settimana non si ripete se la timeline la
 mette già nell'hero (`upcomingInHero`).
 
-Sotto l'hero c'è il **quadro settimana** (`components/week-rail.tsx`): lunedì →
-domenica, i giorni con proiezione accesi in oro con gli orari, gli altri spenti.
-Punta a `/programmazione#YYYY-MM-DD` (l'ancora è sulla `<section>` di
-`DaySchedule`).
+**Il quadro settimana LUN→DOM è stato tolto** (ago 2026, decisione dell'utente):
+si proietta da ottobre a maggio e quasi solo nel fine settimana, quindi mostrava
+quattro o cinque caselle spente su sette; e da quando ogni gruppo di orari porta
+la sua data sopra (`<DayLabel>` in `components/showtimes.tsx`), ripeteva
+informazioni già presenti — con meno contesto, perché non diceva di quale film
+fossero quegli orari. Sotto l'hero resta solo il filo dorato dell'insegna, a
+separare le due zone.
+
+Le `<section>` di `DaySchedule` conservano `id={dayKey}`: permalink a un singolo
+giorno, es. `/programmazione#2026-08-22`.
 
 ## Pagine
 
