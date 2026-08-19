@@ -36,6 +36,13 @@ const PATHS: Record<string, ReadonlyArray<[string, 'page' | 'layout']>> = {
   ],
   // Lo slideshow lo mostra solo la home.
   slideshow: [['/', 'page']],
+  // Un corso cambia la sua pagina e — se cambia la finestra o la pubblicazione
+  // — anche il menu, che sta nel layout: quindi cade tutto.
+  corsi: [
+    ['/corsi', 'page'],
+    ['/corsi/[slug]', 'page'],
+    ['/', 'layout'],
+  ],
 };
 
 /** Confronto a tempo costante: un `===` racconta quanti caratteri combaciano. */

@@ -41,6 +41,8 @@ export const NAV_LINKS = [
   { href: '/programmazione', label: 'Programmazione' },
   { href: '/prossimamente', label: 'Prossimamente' },
   { href: '/venerdi', label: 'I Venerdì' },
+  // Compare solo dentro la finestra di date scelta in dashboard: vedi lib/nav.ts.
+  { href: '/corsi', label: 'Corsi' },
   { href: '/associazione', label: 'Associazione' },
   { href: '/info', label: 'Info e prezzi' },
 ] as const;
