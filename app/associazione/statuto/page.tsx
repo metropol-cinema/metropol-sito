@@ -86,7 +86,7 @@ export default function StatutoPage() {
         </h2>
         {REGOLAMENTO.map((chapter) => (
           <section key={chapter.id} id={chapter.id} className="mt-8">
-            <h3 className="font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-ticket">{chapter.title}</h3>
+            <h3 className="font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-ticket-ink">{chapter.title}</h3>
             {chapter.articles.map((article) => (
               <ArticleSection key={article.id} article={article} level={4} />
             ))}

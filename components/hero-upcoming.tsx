@@ -18,6 +18,7 @@ export function HeroUpcoming({ films }: { films: PublicFilm[] }) {
     >
       <div
         aria-hidden="true"
+        data-decor="fondale"
         className="absolute inset-0 -z-10 bg-[radial-gradient(70%_60%_at_20%_0%,rgba(244,183,64,0.14),transparent_70%)]"
       />
       <div className="container py-12 sm:py-16">
@@ -27,7 +28,7 @@ export function HeroUpcoming({ films }: { films: PublicFilm[] }) {
         </h2>
         {first && (
           <p className="mt-4 text-base text-cinema-text-muted sm:text-lg">
-            Si ricomincia <span className="text-cinema-ticket">{formatDayIt(first.startsAt)}</span>.
+            Si ricomincia <span className="text-cinema-ticket-ink">{formatDayIt(first.startsAt)}</span>.
           </p>
         )}
 
@@ -35,7 +36,7 @@ export function HeroUpcoming({ films }: { films: PublicFilm[] }) {
 
         <Link
           href="/prossimamente"
-          className="group mt-8 inline-flex items-center gap-2 border-b border-cinema-ticket/40 pb-1 font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-ticket transition-colors hover:border-cinema-ticket"
+          className="group mt-8 inline-flex items-center gap-2 border-b border-cinema-ticket-ink/40 pb-1 font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-ticket-ink transition-colors hover:border-cinema-ticket-ink"
         >
           Tutti i film in arrivo
         </Link>

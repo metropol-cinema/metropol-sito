@@ -20,7 +20,7 @@ export function AgeBadge({
     <span className={cn('inline-flex items-center gap-2', className)} title={rating.label}>
       <span
         aria-hidden="true"
-        className="inline-flex min-w-[1.9rem] items-center justify-center rounded border border-cinema-ticket/70 px-1.5 py-0.5 font-utility text-xs font-bold tracking-wide text-cinema-ticket"
+        className="inline-flex min-w-[1.9rem] items-center justify-center rounded border border-cinema-ticket-ink/70 px-1.5 py-0.5 font-utility text-xs font-bold tracking-wide text-cinema-ticket-ink"
       >
         {rating.code}
       </span>

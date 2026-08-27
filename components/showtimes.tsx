@@ -161,11 +161,11 @@ export function DayLabel({ startsAt, className }: { startsAt: string; className?
       )}
     >
       {relative && (
-        <span className="rounded bg-cinema-ticket px-2 py-0.5 font-bold text-cinema-bg">
+        <span className="rounded bg-cinema-ticket px-2 py-0.5 font-bold text-cinema-on-ticket">
           {relative}
         </span>
       )}
-      <span className={relative ? 'text-cinema-text-muted' : 'text-cinema-ticket'}>
+      <span className={relative ? 'text-cinema-text-muted' : 'text-cinema-ticket-ink'}>
         {formatDayIt(startsAt)}
       </span>
     </p>

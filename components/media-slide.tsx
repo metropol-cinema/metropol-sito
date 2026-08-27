@@ -16,7 +16,11 @@ export function MediaSlide({
   caption: string | null;
 }) {
   return (
-    <div className="grain relative isolate h-[24rem] overflow-hidden border-b border-cinema-border sm:h-[34rem]">
+    // zona scura: la didascalia sta sopra il video/immagine, vedi HeroFilm
+    <div
+      data-zona="scura"
+      className="grain relative isolate flex min-h-[24rem] flex-col justify-end overflow-hidden border-b border-cinema-border bg-cinema-bg sm:min-h-[34rem]"
+    >
       {kind === 'video' ? (
         <video
           src={src}
@@ -40,7 +44,7 @@ export function MediaSlide({
       <div aria-hidden="true" className="absolute inset-0 -z-10 vignette" />
 
       {caption && (
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-cinema-bg via-cinema-bg/70 to-transparent pb-8 pt-24 sm:pb-12">
+        <div className="w-full bg-gradient-to-t from-cinema-bg via-cinema-bg/70 to-transparent pb-8 pt-24 sm:pb-12">
           <p className="container text-2xl font-black leading-tight text-cinema-text sm:text-5xl">
             {caption}
           </p>

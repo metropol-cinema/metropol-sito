@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
-import { Archivo, Fraunces, Inter } from 'next/font/google';
+import { Archivo, Atkinson_Hyperlegible, Fraunces, Inter } from 'next/font/google';
 
+import { AccessibilityBar } from '@/components/accessibility-bar';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
+import { SCRIPT_INIZIALE } from '@/lib/a11y';
 import { jsonLdScript } from '@/lib/json-ld';
 import { SITE } from '@/lib/site';
 import './globals.css';
@@ -28,6 +30,17 @@ const utility = Archivo({
   axes: ['wdth'],
   variable: '--font-utility',
 });
+// Alta leggibilità: Atkinson Hyperlegible, disegnato dal Braille Institute per
+// chi ha poca vista — le lettere che di solito si scambiano (I l 1, O 0, b d)
+// hanno forme volutamente diverse. Lo attiva la barra di accessibilità e
+// sostituisce tutti e tre i ruoli qui sopra. Licenza libera (OFL) e servito da
+// noi come gli altri: nessuna richiesta a Google dal browser del visitatore.
+const readable = Atkinson_Hyperlegible({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400', '700'],
+  variable: '--font-readable',
+});
 
 // Dati strutturati del cinema, per assistenti vocali e motori di ricerca.
 const theaterJsonLd = {
@@ -38,6 +51,15 @@ const theaterJsonLd = {
   address: SITE.venueAddress,
   url: 'https://www.cinemametropol.com',
   sameAs: [SITE.social.facebook, SITE.social.instagram],
+  // Accessibilità della sala, per assistenti vocali e mappe: le stesse cose
+  // che stanno in /accessibilita, in una forma che le macchine sanno leggere.
+  // Cambiano lì? Cambiale anche qui (lib/accessibilita.ts).
+  isAccessibleForFree: false,
+  amenityFeature: [
+    { '@type': 'LocationFeatureSpecification', name: 'Accesso in carrozzina', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Servizi igienici accessibili', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Anello magnetico per apparecchi acustici', value: false },
+  ],
 };
 
 const DESCRIPTION =
@@ -76,9 +98,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="it"
-      className={`${display.variable} ${sans.variable} ${utility.variable}`}
+      // Lo script inline scrive `data-tema` & co. su <html> prima che React
+      // parta: per React è una differenza fra server e client, e va detto che
+      // è voluta. Vale solo per gli attributi di questo elemento.
+      suppressHydrationWarning
+      className={`${display.variable} ${sans.variable} ${utility.variable} ${readable.variable}`}
     >
       <body className="flex min-h-screen flex-col font-sans">
+        {/* Le preferenze di lettura salvate vanno applicate PRIMA del primo
+            disegno: altrimenti chi ha scelto il tema chiaro si becca un lampo
+            di nero a ogni pagina. Da qui il piccolo script inline. */}
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_INIZIALE }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLdScript(theaterJsonLd) }}
@@ -86,6 +116,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#contenuto" className="skip-link">
           Salta al contenuto
         </a>
+        {/* Subito dopo il salto al contenuto: chi naviga da tastiera trova gli
+            strumenti di lettura al secondo Tab, non in fondo alla pagina. */}
+        <AccessibilityBar />
         <SiteHeader />
         <div id="contenuto" tabIndex={-1} className="flex-1 outline-none">
           {children}

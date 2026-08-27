@@ -21,7 +21,7 @@ export function FilmPosterCard({
 
   return (
     <Link href={`/film/${film.id}`} className="group block">
-      <div className="relative aspect-[2/3] w-full overflow-hidden rounded-xl border border-cinema-border bg-cinema-surface-2 shadow-lg shadow-black/40 transition-colors group-hover:border-cinema-ticket/60">
+      <div className="relative aspect-[2/3] w-full overflow-hidden rounded-xl border border-cinema-border bg-cinema-surface-2 shadow-lg shadow-black/40 transition-colors group-hover:border-cinema-ticket-ink/60">
         {film.poster ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -43,7 +43,7 @@ export function FilmPosterCard({
 
       <h3
         className={cn(
-          'mt-3 line-clamp-2 font-bold leading-tight text-cinema-text transition-colors group-hover:text-cinema-ticket',
+          'mt-3 line-clamp-2 font-bold leading-tight text-cinema-text transition-colors group-hover:text-cinema-ticket-ink',
           prominent ? 'text-lg sm:text-xl' : 'text-sm sm:text-base'
         )}
       >
@@ -51,7 +51,7 @@ export function FilmPosterCard({
       </h3>
       {/* Un film annunciato può non avere ancora orari: meglio dirlo che
           lasciare la riga vuota. */}
-      <p className="mt-1 font-utility text-[0.68rem] font-semibold uppercase tracking-wider text-cinema-ticket">
+      <p className="mt-1 font-utility text-[0.68rem] font-semibold uppercase tracking-wider text-cinema-ticket-ink">
         {first ? `Dal ${formatDayIt(first.startsAt)}` : 'Date in arrivo'}
       </p>
     </Link>

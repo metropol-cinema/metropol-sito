@@ -55,7 +55,7 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
         {entries.map(({ film, showtimes }) => (
           <article
             key={`${dayKey}-${film.id}`}
-            className="group flex gap-5 rounded-2xl border border-cinema-border bg-cinema-surface p-5 transition-colors hover:border-cinema-ticket/45"
+            className="group flex gap-5 rounded-2xl border border-cinema-border bg-cinema-surface p-5 transition-colors hover:border-cinema-ticket-ink/45"
           >
             <Link
               href={`/film/${film.id}`}
@@ -81,7 +81,7 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
               <h3 className="text-xl font-black leading-tight sm:text-2xl">
                 <Link
                   href={`/film/${film.id}`}
-                  className="text-cinema-text transition-colors hover:text-cinema-ticket"
+                  className="text-cinema-text transition-colors hover:text-cinema-ticket-ink"
                 >
                   {film.title}
                 </Link>
@@ -95,7 +95,7 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
                 showtimes={showtimes}
                 showVenue
                 className="mt-4"
-                perfBg="#131316"
+                perfBg="rgb(var(--c-surface))"
               />
               <PriceLegend showtimes={showtimes} className="mt-2.5" />
             </div>

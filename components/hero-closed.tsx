@@ -16,6 +16,7 @@ export function HeroClosed() {
     >
       <div
         aria-hidden="true"
+        data-decor="fondale"
         className="absolute inset-0 -z-10 bg-[radial-gradient(70%_60%_at_50%_0%,rgba(244,183,64,0.12),transparent_70%)]"
       />
       <div className="container py-16 sm:py-24">
@@ -33,13 +34,13 @@ export function HeroClosed() {
         <div className="mt-8 flex flex-wrap gap-3">
           <Link
             href="/associazione/come-associarsi"
-            className="rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-bg transition-colors hover:bg-cinema-ticket-hover"
+            className="rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover"
           >
             Diventa socio
           </Link>
           <Link
             href="/info"
-            className="inline-flex items-center gap-2 rounded-lg border border-cinema-border-strong px-5 py-2.5 font-utility text-sm font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket hover:text-cinema-ticket"
+            className="inline-flex items-center gap-2 rounded-lg border border-cinema-border-strong px-5 py-2.5 font-utility text-sm font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
           >
             <MapPin className="h-4 w-4" aria-hidden="true" />
             Dove siamo

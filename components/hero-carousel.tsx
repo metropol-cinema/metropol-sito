@@ -52,10 +52,21 @@ export function HeroCarousel({ slides, durations }: HeroCarouselProps) {
     };
   }, [emblaApi, autoplay]);
 
-  // Chi ha disattivato le animazioni si vede la prima slide, ferma.
+  // Chi ha disattivato le animazioni si vede la prima slide, ferma. Due modi
+  // per chiederlo: l'impostazione di sistema, oppure l'interruttore della barra
+  // di accessibilità — che scrive `data-animazioni` su <html>. Il carosello lo
+  // guarda da sé: così i due componenti non hanno bisogno di conoscersi.
   useEffect(() => {
     if (!emblaApi) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) autoplay.stop();
+    const radice = document.documentElement;
+    const daFermo = () =>
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      radice.getAttribute('data-animazioni') === 'ferme';
+    const sincronizza = () => (daFermo() ? autoplay.stop() : autoplay.play());
+    sincronizza();
+    const osservatore = new MutationObserver(sincronizza);
+    osservatore.observe(radice, { attributeFilter: ['data-animazioni'] });
+    return () => osservatore.disconnect();
   }, [emblaApi, autoplay]);
 
   const toggle = useCallback(() => {

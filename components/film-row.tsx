@@ -27,7 +27,7 @@ export async function FilmRow({ film }: { film: PublicFilm }) {
   ];
 
   return (
-    <article className="group relative overflow-hidden rounded-2xl border border-cinema-border bg-cinema-surface transition-colors hover:border-cinema-ticket/45">
+    <article className="group relative overflow-hidden rounded-2xl border border-cinema-border bg-cinema-surface transition-colors hover:border-cinema-ticket-ink/45">
       <div className="flex gap-4 p-4 sm:gap-6 sm:p-6">
         <Link
           href={`/film/${film.id}`}
@@ -54,7 +54,7 @@ export async function FilmRow({ film }: { film: PublicFilm }) {
           <h3 className="text-2xl font-black leading-[1.05] sm:text-4xl">
             <Link
               href={`/film/${film.id}`}
-              className="text-cinema-text transition-colors hover:text-cinema-ticket"
+              className="text-cinema-text transition-colors hover:text-cinema-ticket-ink"
             >
               {film.title}
             </Link>
@@ -71,11 +71,11 @@ export async function FilmRow({ film }: { film: PublicFilm }) {
           )}
 
           <div className="mt-auto pt-5">
-            <ShowtimesByDay film={film} showVenue perfBg="#131316" size="lg" />
+            <ShowtimesByDay film={film} showVenue perfBg="rgb(var(--c-surface))" size="lg" />
             <PriceLegend showtimes={film.showtimes} className="mt-2.5" />
             <Link
               href={`/film/${film.id}`}
-              className="mt-4 inline-flex items-center gap-1.5 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:text-cinema-ticket"
+              className="mt-4 inline-flex items-center gap-1.5 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:text-cinema-ticket-ink"
             >
               Trailer, foto e dettagli
               <span className="sr-only"> di {film.title}</span>

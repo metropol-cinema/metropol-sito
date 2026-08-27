@@ -77,13 +77,13 @@ export default function AssociazionePage() {
             <li key={section.href} className="last:sm:col-span-2">
               <Link
                 href={section.href}
-                className="group flex h-full flex-col rounded-2xl border border-cinema-border bg-cinema-surface p-6 transition-colors hover:border-cinema-ticket/60 hover:bg-cinema-surface-2"
+                className="group flex h-full flex-col rounded-2xl border border-cinema-border bg-cinema-surface p-6 transition-colors hover:border-cinema-ticket-ink/60 hover:bg-cinema-surface-2"
               >
                 <span className="flex items-center gap-2.5 font-bold tracking-tight text-cinema-text">
-                  <section.icon className="h-5 w-5 text-cinema-ticket" aria-hidden="true" />
+                  <section.icon className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" />
                   {section.label}
                   <ArrowRight
-                    className="ml-auto h-4 w-4 text-cinema-text-subtle transition-transform group-hover:translate-x-0.5 group-hover:text-cinema-ticket"
+                    className="ml-auto h-4 w-4 text-cinema-text-subtle transition-transform group-hover:translate-x-0.5 group-hover:text-cinema-ticket-ink"
                     aria-hidden="true"
                   />
                 </span>
@@ -116,7 +116,7 @@ export default function AssociazionePage() {
           <div>
             <dt className="inline font-medium text-cinema-text">PEC: </dt>
             <dd className="inline">
-              <a href={`mailto:${SITE.pec}`} className="text-cinema-ticket hover:underline">
+              <a href={`mailto:${SITE.pec}`} className="text-cinema-ticket-ink hover:underline">
                 {SITE.pec}
               </a>
             </dd>

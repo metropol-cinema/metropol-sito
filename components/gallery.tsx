@@ -78,7 +78,7 @@ export function Gallery({ images, title }: { images: TmdbImage[]; title: string 
           onClick={() => emblaApi?.scrollPrev()}
           disabled={!scrollable.prev}
           aria-label="Scorri le foto indietro"
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text-muted transition-colors hover:border-cinema-ticket hover:text-cinema-ticket disabled:opacity-30 disabled:hover:border-cinema-border-strong disabled:hover:text-cinema-text-muted"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink disabled:opacity-30 disabled:hover:border-cinema-border-strong disabled:hover:text-cinema-text-muted"
         >
           <ChevronLeft className="h-4 w-4" aria-hidden="true" />
         </button>
@@ -87,7 +87,7 @@ export function Gallery({ images, title }: { images: TmdbImage[]; title: string 
           onClick={() => emblaApi?.scrollNext()}
           disabled={!scrollable.next}
           aria-label="Scorri le foto avanti"
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text-muted transition-colors hover:border-cinema-ticket hover:text-cinema-ticket disabled:opacity-30 disabled:hover:border-cinema-border-strong disabled:hover:text-cinema-text-muted"
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink disabled:opacity-30 disabled:hover:border-cinema-border-strong disabled:hover:text-cinema-text-muted"
         >
           <ChevronRight className="h-4 w-4" aria-hidden="true" />
         </button>
@@ -101,7 +101,7 @@ export function Gallery({ images, title }: { images: TmdbImage[]; title: string 
                 type="button"
                 onClick={() => open(i)}
                 aria-label={`Apri la foto ${i + 1} di ${images.length} di ${title}`}
-                className="relative block aspect-video w-full overflow-hidden rounded-xl border border-cinema-border bg-cinema-surface-2 transition-colors hover:border-cinema-ticket/60"
+                className="relative block aspect-video w-full overflow-hidden rounded-xl border border-cinema-border bg-cinema-surface-2 transition-colors hover:border-cinema-ticket-ink/60"
               >
                 <Image
                   src={image.thumbUrl}
@@ -135,7 +135,7 @@ export function Gallery({ images, title }: { images: TmdbImage[]; title: string 
                 type="button"
                 onClick={close}
                 aria-label="Chiudi la foto"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text transition-colors hover:border-cinema-ticket hover:text-cinema-ticket"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
               >
                 <X className="h-5 w-5" aria-hidden="true" />
               </button>
@@ -157,7 +157,7 @@ export function Gallery({ images, title }: { images: TmdbImage[]; title: string 
                 type="button"
                 onClick={() => step(-1)}
                 aria-label="Foto precedente"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text transition-colors hover:border-cinema-ticket hover:text-cinema-ticket"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
               >
                 <ChevronLeft className="h-5 w-5" aria-hidden="true" />
               </button>
@@ -165,7 +165,7 @@ export function Gallery({ images, title }: { images: TmdbImage[]; title: string 
                 type="button"
                 onClick={() => step(1)}
                 aria-label="Foto successiva"
-                className="flex h-11 w-11 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text transition-colors hover:border-cinema-ticket hover:text-cinema-ticket"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
               >
                 <ChevronRight className="h-5 w-5" aria-hidden="true" />
               </button>

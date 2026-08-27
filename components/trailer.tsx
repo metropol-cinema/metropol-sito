@@ -39,7 +39,7 @@ export function Trailer({
     <button
       type="button"
       onClick={() => setPlaying(true)}
-      className="group relative block aspect-video w-full overflow-hidden rounded-2xl border border-cinema-border bg-cinema-surface-2 transition-colors hover:border-cinema-ticket/50"
+      className="group relative block aspect-video w-full overflow-hidden rounded-2xl border border-cinema-border bg-cinema-surface-2 transition-colors hover:border-cinema-ticket-ink/50"
     >
       {posterUrl && (
         // Fotogramma di riferimento: decorativo, il testo del bottone dice tutto.
@@ -53,7 +53,7 @@ export function Trailer({
       <span aria-hidden="true" className="absolute inset-0 vignette" />
 
       <span className="absolute inset-0 flex flex-col items-center justify-center gap-3">
-        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-cinema-ticket text-cinema-bg shadow-2xl transition-transform duration-300 group-hover:scale-110 sm:h-20 sm:w-20">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full bg-cinema-ticket text-cinema-on-ticket shadow-2xl transition-transform duration-300 group-hover:scale-110 sm:h-20 sm:w-20">
           <Play className="ml-1 h-7 w-7 fill-current sm:h-8 sm:w-8" aria-hidden="true" />
         </span>
         <span className="font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-text">

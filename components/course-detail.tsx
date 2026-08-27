@@ -66,7 +66,7 @@ export function CourseDetail({ course }: { course: PublicCourse }) {
           )}
           {course.venue && (
             <p className="mt-5 flex items-center gap-2 font-utility text-xs uppercase tracking-wider text-cinema-text-muted">
-              <MapPin className="h-4 w-4 text-cinema-ticket" aria-hidden="true" />
+              <MapPin className="h-4 w-4 text-cinema-ticket-ink" aria-hidden="true" />
               {course.venue}
             </p>
           )}
@@ -98,7 +98,7 @@ export function CourseDetail({ course }: { course: PublicCourse }) {
                       key={`${lesson.title}-${i}`}
                       className="rounded-2xl border border-cinema-border bg-cinema-surface p-5"
                     >
-                      <p className="flex items-center gap-2 font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-ticket">
+                      <p className="flex items-center gap-2 font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-ticket-ink">
                         <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />
                         {lesson.startsAt ? (
                           <time dateTime={lesson.startsAt}>{when}</time>
@@ -154,7 +154,7 @@ export function CourseDetail({ course }: { course: PublicCourse }) {
                   href={course.paypalUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-cinema-border-strong px-5 py-3 font-utility text-sm font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket hover:text-cinema-ticket"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-cinema-border-strong px-5 py-3 font-utility text-sm font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
                 >
                   Paga con PayPal
                   <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
@@ -167,7 +167,7 @@ export function CourseDetail({ course }: { course: PublicCourse }) {
                   href={course.infoFormUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-cinema-border-strong px-5 py-3 font-utility text-sm font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket hover:text-cinema-ticket"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-cinema-border-strong px-5 py-3 font-utility text-sm font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
                 >
                   Chiedi informazioni
                   <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />

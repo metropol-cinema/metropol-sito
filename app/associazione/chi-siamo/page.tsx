@@ -110,7 +110,7 @@ export default function ChiSiamoPage() {
               <p className="mt-1.5 font-semibold text-cinema-text">{person.name}</p>
               <a
                 href={`mailto:${person.email}`}
-                className="mt-1.5 flex items-center gap-1.5 break-all text-sm text-cinema-ticket hover:underline"
+                className="mt-1.5 flex items-center gap-1.5 break-all text-sm text-cinema-ticket-ink hover:underline"
               >
                 <Mail className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                 {person.email}
@@ -124,7 +124,7 @@ export default function ChiSiamoPage() {
             <p className="mt-1.5 font-semibold text-cinema-text">{PROBIVIRI.names}</p>
             <a
               href={`mailto:${PROBIVIRI.email}`}
-              className="mt-1.5 flex items-center gap-1.5 break-all text-sm text-cinema-ticket hover:underline"
+              className="mt-1.5 flex items-center gap-1.5 break-all text-sm text-cinema-ticket-ink hover:underline"
             >
               <Mail className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
               {PROBIVIRI.email}

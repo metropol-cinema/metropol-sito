@@ -146,7 +146,7 @@ function SectionHeading({
       {action && (
         <Link
           href={action.href}
-          className="shrink-0 border-b border-cinema-border-strong pb-1 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket hover:text-cinema-ticket"
+          className="shrink-0 border-b border-cinema-border-strong pb-1 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
         >
           {action.label}
         </Link>
@@ -224,7 +224,7 @@ export default async function HomePage() {
             aria-labelledby="prezzi-titolo"
             className="rounded-2xl border border-cinema-border bg-cinema-surface p-6"
           >
-            <Ticket className="h-6 w-6 text-cinema-ticket" aria-hidden="true" />
+            <Ticket className="h-6 w-6 text-cinema-ticket-ink" aria-hidden="true" />
             <h2 id="prezzi-titolo" className="mt-4 text-xl font-bold text-cinema-text">
               Prezzi dei biglietti
             </h2>
@@ -242,7 +242,7 @@ export default async function HomePage() {
               ))}
             </dl>
             <p className="mt-4 flex items-start gap-2 text-sm leading-relaxed text-cinema-text-muted">
-              <Clock className="mt-0.5 h-4 w-4 shrink-0 text-cinema-ticket" aria-hidden="true" />
+              <Clock className="mt-0.5 h-4 w-4 shrink-0 text-cinema-ticket-ink" aria-hidden="true" />
               {BOX_OFFICE_NOTE}
             </p>
             <p className="mt-3 text-xs leading-relaxed text-cinema-text-subtle">
@@ -250,7 +250,7 @@ export default async function HomePage() {
             </p>
             <Link
               href="/info#prezzi"
-              className="mt-4 inline-block border-b border-cinema-border-strong pb-0.5 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket hover:text-cinema-ticket"
+              className="mt-4 inline-block border-b border-cinema-border-strong pb-0.5 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
             >
               Info e prezzi
             </Link>
@@ -260,7 +260,7 @@ export default async function HomePage() {
             aria-labelledby="dove-titolo"
             className="rounded-2xl border border-cinema-border bg-cinema-surface p-6"
           >
-            <MapPin className="h-6 w-6 text-cinema-ticket" aria-hidden="true" />
+            <MapPin className="h-6 w-6 text-cinema-ticket-ink" aria-hidden="true" />
             <h2 id="dove-titolo" className="mt-4 text-xl font-bold text-cinema-text">
               Dove siamo
             </h2>
@@ -279,7 +279,7 @@ export default async function HomePage() {
               href={SITE.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-5 inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-4 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-bg transition-colors hover:bg-cinema-ticket-hover"
+              className="mt-5 inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-4 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover"
             >
               <MapPin className="h-4 w-4" aria-hidden="true" />
               Apri in Google Maps

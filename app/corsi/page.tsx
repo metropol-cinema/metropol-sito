@@ -42,9 +42,9 @@ export default async function CorsiPage() {
             <li key={course.id}>
               <Link
                 href={`/corsi/${course.slug}`}
-                className="group block rounded-2xl border border-cinema-border bg-cinema-surface p-6 transition-colors hover:border-cinema-ticket/50"
+                className="group block rounded-2xl border border-cinema-border bg-cinema-surface p-6 transition-colors hover:border-cinema-ticket-ink/50"
               >
-                <h2 className="text-2xl font-black text-cinema-text transition-colors group-hover:text-cinema-ticket">
+                <h2 className="text-2xl font-black text-cinema-text transition-colors group-hover:text-cinema-ticket-ink">
                   {course.title}
                 </h2>
                 {course.subtitle && (

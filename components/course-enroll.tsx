@@ -43,7 +43,8 @@ export function CourseEnroll({ slug, price }: { slug: string; price: string }) {
         type="button"
         onClick={start}
         disabled={pending}
-        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-cinema-ticket px-5 py-3 font-utility text-sm font-bold uppercase tracking-wider text-cinema-bg transition-colors hover:bg-cinema-ticket-hover disabled:opacity-60"
+        aria-busy={pending}
+        className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-cinema-ticket px-5 py-3 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover disabled:opacity-60"
       >
         {pending ? (
           <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
@@ -52,6 +53,11 @@ export function CourseEnroll({ slug, price }: { slug: string; price: string }) {
         )}
         Iscriviti e paga {price}
       </button>
+      {/* Il girello dice "sta caricando" solo a chi lo vede: chi ascolta la
+          pagina ha bisogno che qualcuno glielo dica. */}
+      <p role="status" className="sr-only">
+        {pending ? 'Attendi: ti stiamo portando alla pagina di pagamento.' : ''}
+      </p>
       {error && (
         <p role="alert" className="mt-2 text-sm text-cinema-danger">
           {error}

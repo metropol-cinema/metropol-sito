@@ -15,36 +15,50 @@ const config: Config = {
         // Utility: Archivo. Occhielli, giorni, etichette — in maiuscolo spaziato
         // richiama le lettere mobili del quadro orario in cassa.
         utility: ['var(--font-utility)', 'var(--font-sans)', 'system-ui', 'sans-serif'],
+        // Alta leggibilità (Atkinson Hyperlegible): non si usa direttamente
+        // nelle classi — la barra di accessibilità lo sostituisce ai tre
+        // ruoli qui sopra ridefinendo le variabili (globals.css).
+        readable: ['var(--font-readable)', 'Verdana', 'sans-serif'],
       },
       colors: {
-        // Palette "sala buia, insegna d'oro". Il nero è caldo (non il blu-grigio
-        // di GitHub): sotto le locandine un fondo neutro-caldo non compete.
+        // Palette "sala buia, insegna d'oro". I valori veri stanno in
+        // app/globals.css come variabili CSS: qui ci sono solo i nomi, così la
+        // stessa classe (`bg-cinema-surface`) rende bene in tutti e quattro i
+        // temi della barra di accessibilità. Canali RGB separati da spazi:
+        // serve a far funzionare ancora i modificatori di opacità (`/90`).
         cinema: {
-          bg: '#0B0B0D',
-          'bg-deep': '#050506',
-          surface: '#131316',
-          'surface-2': '#1C1C21',
-          border: '#2A2A31',
-          'border-strong': '#3A3A44',
-          text: '#F5F2EC',
-          'text-muted': '#C8C3BA',
-          'text-subtle': '#8E8981',
-          // Oro dell'insegna: azione, orari, occhielli. Va SEMPRE con testo
-          // scuro (text-cinema-bg) — contrasto ~11:1.
-          ticket: '#F4B740',
-          'ticket-hover': '#FFC94D',
-          'ticket-dim': '#8A6A25',
+          bg: 'rgb(var(--c-bg) / <alpha-value>)',
+          'bg-deep': 'rgb(var(--c-bg-deep) / <alpha-value>)',
+          surface: 'rgb(var(--c-surface) / <alpha-value>)',
+          'surface-2': 'rgb(var(--c-surface-2) / <alpha-value>)',
+          border: 'rgb(var(--c-border) / <alpha-value>)',
+          'border-strong': 'rgb(var(--c-border-strong) / <alpha-value>)',
+          text: 'rgb(var(--c-text) / <alpha-value>)',
+          'text-muted': 'rgb(var(--c-text-muted) / <alpha-value>)',
+          'text-subtle': 'rgb(var(--c-text-subtle) / <alpha-value>)',
+          // L'oro dell'insegna, in tre ruoli distinti:
+          //   ticket      superficie d'azione (bottoni pieni, tagliando)
+          //   ticket-ink  oro come inchiostro (occhielli, icone, bordi)
+          //   on-ticket   il testo SOPRA la superficie d'oro
+          // Sul nero i primi due coincidono; su fondo chiaro no, perché l'oro
+          // su carta non si legge. Regola pratica: `bg-cinema-ticket` va
+          // sempre con `text-cinema-on-ticket`, mai con `text-cinema-bg`.
+          ticket: 'rgb(var(--c-ticket) / <alpha-value>)',
+          'ticket-hover': 'rgb(var(--c-ticket-hover) / <alpha-value>)',
+          'ticket-ink': 'rgb(var(--c-ticket-ink) / <alpha-value>)',
+          'ticket-dim': 'rgb(var(--c-ticket-dim) / <alpha-value>)',
+          'on-ticket': 'rgb(var(--c-on-ticket) / <alpha-value>)',
           // Rosso sipario: rassegne e proiezioni fuori sala (Castello).
-          curtain: '#8C1D18',
-          'curtain-light': '#D9695F',
+          curtain: 'rgb(var(--c-curtain) / <alpha-value>)',
+          'curtain-light': 'rgb(var(--c-curtain-light) / <alpha-value>)',
           // Blu di sistema: resta per skip-link e focus, fuori dalle superfici.
-          accent: '#388BFD',
-          'accent-hover': '#58A6FF',
-          'accent-strong': '#1F6FEB',
-          'accent-strong-hover': '#1857C7',
-          success: '#3FB950',
-          warning: '#E3B341',
-          danger: '#F85149',
+          accent: 'rgb(var(--c-accent) / <alpha-value>)',
+          'accent-hover': 'rgb(var(--c-accent-hover) / <alpha-value>)',
+          'accent-strong': 'rgb(var(--c-accent-strong) / <alpha-value>)',
+          'accent-strong-hover': 'rgb(var(--c-accent-strong-hover) / <alpha-value>)',
+          success: 'rgb(var(--c-success) / <alpha-value>)',
+          warning: 'rgb(var(--c-warning) / <alpha-value>)',
+          danger: 'rgb(var(--c-danger) / <alpha-value>)',
         },
       },
       letterSpacing: {

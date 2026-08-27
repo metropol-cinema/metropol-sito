@@ -32,6 +32,9 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
+  // Solo in sviluppo: il bollino di Next sta in basso a sinistra, dove ora c'è
+  // il bottone della barra di accessibilità, e se lo copre non lo si clicca.
+  devIndicators: { position: 'top-right' },
   images: {
     // Per usare le locandine da TMDB (campo tmdbId) con next/image, se vorrai.
     remotePatterns: [{ protocol: 'https', hostname: 'image.tmdb.org' }],

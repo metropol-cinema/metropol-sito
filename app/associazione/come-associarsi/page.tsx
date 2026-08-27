@@ -34,7 +34,7 @@ export default function ComeAssociarsiPage() {
       <div className="space-y-12">
         <section id="adesione">
           <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
-            <Heart className="h-5 w-5 text-cinema-ticket" aria-hidden="true" /> L&apos;adesione
+            <Heart className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" /> L&apos;adesione
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             È possibile effettuare la propria adesione all&apos;Associazione Culturale Metropol
@@ -44,7 +44,7 @@ export default function ComeAssociarsiPage() {
           <a
             href="/docs/modulo-adesione-socio.pdf"
             download
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-bg transition-colors hover:bg-cinema-ticket-hover"
+            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover"
           >
             <Download className="h-4 w-4" aria-hidden="true" /> Scarica il modulo di adesione (PDF)
           </a>
@@ -52,7 +52,7 @@ export default function ComeAssociarsiPage() {
 
         <section id="vantaggi">
           <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
-            <Ticket className="h-5 w-5 text-cinema-ticket" aria-hidden="true" /> I vantaggi della
+            <Ticket className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" /> I vantaggi della
             tessera
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
@@ -64,14 +64,14 @@ export default function ComeAssociarsiPage() {
 
         <section id="rinnovo">
           <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
-            <CalendarCheck className="h-5 w-5 text-cinema-ticket" aria-hidden="true" /> Quota e
+            <CalendarCheck className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" /> Quota e
             rinnovo
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             La quota associativa è annuale e il suo importo è stabilito dal Consiglio Direttivo; la
             scadenza per il rinnovo è il 30 novembre di ogni anno. I requisiti per
             l&apos;ammissione sono indicati nello{' '}
-            <Link href="/associazione/statuto" className="text-cinema-ticket hover:underline">
+            <Link href="/associazione/statuto" className="text-cinema-ticket-ink hover:underline">
               statuto e nel regolamento interno
             </Link>
             .

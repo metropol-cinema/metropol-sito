@@ -1,5 +1,6 @@
-import { Clock, MapPin, Ticket } from 'lucide-react';
+import { Accessibility, Clock, MapPin, Ticket } from 'lucide-react';
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 import { BOX_OFFICE_NOTE, SITE, TICKET_PRICES } from '@/lib/site';
 import { formatEuro } from '@/lib/utils';
@@ -23,7 +24,7 @@ export default function InfoPage() {
       <div className="space-y-12">
         <section id="prezzi">
           <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
-            <Ticket className="h-5 w-5 text-cinema-ticket" aria-hidden="true" /> Biglietti
+            <Ticket className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" /> Biglietti
           </h2>
           <div className="mt-4 overflow-hidden rounded-xl border border-cinema-border">
             <table className="w-full text-sm">
@@ -53,16 +54,35 @@ export default function InfoPage() {
 
         <section id="biglietteria">
           <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
-            <Clock className="h-5 w-5 text-cinema-ticket" aria-hidden="true" /> Biglietteria
+            <Clock className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" /> Biglietteria
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             {BOX_OFFICE_NOTE} La tessera socio si può richiedere direttamente in cassa.
           </p>
         </section>
 
+        <section id="accessibilita">
+          <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
+            <Accessibility className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" />{' '}
+            Accessibilità
+          </h2>
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
+            Si entra e si raggiunge la sala in carrozzina in autonomia, con posti dedicati in
+            platea, e ci sono servizi igienici accessibili. Il dettaglio — comprese le cose che
+            ancora non abbiamo, come gli ausili per l&apos;udito — sta nella{' '}
+            <Link
+              href="/accessibilita"
+              className="text-cinema-ticket-ink underline underline-offset-2"
+            >
+              pagina sull&apos;accessibilità
+            </Link>
+            .
+          </p>
+        </section>
+
         <section id="dove-siamo">
           <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
-            <MapPin className="h-5 w-5 text-cinema-ticket" aria-hidden="true" /> Dove siamo
+            <MapPin className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" /> Dove siamo
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             {SITE.venueName}
@@ -73,7 +93,7 @@ export default function InfoPage() {
             href={SITE.mapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-bg transition-colors hover:bg-cinema-ticket-hover"
+            className="mt-3 inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover"
           >
             <MapPin className="h-4 w-4" aria-hidden="true" /> Apri in Google Maps<span className="sr-only"> (si apre in una nuova scheda)</span>
           </a>

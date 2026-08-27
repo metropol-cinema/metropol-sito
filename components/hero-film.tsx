@@ -46,7 +46,11 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
   return (
     <section
       aria-label={`In evidenza: ${film.title}`}
-      className="grain beam relative isolate flex min-h-[30rem] flex-col justify-end overflow-hidden sm:min-h-[36rem]"
+      // zona scura: qui sotto c'è una fotografia, e il testo le sta sopra. Il
+      // tema chiaro non entra — un velo bianco su un fotogramma non fa
+      // contrasto, fa nebbia (globals.css, "Zone scure").
+      data-zona="scura"
+      className="grain beam relative isolate flex min-h-[30rem] flex-col justify-end overflow-hidden bg-cinema-bg sm:min-h-[36rem]"
     >
       {/* Il fotogramma proiettato dietro a tutto */}
       <div className="absolute inset-0 -z-10">
@@ -57,10 +61,16 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
             fill
             priority={priority}
             sizes="100vw"
+            // In alto contrasto sparisce: un'immagine al 60% dietro al testo
+            // abbassa il contrasto proprio a chi non può permetterselo.
+            data-decor="fondale"
             className="scale-105 object-cover object-top opacity-60"
           />
         ) : (
-          <div className="h-full w-full bg-[radial-gradient(80%_60%_at_50%_0%,rgba(244,183,64,0.18),transparent_70%)]" />
+          <div
+            data-decor="fondale"
+            className="h-full w-full bg-[radial-gradient(80%_60%_at_50%_0%,rgba(244,183,64,0.18),transparent_70%)]"
+          />
         )}
         <div className="absolute inset-0 vignette" />
         <div className="absolute inset-0 bg-gradient-to-t from-cinema-bg via-cinema-bg/85 to-cinema-bg/25" />
@@ -68,7 +78,7 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
 
       <div className="container flex flex-col gap-6 pb-10 pt-24 sm:flex-row sm:items-end sm:gap-9 sm:pb-14 sm:pt-32">
         {/* Locandina appesa: filo d'oro come la cornice in atrio */}
-        <div className="w-32 shrink-0 overflow-hidden rounded-xl border border-cinema-ticket/25 shadow-2xl shadow-black/70 sm:w-56">
+        <div className="w-32 shrink-0 overflow-hidden rounded-xl border border-cinema-ticket-ink/25 shadow-2xl shadow-black/70 sm:w-56">
           {poster ? (
             // Il poster può essere un data-URI Cinebot: <img> semplice.
             // eslint-disable-next-line @next/next/no-img-element
@@ -104,14 +114,14 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
             maxDays={2}
             size="lg"
             showVenue
-            perfBg="#0B0B0D"
+            perfBg="rgb(var(--c-bg))"
             className="mt-7"
           />
           <PriceLegend showtimes={film.showtimes} className="mt-3 text-cinema-text-muted" />
 
           <Link
             href={`/film/${film.id}`}
-            className="group mt-7 inline-flex items-center gap-2 border-b border-cinema-ticket/40 pb-1 font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-ticket transition-colors hover:border-cinema-ticket"
+            className="group mt-7 inline-flex items-center gap-2 border-b border-cinema-ticket-ink/40 pb-1 font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-ticket-ink transition-colors hover:border-cinema-ticket-ink"
           >
             Scheda del film<span className="sr-only">: {film.title}</span>
             <ArrowRight

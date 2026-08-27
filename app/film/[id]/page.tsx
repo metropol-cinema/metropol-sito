@@ -135,7 +135,11 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }} />
 
       {/* Testata con il fotogramma del film alle spalle */}
-      <section className="grain beam relative isolate overflow-hidden border-b border-cinema-border">
+      {/* zona scura: il testo sta sopra il fotogramma del film, vedi HeroFilm */}
+      <section
+        data-zona="scura"
+        className="grain beam relative isolate overflow-hidden border-b border-cinema-border bg-cinema-bg"
+      >
         <div className="absolute inset-0 -z-10">
           {details?.backdropUrl ? (
             <Image
@@ -144,17 +148,21 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
               fill
               priority
               sizes="100vw"
+              data-decor="fondale"
               className="scale-105 object-cover object-top opacity-55"
             />
           ) : (
-            <div className="h-full w-full bg-[radial-gradient(80%_60%_at_50%_0%,rgba(244,183,64,0.16),transparent_70%)]" />
+            <div
+              data-decor="fondale"
+              className="h-full w-full bg-[radial-gradient(80%_60%_at_50%_0%,rgba(244,183,64,0.16),transparent_70%)]"
+            />
           )}
           <div className="absolute inset-0 vignette" />
           <div className="absolute inset-0 bg-gradient-to-t from-cinema-bg via-cinema-bg/75 to-cinema-bg/25" />
         </div>
 
         <div className="container flex flex-col gap-6 py-12 sm:flex-row sm:items-end sm:gap-9 sm:py-16">
-          <div className="w-36 shrink-0 self-center overflow-hidden rounded-xl border border-cinema-ticket/25 shadow-2xl shadow-black/70 sm:w-56 sm:self-auto">
+          <div className="w-36 shrink-0 self-center overflow-hidden rounded-xl border border-cinema-ticket-ink/25 shadow-2xl shadow-black/70 sm:w-56 sm:self-auto">
             {poster ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={poster} alt={`Locandina di ${film.title}`} className="w-full" />
@@ -205,7 +213,7 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
             Non ci sono proiezioni in calendario al momento.
           </p>
         ) : (
-          <ShowtimesByDay film={film} size="lg" showVenue perfBg="#0B0B0D" className="space-y-8" />
+          <ShowtimesByDay film={film} size="lg" showVenue perfBg="rgb(var(--c-bg))" className="space-y-8" />
         )}
       </section>
 

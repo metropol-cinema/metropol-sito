@@ -2,17 +2,197 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===========================================================================
+   TEMI
+   ---------------------------------------------------------------------------
+   I token `cinema-*` di Tailwind puntano a queste variabili (canali RGB
+   separati da spazi, così `bg-cinema-bg/90` continua a funzionare).
+   Quattro palette, scelte dalla barra di accessibilità:
+
+     sala             il cinema al buio, quella di sempre (predefinita)
+     chiaro           fondo carta, per chi il testo chiaro su nero non lo regge
+     contrasto-scuro  bianco su nero pieno, oro acceso
+     contrasto-chiaro nero su bianco pieno, bordi netti
+
+   Le quattro liste sono per forza ripetute: sono valori, non regole, e non
+   esiste un modo di "ereditare" un blocco di custom property cambiandone tre.
+   Se aggiungi un token, aggiungilo a tutte e quattro.
+   =========================================================================== */
 @layer base {
-  html {
+  :root,
+  :root[data-tema='sala'] {
     color-scheme: dark;
+
+    --c-bg: 11 11 13;
+    --c-bg-deep: 5 5 6;
+    --c-surface: 19 19 22;
+    --c-surface-2: 28 28 33;
+    --c-border: 42 42 49;
+    --c-border-strong: 58 58 68;
+    --c-text: 245 242 236;
+    --c-text-muted: 200 195 186;
+    --c-text-subtle: 142 137 129;
+    /* L'oro ha due ruoli e due valori: `ticket` è la superficie (il tagliando,
+       i bottoni pieni), `ticket-ink` è l'oro usato come inchiostro (occhielli,
+       icone, bordi). Sul nero coincidono; su fondo chiaro no, perché l'oro
+       dell'insegna su carta è illeggibile — lì l'inchiostro diventa ambra
+       scura. `on-ticket` è il colore del testo *sopra* la superficie d'oro. */
+    --c-ticket: 244 183 64;
+    --c-ticket-hover: 255 201 77;
+    --c-ticket-ink: 244 183 64;
+    --c-ticket-dim: 138 106 37;
+    --c-on-ticket: 11 11 13;
+    --c-curtain: 140 29 24;
+    --c-curtain-light: 217 105 95;
+    --c-accent: 56 139 253;
+    --c-accent-hover: 88 166 255;
+    --c-accent-strong: 31 111 235;
+    --c-accent-strong-hover: 24 87 199;
+    --c-success: 63 185 80;
+    --c-warning: 227 179 65;
+    --c-danger: 248 81 73;
+    /* Alone caldo in cima alla pagina: la luce dalla cabina di proiezione. */
+    --c-glow: 244 183 64 / 0.07;
   }
+
+  :root[data-tema='chiaro'] {
+    color-scheme: light;
+
+    --c-bg: 251 248 243;
+    --c-bg-deep: 242 237 228;
+    --c-surface: 255 255 255;
+    --c-surface-2: 246 242 235;
+    --c-border: 226 218 205;
+    --c-border-strong: 176 165 147;
+    --c-text: 26 23 19;
+    --c-text-muted: 74 67 58;
+    --c-text-subtle: 108 100 88;
+    --c-ticket: 240 168 25;
+    --c-ticket-hover: 224 152 10;
+    --c-ticket-ink: 138 83 0;
+    --c-ticket-dim: 122 95 40;
+    --c-on-ticket: 26 18 4;
+    --c-curtain: 140 29 24;
+    --c-curtain-light: 141 27 20;
+    --c-accent: 31 111 235;
+    --c-accent-hover: 21 82 178;
+    --c-accent-strong: 31 111 235;
+    --c-accent-strong-hover: 24 87 199;
+    --c-success: 26 127 55;
+    --c-warning: 138 97 0;
+    --c-danger: 176 24 26;
+    --c-glow: 240 168 25 / 0.05;
+  }
+
+  :root[data-tema='contrasto-scuro'] {
+    color-scheme: dark;
+
+    --c-bg: 0 0 0;
+    --c-bg-deep: 0 0 0;
+    --c-surface: 0 0 0;
+    --c-surface-2: 13 13 13;
+    --c-border: 255 255 255;
+    --c-border-strong: 255 255 255;
+    --c-text: 255 255 255;
+    --c-text-muted: 255 255 255;
+    --c-text-subtle: 230 230 230;
+    --c-ticket: 255 214 0;
+    --c-ticket-hover: 255 234 90;
+    --c-ticket-ink: 255 214 0;
+    --c-ticket-dim: 255 214 0;
+    --c-on-ticket: 0 0 0;
+    --c-curtain: 120 0 0;
+    --c-curtain-light: 255 138 128;
+    --c-accent: 140 190 255;
+    --c-accent-hover: 180 214 255;
+    --c-accent-strong: 0 82 204;
+    --c-accent-strong-hover: 0 61 153;
+    --c-success: 0 230 118;
+    --c-warning: 255 214 0;
+    --c-danger: 255 110 100;
+    --c-glow: 0 0 0 / 0;
+  }
+
+  :root[data-tema='contrasto-chiaro'] {
+    color-scheme: light;
+
+    --c-bg: 255 255 255;
+    --c-bg-deep: 255 255 255;
+    --c-surface: 255 255 255;
+    --c-surface-2: 245 245 245;
+    --c-border: 0 0 0;
+    --c-border-strong: 0 0 0;
+    --c-text: 0 0 0;
+    --c-text-muted: 0 0 0;
+    --c-text-subtle: 26 26 26;
+    --c-ticket: 255 214 0;
+    --c-ticket-hover: 255 234 90;
+    --c-ticket-ink: 107 62 0;
+    --c-ticket-dim: 107 62 0;
+    --c-on-ticket: 0 0 0;
+    --c-curtain: 140 0 0;
+    --c-curtain-light: 140 0 0;
+    --c-accent: 0 51 153;
+    --c-accent-hover: 0 41 122;
+    --c-accent-strong: 0 51 153;
+    --c-accent-strong-hover: 0 41 122;
+    --c-success: 0 92 34;
+    --c-warning: 107 62 0;
+    --c-danger: 176 0 0;
+    --c-glow: 0 0 0 / 0;
+  }
+
+  /* ----- Zone scure -------------------------------------------------------
+     Le fasce costruite sopra una fotografia (hero del film, slide media) non
+     seguono il tema: una locandina porta la sua luce, e un velo bianco sopra
+     un fotogramma non fa contrasto, fa nebbia. Qui dentro vale sempre la
+     palette della sala, così il titolo resta chiaro su fondo scuro in tutti e
+     quattro i temi senza toccare una riga dei componenti. */
+  [data-zona='scura'] {
+    --c-bg: 11 11 13;
+    --c-bg-deep: 5 5 6;
+    --c-surface: 19 19 22;
+    --c-surface-2: 28 28 33;
+    --c-border: 42 42 49;
+    --c-border-strong: 58 58 68;
+    --c-text: 245 242 236;
+    --c-text-muted: 200 195 186;
+    --c-text-subtle: 142 137 129;
+    --c-ticket: 244 183 64;
+    --c-ticket-hover: 255 201 77;
+    --c-ticket-ink: 244 183 64;
+    --c-ticket-dim: 138 106 37;
+    --c-on-ticket: 11 11 13;
+  }
+
+  /* Nei due temi ad alto contrasto anche le zone scure vanno al massimo. */
+  :root[data-tema='contrasto-scuro'] [data-zona='scura'],
+  :root[data-tema='contrasto-chiaro'] [data-zona='scura'] {
+    --c-bg: 0 0 0;
+    --c-bg-deep: 0 0 0;
+    --c-surface: 0 0 0;
+    --c-surface-2: 13 13 13;
+    --c-border: 255 255 255;
+    --c-border-strong: 255 255 255;
+    --c-text: 255 255 255;
+    --c-text-muted: 255 255 255;
+    --c-text-subtle: 230 230 230;
+    --c-ticket: 255 214 0;
+    --c-ticket-hover: 255 234 90;
+    --c-ticket-ink: 255 214 0;
+    --c-ticket-dim: 255 214 0;
+    --c-on-ticket: 0 0 0;
+  }
+}
+
+@layer base {
   body {
     @apply bg-cinema-bg font-sans text-cinema-text antialiased;
     /* Il nero non è mai piatto: in alto un alone caldo, come la luce che
        filtra dalla cabina di proiezione. */
     background-image: radial-gradient(
       120% 60% at 50% -10%,
-      rgba(244, 183, 64, 0.07),
+      rgb(var(--c-glow)),
       transparent 60%
     );
     background-attachment: fixed;
@@ -32,17 +212,18 @@
   /* Focus sempre visibile per chi naviga da tastiera (tema scuro: l'outline
      di default può sparire sui fondi neri). */
   :focus-visible {
-    outline: 2px solid theme('colors.cinema.ticket');
+    outline: 2px solid theme('colors.cinema.ticket-ink');
     outline-offset: 3px;
     border-radius: 2px;
   }
 
   ::selection {
     background: theme('colors.cinema.ticket');
-    color: theme('colors.cinema.bg');
+    color: theme('colors.cinema.on-ticket');
   }
 
-  /* Niente animazioni/transizioni per chi le ha disattivate a livello di OS. */
+  /* Niente animazioni/transizioni per chi le ha disattivate a livello di OS
+     (o dalla barra di accessibilità: stesse regole, due interruttori). */
   @media (prefers-reduced-motion: reduce) {
     *,
     ::before,
@@ -59,6 +240,116 @@
   }
 }
 
+/* ===========================================================================
+   PREFERENZE DELLA BARRA DI ACCESSIBILITÀ
+   ---------------------------------------------------------------------------
+   Attributi su <html>, scritti dallo script inline prima del primo disegno
+   (lib/a11y.ts) e poi dal pannello. Ogni preferenza è una manciata di regole:
+   niente di quello che c'è qui sotto tocca il markup dei componenti.
+   =========================================================================== */
+@layer base {
+  /* ----- Dimensione del testo --------------------------------------------
+     Il sito non ha nemmeno una misura in pixel: tutto in rem, quindi basta
+     muovere la radice e scala davvero tutto, spaziature comprese. */
+  :root[data-testo='115'] {
+    font-size: 115%;
+  }
+  :root[data-testo='130'] {
+    font-size: 130%;
+  }
+  :root[data-testo='150'] {
+    font-size: 150%;
+  }
+
+  /* ----- Interlinea e spaziatura ------------------------------------------
+     È il punto di EasyReading: l'affollamento percettivo (crowding) è ciò che
+     fa "ballare" le lettere. Più aria fra righe, lettere e parole. */
+  :root[data-spaziatura='ampia'] body {
+    line-height: 1.85;
+    letter-spacing: 0.055em;
+    word-spacing: 0.16em;
+  }
+  /* I titoli hanno una crenatura stretta di serie: qui va sciolta. */
+  :root[data-spaziatura='ampia'] :is(h1, h2, h3) {
+    letter-spacing: 0;
+    line-height: 1.25;
+  }
+
+  /* ----- Carattere ad alta leggibilità ------------------------------------
+     Atkinson Hyperlegible (Braille Institute): lettere che non si scambiano
+     fra loro, aperture ampie. Ridefinire le tre variabili di next/font
+     sostituisce display, corpo e utility in un colpo solo. */
+  :root[data-carattere='leggibile'] {
+    --font-display: var(--font-readable);
+    --font-sans: var(--font-readable);
+    --font-utility: var(--font-readable);
+  }
+  :root[data-carattere='leggibile'] :is(h1, h2, h3) {
+    font-variation-settings: normal;
+    letter-spacing: 0;
+  }
+
+  /* ----- Link sottolineati -------------------------------------------------
+     Senza, molti link si distinguono solo per colore: WCAG 1.4.1. Fuori i
+     bottoni pieni e i link che avvolgono solo un'immagine (marchio, locandine),
+     dove la sottolineatura sarebbe un trattino sospeso nel vuoto. */
+  :root[data-link='sottolineati'] a {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+  :root[data-link='sottolineati'] a:has(img),
+  :root[data-link='sottolineati'] a:has(> svg:only-child),
+  :root[data-link='sottolineati'] a[data-senza-sottolineatura],
+  :root[data-link='sottolineati'] .ticket-stub {
+    text-decoration: none;
+  }
+
+  /* ----- Animazioni ferme --------------------------------------------------
+     Le stesse regole di prefers-reduced-motion, per chi non l'ha impostato a
+     livello di sistema ma qui e ora ha bisogno che il sito stia fermo.
+     Il carosello e i video si fermano via JS (components/accessibility-bar). */
+  :root[data-animazioni='ferme'] *,
+  :root[data-animazioni='ferme'] ::before,
+  :root[data-animazioni='ferme'] ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  :root[data-animazioni='ferme'] .grain::after,
+  :root[data-animazioni='ferme'] .beam::before {
+    display: none;
+  }
+
+  /* ----- Alto contrasto: via il fumo negli occhi ---------------------------
+     Grana, fascio di luce e vignettatura sono atmosfera; qui sono rumore che
+     abbassa il contrasto. E il fondale del film, che sta dietro al testo a
+     opacità ridotta, viene tolto del tutto: l'informazione è nel titolo. */
+  :root[data-tema^='contrasto'] .grain::after,
+  :root[data-tema^='contrasto'] .beam::before,
+  :root[data-tema^='contrasto'] [data-decor='fondale'] {
+    display: none;
+  }
+  :root[data-tema^='contrasto'] .vignette {
+    box-shadow: none;
+  }
+  /* ----- Il marchio sui fondi chiari --------------------------------------
+     In testata e in fondo c'è la versione monocromatica BIANCA del marchio:
+     giusta sul nero, invisibile sulla carta. Invece di caricare una seconda
+     immagine la si rovescia — è monocromatica, quindi invertirla dà l'identico
+     marchio in nero e non costa un byte in più. */
+  :root[data-tema='chiaro'] .marchio,
+  :root[data-tema='contrasto-chiaro'] .marchio {
+    filter: invert(1);
+  }
+
+  /* Bordi visibili ovunque: in alto contrasto i contorni sono informazione. */
+  :root[data-tema^='contrasto'] :is(button, a, summary, input, [role='dialog']):focus-visible {
+    outline-width: 3px;
+  }
+}
+
 @layer components {
   /* "Salta al contenuto": invisibile finché non riceve focus da tastiera. */
   .skip-link {
@@ -72,11 +363,11 @@
      Etichetta breve sopra un titolo, in Archivo maiuscolo spaziato: le lettere
      mobili del quadro orario appeso in cassa. */
   .eyebrow {
-    @apply flex items-center gap-3 font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket;
+    @apply flex items-center gap-3 font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket-ink;
   }
   .eyebrow::before {
     content: '';
-    @apply h-px w-7 shrink-0 bg-cinema-ticket/60;
+    @apply h-px w-7 shrink-0 bg-cinema-ticket-ink/60;
   }
 
   /* ----- Biglietto: la firma visiva del sito --------------------------------
@@ -92,8 +383,8 @@
     @apply flex items-center gap-2 rounded-l-xl border border-r-0 border-cinema-border-strong bg-cinema-surface-2 px-3.5 py-2.5;
   }
   .ticket-stub {
-    @apply relative flex items-center gap-1.5 rounded-r-xl bg-cinema-ticket px-3.5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-bg;
-    border-left: 2px dashed rgba(11, 11, 13, 0.4);
+    @apply relative flex items-center gap-1.5 rounded-r-xl bg-cinema-ticket px-3.5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket;
+    border-left: 2px dashed rgb(var(--c-on-ticket) / 0.4);
     transition: background-color 150ms ease, transform 150ms ease;
   }
   .ticket-stub:hover {
@@ -128,8 +419,8 @@
     background-image: linear-gradient(
       90deg,
       transparent,
-      theme('colors.cinema.ticket') 18%,
-      theme('colors.cinema.ticket') 82%,
+      theme('colors.cinema.ticket-ink') 18%,
+      theme('colors.cinema.ticket-ink') 82%,
       transparent
     );
     opacity: 0.55;

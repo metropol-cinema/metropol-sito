@@ -21,11 +21,11 @@ export async function SiteFooter() {
               alt={SITE.association}
               width={631}
               height={196}
-              className="h-10 w-auto opacity-90"
+              className="marchio h-10 w-auto opacity-90"
             />
           </h2>
           <p className="mt-3 flex items-start gap-2 text-sm text-cinema-text-subtle">
-            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-cinema-ticket" aria-hidden="true" />
+            <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-cinema-ticket-ink" aria-hidden="true" />
             <span>
               {SITE.venueName}
               <br />
@@ -36,20 +36,20 @@ export async function SiteFooter() {
             Sede legale: {SITE.legalAddress}
             <br />
             P. IVA {SITE.vatNumber} · PEC{' '}
-            <a href={`mailto:${SITE.pec}`} className="transition-colors hover:text-cinema-ticket">
+            <a href={`mailto:${SITE.pec}`} className="transition-colors hover:text-cinema-ticket-ink">
               {SITE.pec}
             </a>
           </p>
         </div>
 
         <nav aria-label="Mappa del sito">
-          <h2 className="font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket">Il cinema</h2>
+          <h2 className="font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket-ink">Il cinema</h2>
           <ul className="mt-4 space-y-2.5">
             {navLinks.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket"
+                  className="text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket-ink"
                 >
                   {link.label}
                 </Link>
@@ -59,13 +59,13 @@ export async function SiteFooter() {
         </nav>
 
         <nav aria-label="Sezioni dell'associazione">
-          <h2 className="font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket">L&apos;associazione</h2>
+          <h2 className="font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket-ink">L&apos;associazione</h2>
           <ul className="mt-4 space-y-2.5">
             {ASSOCIATION_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket"
+                  className="text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket-ink"
                 >
                   {link.label}
                 </Link>
@@ -75,16 +75,16 @@ export async function SiteFooter() {
         </nav>
 
         <div>
-          <h2 className="font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket">Seguici</h2>
+          <h2 className="font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket-ink">Seguici</h2>
           <ul className="mt-4 space-y-2.5">
             <li>
               <a
                 href={SITE.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket"
+                className="flex items-center gap-2 text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket-ink"
               >
-                <Facebook className="h-4 w-4 text-cinema-ticket" aria-hidden="true" /> Facebook<span className="sr-only"> (si apre in una nuova scheda)</span>
+                <Facebook className="h-4 w-4 text-cinema-ticket-ink" aria-hidden="true" /> Facebook<span className="sr-only"> (si apre in una nuova scheda)</span>
               </a>
             </li>
             <li>
@@ -92,9 +92,9 @@ export async function SiteFooter() {
                 href={SITE.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket"
+                className="flex items-center gap-2 text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket-ink"
               >
-                <Instagram className="h-4 w-4 text-cinema-ticket" aria-hidden="true" /> Instagram<span className="sr-only"> (si apre in una nuova scheda)</span>
+                <Instagram className="h-4 w-4 text-cinema-ticket-ink" aria-hidden="true" /> Instagram<span className="sr-only"> (si apre in una nuova scheda)</span>
               </a>
             </li>
             <li>
@@ -102,9 +102,9 @@ export async function SiteFooter() {
                 href={SITE.social.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket"
+                className="flex items-center gap-2 text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket-ink"
               >
-                <MessageCircle className="h-4 w-4 text-cinema-ticket" aria-hidden="true" /> Canale WhatsApp<span className="sr-only"> (si apre in una nuova scheda)</span>
+                <MessageCircle className="h-4 w-4 text-cinema-ticket-ink" aria-hidden="true" /> Canale WhatsApp<span className="sr-only"> (si apre in una nuova scheda)</span>
               </a>
             </li>
           </ul>
@@ -112,7 +112,10 @@ export async function SiteFooter() {
       </div>
 
       <div className="border-t border-cinema-border py-5 text-center text-xs text-cinema-text-subtle">
-        © {new Date().getFullYear()} {SITE.association} · {SITE.city}
+        © {new Date().getFullYear()} {SITE.association} · {SITE.city} ·{' '}
+        <Link href="/accessibilita" className="transition-colors hover:text-cinema-ticket-ink">
+          Accessibilità
+        </Link>
       </div>
     </footer>
   );
