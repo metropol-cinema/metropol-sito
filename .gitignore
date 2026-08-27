@@ -26,3 +26,7 @@ next-env.d.ts
 
 # vercel
 .vercel
+
+# strumenti dell'agent: dentro ci finisce anche un worktree git, cioè un
+# checkout del repo dentro il repo
+.claude
