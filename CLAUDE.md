@@ -88,6 +88,122 @@ separare le due zone.
 Le `<section>` di `DaySchedule` conservano `id={dayKey}`: permalink a un singolo
 giorno, es. `/programmazione#2026-08-22`.
 
+## Accessibilità: la barra e i quattro temi
+
+In basso a sinistra c'è la **barra di accessibilità** (`components/accessibility-bar.tsx`):
+roba nostra, non un widget di terzi — nessuno script esterno, niente richieste
+in uscita, tutto in italiano. Offre quattro temi di colore, quattro dimensioni
+del testo, il carattere ad alta leggibilità, più spazio fra righe e lettere,
+link sottolineati e uno stop alle animazioni.
+
+**Come funziona**, perché è il pezzo che tocca tutto il resto:
+
+1. le preferenze stanno in `localStorage` (`lib/a11y.ts`) e diventano attributi
+   `data-*` su `<html>`;
+2. uno **script inline** nel layout le riapplica **prima del primo disegno** —
+   senza, chi ha scelto il tema chiaro vedrebbe un lampo di nero a ogni pagina.
+   Da qui il `suppressHydrationWarning` sull'`<html>`: la differenza fra server
+   e client è voluta;
+3. tutto l'aspetto lo decide il CSS in `app/globals.css`. **Nessun componente
+   sa che la barra esiste**, tranne il carosello e i video, che il CSS non può
+   fermare.
+
+### Colori: token, non valori
+
+I token `cinema-*` di Tailwind puntano a variabili CSS (`--c-*`) definite in
+`globals.css`, una lista per tema: `sala` (predefinito), `chiaro`,
+`contrasto-scuro`, `contrasto-chiaro`. **Scrivi sempre classi con token**, mai
+un colore letterale: un `#0B0B0D` in una classe resta nero anche sulla carta.
+Se aggiungi un token, aggiungilo a tutte e quattro le liste.
+
+L'oro ha **tre** ruoli distinti, ed è l'unico punto dove si sbaglia facile:
+
+| Classe | Quando | Sul chiaro diventa |
+| --- | --- | --- |
+| `bg-cinema-ticket` | superficie d'azione (bottone pieno, tagliando) | oro, sempre |
+| `text-cinema-on-ticket` | il testo **sopra** quella superficie | quasi nero |
+| `text-cinema-ticket-ink` / `border-cinema-ticket-ink` | oro come **inchiostro** (occhielli, icone, bordi) | ambra scura |
+
+Regola pratica: `bg-cinema-ticket` va **sempre** con `text-cinema-on-ticket`
+(mai `text-cinema-bg`), e l'oro che scrive è sempre `-ink`.
+
+### `data-zona="scura"` e `data-decor="fondale"`
+
+- **`data-zona="scura"`** su una fascia costruita sopra una fotografia (hero del
+  film, testata della scheda, slide media): dentro quel sottoalbero valgono
+  sempre i colori della sala, in tutti e quattro i temi. Una locandina porta la
+  sua luce, e un velo bianco su un fotogramma non fa contrasto, fa nebbia.
+  Serve anche `bg-cinema-bg` sulla fascia, o in tema chiaro resterebbe
+  trasparente. Le due fasce senza fotografia (`HeroClosed`, `HeroUpcoming`)
+  **non** sono zone scure: seguono il tema.
+- **`data-decor="fondale"`** su un fondale puramente decorativo (il backdrop del
+  film, gli aloni dorati): sparisce nei due temi ad alto contrasto, dove
+  un'immagine al 60% dietro al testo toglie proprio a chi non può permetterselo.
+
+### `/accessibilita`: la pagina che conta più della barra
+
+Contenuti in `lib/accessibilita.ts`, linkata dal piè di pagina, da `/info` e dal
+pannello della barra. Dice due cose: **come si entra davvero in Sala "Alida
+Ferrarini"** e cosa abbiamo fatto (e non fatto) su questo sito.
+
+**La regola del file è una sola, e non si negozia: ci va solo ciò che qualcuno
+ha verificato di persona.** Chi legge quella pagina non sta scegliendo un film,
+sta decidendo se mettersi in viaggio: una voce ottimistica scritta per non fare
+brutta figura è peggio di una voce mancante — quella si può chiedere, un viaggio
+a vuoto no. Se una cosa non si sa, si toglie la voce. Le stesse tre voci stanno
+anche nei dati strutturati del cinema (`amenityFeature` in `app/layout.tsx`):
+cambiano lì, cambiale anche qui.
+
+`CONTATTO_ACCESSIBILITA` è ancora `null` — manca un indirizzo email pubblico, e
+finché manca la pagina rimanda ai social e alla cassa.
+
+### Verifiche automatiche
+
+- `npm run lint` — le regole di accessibilità di **jsx-a11y al set `strict`**
+  (30 regole, non la manciata che accende `eslint-config-next`): alt mancanti,
+  bottoni senza nome, etichette scollegate, ruoli inventati. Prende gli errori
+  mentre scrivi.
+- `npm run a11y` — dopo un `npm run build`, controlla l'HTML **già generato** di
+  ogni pagina statica: una sola `<h1>`, livelli di intestazione senza salti,
+  `alt` su ogni immagine, `title` su ogni iframe, un nome accessibile su ogni
+  link e bottone, etichette sui campi, niente `tabindex` positivo, niente id
+  ripetuti, un solo `<main>`, e i link che aprono una nuova scheda che lo
+  dicono. `scripts/verifica-accessibilita.mjs`.
+- `npm run verifica` — i tre in fila.
+
+Perché non axe: misura anche i contrasti, e per farlo vuole un browser vero —
+Chromium, ~300 MB, in un repo che non ha nemmeno un test runner. I contrasti qui
+li fissa la palette una volta per tutte, non le singole pagine. **Limite noto:**
+`npm run a11y` vede solo le pagine pre-generate, quindi non `/film/[id]` né
+`/corsi/[slug]`, che sono dinamiche.
+
+Il controllo **non** è agganciato al deploy: `npm run build` su Vercel non lo
+esegue. Volendo si può, ma vuol dire che una pagina con un alt mancante blocca
+la messa in produzione — è una scelta da fare a mente fredda.
+
+### Da rispettare scrivendo pagine nuove
+
+- Il resto delle regole WCAG AA è più sotto, in "Convenzioni".
+- **Niente misure in pixel per il testo**: tutto in `rem`, altrimenti
+  l'ingrandimento non ingrandisce. Oggi il sito non ne ha nemmeno una.
+- Un contenitore con altezza fissa e `overflow-hidden` attorno a del testo si
+  rompe al 150%: usa `min-h-`.
+- Il **marchio** in testata e in fondo porta la classe `.marchio`: sui temi
+  chiari viene rovesciato in nero via `filter: invert(1)`. È monocromatico,
+  quindi funziona; se un domani ci fosse un logo a colori servirebbe un file.
+- Il **menu su schermo stretto** (`components/mobile-menu.tsx`) resta un
+  `<details>` — è una tendina già dal browser e funziona anche senza
+  JavaScript — con sopra le tre cose che a tastiera si sentono subito: Esc che
+  chiude e restituisce il focus, click fuori, e chiusura al cambio pagina.
+- Il **carattere ad alta leggibilità** è Atkinson Hyperlegible (Braille
+  Institute, licenza OFL, servito da noi via `next/font`). Non si usa
+  direttamente in una classe: la barra ridefinisce `--font-display`,
+  `--font-sans` e `--font-utility`, e cambiano tutti e tre insieme.
+  *Nota licenza:* EasyReading, il font italiano dyslexia-friendly, **non** è
+  utilizzabile gratuitamente da un'associazione — la loro licenza gratuita
+  esclude esplicitamente gli enti e le associazioni, anche senza scopo di lucro.
+  Se un giorno se ne comprasse la licenza webfont, si sostituisce qui e basta.
+
 ## Pagine
 
 `/` (hero + settimana) · `/programmazione` (per giorno) ·
@@ -96,8 +212,10 @@ automatico) · `/associazione` (hub con card) e sottopagine `/chi-siamo`,
 `/storia`, `/come-associarsi` (modulo PDF in `public/docs/`),
 `/diventa-volontario`, `/statuto` (testo in `content.ts` accanto alla pagina) ·
 `/corsi` e `/corsi/[slug]` (corsi di cinema, vedi sotto) ·
-`/info` (statiche; le sottopagine dell'associazione sono linkate da
-`ASSOCIATION_LINKS` in hub e footer, non nel menu principale).
+`/info` · `/accessibilita` (vedi sotto) (statiche; le sottopagine
+dell'associazione sono linkate da `ASSOCIATION_LINKS` in hub e footer, non nel
+menu principale). `not-found.tsx` e `global-error.tsx` sono nostre: le pagine
+di serie di Next erano in inglese e senza `<main>`.
 
 ## Convenzioni
 
@@ -111,6 +229,8 @@ automatico) · `/associazione` (hub con card) e sottopagine `/chi-siamo`,
   - bottoni pieni col testo bianco: usare `bg-cinema-accent-strong` (4.6:1),
     MAI `bg-cinema-accent` (3.5:1, sotto AA); testo piccolo su chip accent/15:
     `text-cinema-accent-hover`;
+  - l'oro: `bg-cinema-ticket` + `text-cinema-on-ticket` per le superfici,
+    `text-cinema-ticket-ink` per l'oro che scrive (vedi "Accessibilità");
   - skip-link e `:focus-visible` definiti in `globals.css`; rispettare
     `prefers-reduced-motion`;
   - JSON-LD: MovieTheater nel layout, Movie+ScreeningEvent nella scheda film.
