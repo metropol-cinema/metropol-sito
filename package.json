@@ -10,7 +10,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "a11y": "node scripts/verifica-accessibilita.mjs",
+    "verifica": "npm run lint && npm run build && npm run a11y"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -30,6 +32,7 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^9.21.0",
     "eslint-config-next": "^16.2.12",
+    "linkedom": "^0.18.13",
     "postcss": "^8.5.25",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3"
