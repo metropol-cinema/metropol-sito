@@ -33,7 +33,7 @@ const SECTIONS = [
   {
     href: '/associazione/come-associarsi',
     label: 'Come associarsi',
-    description: 'La tessera socio: l’adesione in cassa, il modulo da scaricare e i vantaggi.',
+    description: 'La tessera socio: l’iscrizione online, l’adesione in cassa e i vantaggi.',
     icon: Heart,
   },
   {

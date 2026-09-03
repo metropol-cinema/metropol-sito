@@ -57,7 +57,11 @@ export default function InfoPage() {
             <Clock className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" /> Biglietteria
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
-            {BOX_OFFICE_NOTE} La tessera socio si può richiedere direttamente in cassa.
+            {BOX_OFFICE_NOTE} La tessera socio si può fare in cassa oppure{' '}
+            <a href={SITE.sociSignupUrl} className="text-cinema-ticket-ink hover:underline">
+              online
+            </a>
+            .
           </p>
         </section>
 

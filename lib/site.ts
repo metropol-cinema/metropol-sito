@@ -13,6 +13,15 @@ export const SITE = {
   pec: 'pec@pec.cinemametropol.com',
   mapsUrl:
     'https://www.google.com/maps/search/?api=1&query=Piazza+Villafranchetta+1,+37069+Villafranca+di+Verona',
+  /**
+   * Portale soci (gestionale `metropol-cinema`, dominio suo).
+   *
+   * Sta qui perche' e' un indirizzo dell'associazione come la sede o la PEC, e
+   * perche' cambiarlo in un posto solo e' l'unico modo di non lasciarne in giro
+   * una copia vecchia. Il sito NON gestisce iscrizioni: le manda li' e basta.
+   */
+  sociSignupUrl: 'https://soci.cinemametropol.it/m/iscriviti',
+  sociAreaUrl: 'https://soci.cinemametropol.it/m',
   social: {
     facebook: 'https://www.facebook.com/metropol.cinema',
     instagram: 'https://instagram.com/metropol.cinema',
