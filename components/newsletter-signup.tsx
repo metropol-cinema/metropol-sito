@@ -23,11 +23,18 @@ export function NewsletterSignup() {
   const [sito, setSito] = useState('');
   const [stato, setStato] = useState<'fermo' | 'invio' | 'fatto' | 'errore'>('fermo');
   const [messaggio, setMessaggio] = useState('');
+  /* Il dominio sembra sbagliato. Si CHIEDE, non si corregge: `gmial.com`
+     esiste davvero, e riscrivere l'indirizzo di qualcuno vorrebbe dire
+     mandare la sua posta a un altro. */
+  const [suggerimento, setSuggerimento] = useState<string | null>(null);
 
-  async function invia(e: React.FormEvent) {
+  async function invia(e: React.FormEvent, opzioni: { forza?: boolean; indirizzo?: string } = {}) {
     e.preventDefault();
     if (stato === 'invio') return;
     setStato('invio');
+    setSuggerimento(null);
+
+    const indirizzo = opzioni.indirizzo ?? email;
 
     try {
       const res = await fetch(
@@ -35,10 +42,15 @@ export function NewsletterSignup() {
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, nome, sito }),
+          body: JSON.stringify({ email: indirizzo, nome, sito, forza: opzioni.forza ?? false }),
         }
       );
-      const json = (await res.json()) as { ok?: boolean; messaggio?: string; errore?: string };
+      const json = (await res.json()) as {
+        ok?: boolean;
+        messaggio?: string;
+        errore?: string;
+        suggerimento?: string;
+      };
 
       if (res.ok && json.ok) {
         setStato('fatto');
@@ -46,6 +58,11 @@ export function NewsletterSignup() {
         setEmail('');
         setNome('');
         setSito('');
+      } else if (json.suggerimento) {
+        // Non è un errore: è una domanda. Il modulo resta com'è e si chiede
+        // conferma, così basta un clic sia per correggere sia per insistere.
+        setStato('fermo');
+        setSuggerimento(json.suggerimento);
       } else {
         setStato('errore');
         setMessaggio(json.errore ?? 'Non ha funzionato. Riprova fra poco.');
@@ -75,6 +92,36 @@ export function NewsletterSignup() {
         Una email a settimana con il film in programma. Ti arriverà prima una richiesta di
         conferma. Ti puoi cancellare quando vuoi, con un clic.
       </p>
+
+      {suggerimento && (
+        <div
+          role="status"
+          className="rounded-md border border-cinema-ticket-ink/40 bg-cinema-ticket-ink/10 p-3 text-sm"
+        >
+          <p className="text-cinema-text">
+            Forse intendevi <strong>{suggerimento}</strong>?
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={(e) => {
+                setEmail(suggerimento);
+                void invia(e, { forza: true, indirizzo: suggerimento });
+              }}
+              className="rounded-md bg-cinema-ticket-ink px-3 py-1.5 text-xs font-medium text-cinema-bg transition-opacity hover:opacity-90"
+            >
+              Sì, usa questo
+            </button>
+            <button
+              type="button"
+              onClick={(e) => void invia(e, { forza: true })}
+              className="rounded-md border border-cinema-border px-3 py-1.5 text-xs font-medium text-cinema-text-subtle transition-colors hover:text-cinema-text"
+            >
+              No, il mio è corretto
+            </button>
+          </div>
+        </div>
+      )}
 
       <div
         aria-hidden="true"
