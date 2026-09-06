@@ -17,6 +17,10 @@ import { Mail } from 'lucide-react';
 export function NewsletterSignup() {
   const [email, setEmail] = useState('');
   const [nome, setNome] = useState('');
+  /* Campo-trappola: invisibile a una persona, irresistibile per uno script che
+     riempie tutto quello che trova. Se arriva pieno, il server risponde OK e
+     non scrive niente. */
+  const [sito, setSito] = useState('');
   const [stato, setStato] = useState<'fermo' | 'invio' | 'fatto' | 'errore'>('fermo');
   const [messaggio, setMessaggio] = useState('');
 
@@ -31,7 +35,7 @@ export function NewsletterSignup() {
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, nome }),
+          body: JSON.stringify({ email, nome, sito }),
         }
       );
       const json = (await res.json()) as { ok?: boolean; messaggio?: string; errore?: string };
@@ -41,6 +45,7 @@ export function NewsletterSignup() {
         setMessaggio(json.messaggio ?? 'Iscrizione registrata.');
         setEmail('');
         setNome('');
+        setSito('');
       } else {
         setStato('errore');
         setMessaggio(json.errore ?? 'Non ha funzionato. Riprova fra poco.');
@@ -54,21 +59,43 @@ export function NewsletterSignup() {
   if (stato === 'fatto') {
     return (
       <div role="status" className="text-sm text-cinema-text-subtle">
-        <p className="font-medium text-cinema-text">Fatto.</p>
+        <p className="font-medium text-cinema-text">Controlla la posta.</p>
         <p className="mt-1">{messaggio}</p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={invia} className="space-y-2">
+    <form onSubmit={invia} className="relative space-y-2">
       <label htmlFor="newsletter-email" className="flex items-center gap-2 text-sm font-medium text-cinema-text">
         <Mail className="h-4 w-4 text-cinema-ticket-ink" aria-hidden="true" />
         Il film di venerdì, nella tua posta
       </label>
       <p className="text-xs text-cinema-text-subtle">
-        Una email a settimana con il film in programma. Ti puoi cancellare quando vuoi, con un clic.
+        Una email a settimana con il film in programma. Ti arriverà prima una richiesta di
+        conferma. Ti puoi cancellare quando vuoi, con un clic.
       </p>
+
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          left: '-9999px',
+          width: '1px',
+          height: '1px',
+          overflow: 'hidden',
+        }}
+      >
+        <label htmlFor="newsletter-sito">Non compilare questo campo</label>
+        <input
+          id="newsletter-sito"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={sito}
+          onChange={(e) => setSito(e.target.value)}
+        />
+      </div>
 
       <div className="flex flex-col gap-2 sm:flex-row">
         <input
