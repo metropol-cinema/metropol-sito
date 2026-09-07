@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Mail } from 'lucide-react';
 
 /**
@@ -13,7 +13,26 @@ import { Mail } from 'lucide-react';
  * CHIEDE SOLO L'EMAIL, e il nome come facoltativo. Ogni campo obbligatorio in
  * più è gente che non si iscrive; il nome serve solo a scrivere «Ciao Mario»
  * invece di «Ciao», e chi non lo lascia riceve comunque un saluto sensato.
+ *
+ * LE LISTE IN PIÙ ARRIVANO DALLA DASHBOARD, non da qui: l'elenco lo dà
+ * `/api/public/newsletter/liste`, e sono quelle che l'associazione ha marcato
+ * come pubbliche. Così creare una lista nuova e renderla disponibile qui non
+ * richiede di toccare il sito. Se la chiamata fallisce il modulo resta quello
+ * di prima e l'iscrizione funziona lo stesso: un elenco di caselle facoltative
+ * non vale un modulo rotto.
  */
+
+const API =
+  process.env.NEXT_PUBLIC_NEWSLETTER_API_URL ?? 'https://app.cinemametropol.it';
+
+/** La lista storica: è lo scopo stesso di questo modulo, non un'opzione. */
+const LISTA_NEWSLETTER = 'iscritti_sito';
+
+interface ListaPubblica {
+  chiave: string;
+  nome: string;
+  descrizione: string;
+}
 export function NewsletterSignup() {
   const [email, setEmail] = useState('');
   const [nome, setNome] = useState('');
@@ -27,6 +46,29 @@ export function NewsletterSignup() {
      esiste davvero, e riscrivere l'indirizzo di qualcuno vorrebbe dire
      mandare la sua posta a un altro. */
   const [suggerimento, setSuggerimento] = useState<string | null>(null);
+  /* Le altre liste a cui ci si può iscrivere da qui, e quelle spuntate. La
+     newsletter non è fra queste: è il motivo per cui il modulo esiste. */
+  const [altreListe, setAltreListe] = useState<ListaPubblica[]>([]);
+  const [scelte, setScelte] = useState<string[]>([]);
+
+  useEffect(() => {
+    let vivo = true;
+    void (async () => {
+      try {
+        const res = await fetch(`${API}/api/public/newsletter/liste`);
+        const json = (await res.json()) as { ok?: boolean; liste?: ListaPubblica[] };
+        if (!vivo || !json.ok) return;
+        setAltreListe((json.liste ?? []).filter((l) => l.chiave !== LISTA_NEWSLETTER));
+      } catch {
+        // Silenzio voluto: senza l'elenco il modulo fa quello che ha sempre
+        // fatto, e chi si iscrive non deve vedere un errore per una casella
+        // facoltativa che non è arrivata.
+      }
+    })();
+    return () => {
+      vivo = false;
+    };
+  }, []);
 
   async function invia(e: React.FormEvent, opzioni: { forza?: boolean; indirizzo?: string } = {}) {
     e.preventDefault();
@@ -38,11 +80,17 @@ export function NewsletterSignup() {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_NEWSLETTER_API_URL ?? 'https://app.cinemametropol.it'}/api/public/newsletter/iscrizione`,
+        `${API}/api/public/newsletter/iscrizione`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: indirizzo, nome, sito, forza: opzioni.forza ?? false }),
+          body: JSON.stringify({
+            email: indirizzo,
+            nome,
+            sito,
+            forza: opzioni.forza ?? false,
+            liste: [LISTA_NEWSLETTER, ...scelte],
+          }),
         }
       );
       const json = (await res.json()) as {
@@ -58,6 +106,7 @@ export function NewsletterSignup() {
         setEmail('');
         setNome('');
         setSito('');
+        setScelte([]);
       } else if (json.suggerimento) {
         // Non è un errore: è una domanda. Il modulo resta com'è e si chiede
         // conferma, così basta un clic sia per correggere sia per insistere.
@@ -173,6 +222,37 @@ export function NewsletterSignup() {
           {stato === 'invio' ? 'Attendi…' : 'Iscriviti'}
         </button>
       </div>
+
+      {altreListe.length > 0 && (
+        <fieldset className="space-y-1.5">
+          <legend className="text-xs text-cinema-text-subtle">Mandami anche:</legend>
+          {altreListe.map((l) => (
+            <label
+              key={l.chiave}
+              className="flex cursor-pointer items-start gap-2 text-xs text-cinema-text"
+            >
+              <input
+                type="checkbox"
+                checked={scelte.includes(l.chiave)}
+                onChange={(e) =>
+                  setScelte((prima) =>
+                    e.target.checked
+                      ? [...prima, l.chiave]
+                      : prima.filter((c) => c !== l.chiave)
+                  )
+                }
+                className="mt-0.5 h-4 w-4 shrink-0 accent-cinema-ticket-ink"
+              />
+              <span>
+                {l.nome}
+                {l.descrizione && (
+                  <span className="block text-cinema-text-subtle">{l.descrizione}</span>
+                )}
+              </span>
+            </label>
+          ))}
+        </fieldset>
+      )}
 
       {stato === 'errore' && (
         <p role="alert" className="text-xs text-red-400">
