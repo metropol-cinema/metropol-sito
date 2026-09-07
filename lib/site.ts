@@ -10,6 +10,8 @@ export const SITE = {
   /** Sede legale dell'associazione. */
   legalAddress: 'Via Tione 25, 37069 Villafranca di Verona (VR)',
   vatNumber: '04274550237',
+  /** Casella generale: e' anche il mittente della newsletter e il recapito privacy. */
+  email: 'info@cinemametropol.com',
   pec: 'pec@pec.cinemametropol.com',
   mapsUrl:
     'https://www.google.com/maps/search/?api=1&query=Piazza+Villafranchetta+1,+37069+Villafranca+di+Verona',

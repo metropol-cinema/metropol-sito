@@ -125,6 +125,10 @@ export async function SiteFooter() {
         © {new Date().getFullYear()} {SITE.association} · {SITE.city} ·{' '}
         <Link href="/accessibilita" className="transition-colors hover:text-cinema-ticket-ink">
           Accessibilità
+        </Link>{' '}
+        ·{' '}
+        <Link href="/privacy" className="transition-colors hover:text-cinema-ticket-ink">
+          Privacy e cookie
         </Link>
       </div>
     </footer>

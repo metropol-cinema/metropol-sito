@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Mail } from 'lucide-react';
+import Link from 'next/link';
 
 /**
  * Il modulo di iscrizione alla newsletter.
@@ -260,12 +261,13 @@ export function NewsletterSignup() {
         </p>
       )}
 
-      {/* Nessun link a un'informativa: sul sito non c'è ancora una pagina
-          privacy, e mandare a un 404 è peggio che dirlo in una riga. Quando la
-          pagina ci sarà, il link va qui. */}
       <p className="text-xs text-cinema-text-subtle">
         Usiamo il tuo indirizzo solo per mandarti questa newsletter, e per
-        nient’altro.
+        nient’altro:{' '}
+        <Link href="/privacy#newsletter" className="underline underline-offset-2 hover:text-cinema-ticket-ink">
+          come trattiamo i tuoi dati
+        </Link>
+        .
       </p>
     </form>
   );

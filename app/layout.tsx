@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Archivo, Atkinson_Hyperlegible, Fraunces, Inter } from 'next/font/google';
 
 import { AccessibilityBar } from '@/components/accessibility-bar';
+import { Analytics } from '@/components/analytics';
+import { CookieBanner } from '@/components/cookie-banner';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { SCRIPT_INIZIALE } from '@/lib/a11y';
@@ -119,11 +121,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Subito dopo il salto al contenuto: chi naviga da tastiera trova gli
             strumenti di lettura al secondo Tab, non in fondo alla pagina. */}
         <AccessibilityBar />
+        {/* Sta qui, e non in fondo al body, per l'ordine di tabulazione: chi
+            naviga da tastiera trova la domanda sui cookie subito, non dopo
+            tutta la pagina. Dove si vede lo decide il CSS, non questa riga. */}
+        <CookieBanner />
         <SiteHeader />
         <div id="contenuto" tabIndex={-1} className="flex-1 outline-none">
           {children}
         </div>
         <SiteFooter />
+        {/* Non carica niente finché il consenso non c'è: vedi lib/consenso.ts. */}
+        <Analytics />
       </body>
     </html>
   );
