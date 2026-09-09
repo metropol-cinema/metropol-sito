@@ -178,7 +178,7 @@ export function NewsletterSignup() {
     <form onSubmit={invia} className="relative space-y-2">
       <label htmlFor="newsletter-email" className="flex items-center gap-2 text-sm font-medium text-cinema-text">
         <Mail className="h-4 w-4 text-cinema-ticket-ink" aria-hidden="true" />
-        I Venerdì del Metropol, nella tua posta
+        Le nostre proposte, nella tua posta
       </label>
       {/* «Una email a settimana» sta qui solo quando le caselle non ci sono:
           quando ci sono, ogni lista si descrive da sé, e ripetere la stessa
