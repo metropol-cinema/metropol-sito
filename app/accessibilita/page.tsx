@@ -48,7 +48,10 @@ export default function AccessibilitaPage() {
             La sala
           </h2>
           <p className="mt-2 text-sm text-cinema-text-subtle">
-            {SITE.venueName}, {SITE.venueAddress}
+            {SITE.venueName}, {SITE.venueAddress} —{' '}
+            <Link href="/sala" className="text-cinema-ticket-ink underline underline-offset-2">
+              com&apos;è fatta
+            </Link>
           </p>
 
           <ul className="mt-6 space-y-3">

@@ -101,6 +101,10 @@ export default function InfoPage() {
             {SITE.venueName}
             <br />
             {SITE.venueAddress}
+            <br />
+            <Link href="/sala" className="text-cinema-ticket-ink underline underline-offset-2">
+              Com&apos;è fatta la sala
+            </Link>
           </p>
           <a
             href={SITE.mapsUrl}

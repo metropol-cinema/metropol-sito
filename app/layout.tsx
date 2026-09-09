@@ -8,6 +8,7 @@ import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { SCRIPT_INIZIALE } from '@/lib/a11y';
 import { jsonLdScript } from '@/lib/json-ld';
+import { SALA } from '@/lib/sala';
 import { SITE } from '@/lib/site';
 import './globals.css';
 
@@ -57,6 +58,8 @@ const theaterJsonLd = {
   // che stanno in /accessibilita, in una forma che le macchine sanno leggere.
   // Cambiano lì? Cambiale anche qui (lib/accessibilita.ts).
   isAccessibleForFree: false,
+  // Capienza della sala: 450 posti più quattro per le carrozzine (lib/sala.ts).
+  maximumAttendeeCapacity: SALA.posti + SALA.postiCarrozzina,
   amenityFeature: [
     { '@type': 'LocationFeatureSpecification', name: 'Accesso in carrozzina', value: true },
     { '@type': 'LocationFeatureSpecification', name: 'Posti attrezzati per carrozzine', value: 4 },
