@@ -12,6 +12,11 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
  * dipendenza in più.
  */
 const eslintConfig = [
+  // Gli strumenti dell'agent tengono qui dentro un worktree git completo, col
+  // suo `.next` già compilato: senza questa riga `npm run lint` finisce per
+  // controllare del codice generato da Turbopack e fallisce sempre, che vuol
+  // dire non usarlo più. L'ignora vale per l'intera cartella: non è nostra.
+  { ignores: ['.claude/**'] },
   ...next,
   {
     // Solo le REGOLE del set strict: il plugin lo registra già
