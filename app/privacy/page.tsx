@@ -1,4 +1,4 @@
-import { BarChart3, Cookie, FileText, Mail, Newspaper, Server, ShieldCheck, Ticket } from 'lucide-react';
+import { BarChart3, Cookie, FileText, Mail, Newspaper, Server, ShieldCheck, Ticket, Users } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 /** Ultima revisione del testo. Va aggiornata quando cambia qualcosa di sostanziale. */
-const AGGIORNATA_IL = '7 settembre 2026';
+const AGGIORNATA_IL = '9 settembre 2026';
 
 /**
  * Cosa resta sul dispositivo di chi legge. Sono quattro voci in croce perché il
@@ -57,7 +57,7 @@ const FORNITORI = [
   { nome: 'Vercel', ruolo: 'Ospita il sito e ne registra i log tecnici', dove: 'Stati Uniti (clausole contrattuali standard)' },
   { nome: 'Supabase', ruolo: 'Banca dati del gestionale, dove finiscono le iscrizioni', dove: 'Unione Europea' },
   { nome: 'Brevo', ruolo: 'Spedisce la newsletter e ne gestisce le iscrizioni', dove: 'Francia' },
-  { nome: 'Stripe', ruolo: 'Incassa i pagamenti dei corsi', dove: 'Stati Uniti (Data Privacy Framework)' },
+  { nome: 'Stripe', ruolo: 'Incassa i pagamenti dei corsi e le quote associative', dove: 'Stati Uniti (Data Privacy Framework)' },
   { nome: 'Google Ireland', ruolo: 'Statistiche di visita e trailer da YouTube', dove: 'Irlanda, con trasferimenti negli Stati Uniti (Data Privacy Framework)' },
   { nome: 'Microsoft', ruolo: 'Caselle di posta dell’associazione', dove: 'Unione Europea' },
   { nome: 'TMDB', ruolo: 'Fornisce alcune immagini dei film', dove: 'Stati Uniti' },
@@ -143,6 +143,43 @@ export default function PrivacyPage() {
             quando e come hai dato il consenso perché la legge ci chiede di poterlo
             dimostrare. Le email partono da Brevo, che le spedisce per conto
             nostro e registra se sono arrivate e se sono state aperte.
+          </p>
+        </section>
+
+        <section aria-labelledby="soci">
+          <h2 id="soci" className="flex items-center gap-3 text-2xl font-black text-cinema-text">
+            <Users className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" />
+            Se ti tesseri
+          </h2>
+          <p className="mt-4 leading-relaxed text-cinema-text-muted">
+            La domanda di iscrizione non si compila qui: questo sito ti manda al
+            portale soci, che è un&apos;altra applicazione dell&apos;associazione.
+            Lì ti chiediamo nome, cognome ed email — l&apos;email è anche la
+            chiave con cui entrerai nella tua area — e, se vuoi darceli, il
+            cellulare e l&apos;indirizzo. La quota si paga con carta su Stripe,
+            che custodisce lui i dati della carta, oppure in cassa.
+          </p>
+          <p className="mt-3 leading-relaxed text-cinema-text-muted">
+            Diventare socio è un contratto, e i dati che servono a gestirlo — il
+            libro soci, le quote versate, la tessera — li trattiamo su quella base
+            (art. 6.1.b) e per gli obblighi contabili che ne discendono (art.
+            6.1.c). Le comunicazioni sulla vita associativa ti arrivano perché sei
+            socio; quelle sui film che escono <strong>solo se le chiedi</strong>, e
+            puoi smettere quando vuoi dalla tua area soci.
+          </p>
+          <p className="mt-3 leading-relaxed text-cinema-text-muted">
+            Il dettaglio completo — cosa raccogliamo, per quanto lo teniamo, chi lo
+            vede — sta nell&apos;
+            <a
+              href={SITE.sociPrivacyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-2 hover:text-cinema-ticket-ink"
+            >
+              informativa privacy dei soci
+              <span className="sr-only"> (si apre in una nuova scheda)</span>
+            </a>
+            , sul portale.
           </p>
         </section>
 

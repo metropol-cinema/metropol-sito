@@ -24,6 +24,10 @@ export const SITE = {
    */
   sociSignupUrl: 'https://soci.cinemametropol.it/m/iscriviti',
   sociAreaUrl: 'https://soci.cinemametropol.it/m',
+  /** L'informativa privacy del tesseramento: la scrive e la serve il
+   *  gestionale, perche' e' li' che si raccolgono quei dati. Qui c'e' solo il
+   *  rimando, per non tenerne due versioni che prima o poi divergono. */
+  sociPrivacyUrl: 'https://soci.cinemametropol.it/m/privacy',
   social: {
     facebook: 'https://www.facebook.com/metropol.cinema',
     instagram: 'https://instagram.com/metropol.cinema',
