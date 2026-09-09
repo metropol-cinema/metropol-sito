@@ -1,6 +1,7 @@
 import { Clapperboard } from 'lucide-react';
 import Link from 'next/link';
 
+import { AccessibleBadge } from '@/components/accessible-badge';
 import type { PublicFilm } from '@/lib/programmazione-client';
 import { formatDayIt } from '@/lib/programmazione-client';
 import { cn } from '@/lib/utils';
@@ -54,6 +55,7 @@ export function FilmPosterCard({
       <p className="mt-1 font-utility text-[0.68rem] font-semibold uppercase tracking-wider text-cinema-ticket-ink">
         {first ? `Dal ${formatDayIt(first.startsAt)}` : 'Date in arrivo'}
       </p>
+      {film.isAccessible && <AccessibleBadge className="mt-1.5" />}
     </Link>
   );
 }

@@ -1,6 +1,7 @@
 import { ArrowRight, Clapperboard } from 'lucide-react';
 import Link from 'next/link';
 
+import { AccessibleBadge } from '@/components/accessible-badge';
 import { AgeBadge } from '@/components/age-badge';
 import { MetaLine } from '@/components/meta-line';
 import { PriceLegend, ShowtimesByDay } from '@/components/showtimes';
@@ -62,6 +63,7 @@ export async function FilmRow({ film }: { film: PublicFilm }) {
 
           <MetaLine items={meta} className="mt-2.5">
             {ageRating && <AgeBadge rating={ageRating} />}
+            {film.isAccessible && <AccessibleBadge />}
           </MetaLine>
 
           {description && (

@@ -2,6 +2,7 @@ import { ArrowRight, Clapperboard } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { AccessibleBadge } from '@/components/accessible-badge';
 import { AgeBadge } from '@/components/age-badge';
 import { MetaLine } from '@/components/meta-line';
 import { PriceLegend, ShowtimesByDay } from '@/components/showtimes';
@@ -105,6 +106,7 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
 
           <MetaLine items={meta} className="mt-4">
             {ageRating && <AgeBadge rating={ageRating} />}
+            {film.isAccessible && <AccessibleBadge />}
           </MetaLine>
 
           {/* Due giorni al massimo: l'hero deve restare leggibile a colpo

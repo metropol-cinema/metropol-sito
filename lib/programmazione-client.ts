@@ -49,6 +49,17 @@ export interface PublicFilm {
   /** Il film va mostrato nella sezione "Prossimamente". Scelta dell'Admin in
    *  dashboard, non una regola sulle date. */
   showInUpcoming: boolean;
+  /**
+   * Proiezione **accessibile**: il film si può seguire con i dispositivi per
+   * persone con disabilità (audiodescrizione, sottotitoli). Lo dichiara il
+   * gestionale film per film.
+   *
+   * Opzionale perché le risposte precedenti all'introduzione del campo non ce
+   * l'hanno: assente o `false` vuol dire **non dichiarato**, e allora non si
+   * scrive niente. Mai il contrario — dire "non accessibile" al posto del
+   * gestionale è il modo di far restare a casa qualcuno che poteva venire.
+   */
+  isAccessible?: boolean;
   /** Locandina come data-URI `data:image/jpeg;base64,…`, o null. */
   poster: string | null;
   /**

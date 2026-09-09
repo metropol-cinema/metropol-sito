@@ -1,8 +1,10 @@
 import { Clapperboard } from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { AccessibleBadge } from '@/components/accessible-badge';
 import { AgeBadge } from '@/components/age-badge';
 import { Gallery } from '@/components/gallery';
 import { MetaLine } from '@/components/meta-line';
@@ -99,6 +101,15 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
       ...(details?.genres.length ? { genre: details.genres } : {}),
       ...(details?.releaseYear ? { datePublished: String(details.releaseYear) } : {}),
       ...(ageRating ? { contentRating: ageRating.code } : {}),
+      // Solo quando è dichiarato: un riassunto generico, senza inventare
+      // QUALE ausilio (audiodescrizione o sottotitoli) — il gestionale dice
+      // solo che la proiezione è accessibile.
+      ...(film.isAccessible
+        ? {
+            accessibilitySummary:
+              'Proiezione accessibile: il film si può seguire con i dispositivi per persone con disabilità.',
+          }
+        : {}),
       ...(trailerId
         ? {
             trailer: {
@@ -186,9 +197,22 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
 
             <MetaLine items={meta} className="mt-4" />
 
-            {ageRating && (
-              <p className="mt-4">
-                <AgeBadge rating={ageRating} showLabel />
+            {(ageRating || film.isAccessible) && (
+              <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+                {ageRating && <AgeBadge rating={ageRating} showLabel />}
+                {film.isAccessible && <AccessibleBadge />}
+              </p>
+            )}
+
+            {/* Qui non basta il bollino: chi lo cerca sta decidendo se venire,
+                e la domanda dopo è sempre «e la sala?». */}
+            {film.isAccessible && (
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-cinema-text-muted">
+                Questo film si può seguire con i dispositivi per persone con disabilità.{' '}
+                <Link href="/accessibilita" className="text-cinema-ticket-ink underline underline-offset-2">
+                  Come si entra e si sta in sala
+                </Link>
+                .
               </p>
             )}
 

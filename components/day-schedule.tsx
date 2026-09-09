@@ -1,6 +1,7 @@
 import { Clapperboard } from 'lucide-react';
 import Link from 'next/link';
 
+import { AccessibleBadge } from '@/components/accessible-badge';
 import { MetaLine } from '@/components/meta-line';
 import { DayLabel, PriceLegend, Showtimes } from '@/components/showtimes';
 import type { PublicFilm, PublicShowtime } from '@/lib/programmazione-client';
@@ -89,7 +90,9 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
               <MetaLine
                 items={[film.director, film.durationMinutes ? `${film.durationMinutes}′` : null]}
                 className="mt-1.5"
-              />
+              >
+                {film.isAccessible && <AccessibleBadge />}
+              </MetaLine>
               <Showtimes
                 film={film}
                 showtimes={showtimes}
