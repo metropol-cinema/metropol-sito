@@ -16,6 +16,12 @@ export interface VoceAccessibilita {
   stato: Stato;
   titolo: string;
   dettaglio: string;
+  /**
+   * Di che tipo di barriera parla la voce: `carrozzina` per come si entra e ci
+   * si muove, `persona` per chi non sente e chi non vede. La sedia a rotelle
+   * messa su una voce di sottotitoli manda fuori strada proprio chi la cerca.
+   */
+  simbolo: 'carrozzina' | 'persona';
   /** Dove sta scritto per esteso, quando una riga non basta. */
   link?: { href: string; label: string };
 }
@@ -26,17 +32,20 @@ export const VERIFICATA_IL = '9 settembre 2026';
 export const ACCESSIBILITA_SALA: VoceAccessibilita[] = [
   {
     stato: 'disponibile',
+    simbolo: 'carrozzina',
     titolo: 'Accesso in carrozzina',
     dettaglio:
       'Un ascensore porta all’ingresso del cinema, e in platea ci sono quattro posti attrezzati per le carrozzine. Si entra e si raggiunge la sala in autonomia. Se ci scrivi prima ti teniamo il posto migliore.',
   },
   {
     stato: 'disponibile',
+    simbolo: 'carrozzina',
     titolo: 'Servizi igienici accessibili',
     dettaglio: 'Disponibili durante tutte le proiezioni.',
   },
   {
     stato: 'disponibile',
+    simbolo: 'persona',
     titolo: 'Sottotitoli e audiodescrizione',
     dettaglio:
       'Siamo una sala CinemAmico: chi non sente o non vede può seguire il film con MovieReading, l’app gratuita che porta sottotitoli e audiodescrizione sul telefono. Dipende dal film: il bollino «accessibile» sulla scheda dice quali titoli li hanno.',
@@ -44,6 +53,7 @@ export const ACCESSIBILITA_SALA: VoceAccessibilita[] = [
   },
   {
     stato: 'assente',
+    simbolo: 'persona',
     titolo: 'Anello magnetico',
     dettaglio:
       'La sala non ha un anello magnetico per apparecchi acustici: chi lo usa non trova qui l’audio in cuffia. I sottotitoli di MovieReading sono la strada che possiamo offrire oggi. Se ti servirebbe, dircelo ci aiuta a metterlo in conto.',

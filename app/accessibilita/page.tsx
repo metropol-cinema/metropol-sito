@@ -1,4 +1,13 @@
-import { Accessibility, ArrowRight, Check, Info, Minus, Monitor, Smartphone } from 'lucide-react';
+import {
+  Accessibility,
+  ArrowRight,
+  Check,
+  Info,
+  Minus,
+  Monitor,
+  PersonStanding,
+  Smartphone,
+} from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -23,6 +32,11 @@ const SEGNI: Record<Stato, { icona: typeof Check; classe: string; etichetta: str
   assente: { icona: Minus, classe: 'text-cinema-text-subtle', etichetta: 'Non disponibile' },
 };
 
+/** Di cosa parla la voce: la carrozzina per come si entra e ci si muove, la
+ *  figura umana per chi non sente e chi non vede. È un'etichetta visiva, non
+ *  lo stato — quello resta il cerchietto a sinistra. */
+const SIMBOLI = { carrozzina: Accessibility, persona: PersonStanding } as const;
+
 export default function AccessibilitaPage() {
   return (
     <main className="container max-w-3xl py-10 sm:py-12">
@@ -40,11 +54,10 @@ export default function AccessibilitaPage() {
 
       <div className="space-y-12">
         <section aria-labelledby="la-sala">
-          <h2
-            id="la-sala"
-            className="flex items-center gap-3 text-2xl font-black text-cinema-text"
-          >
-            <Accessibility className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" />
+          {/* Niente icona sul titolo: i simboli stanno sulle singole voci, dove
+              distinguono una barriera dall'altra. Ripeterne uno qui sopra le
+              contraddirebbe tutte e tre. */}
+          <h2 id="la-sala" className="text-2xl font-black text-cinema-text">
             La sala
           </h2>
           <p className="mt-2 text-sm text-cinema-text-subtle">
@@ -58,6 +71,7 @@ export default function AccessibilitaPage() {
             {ACCESSIBILITA_SALA.map((voce) => {
               const segno = SEGNI[voce.stato];
               const Icona = segno.icona;
+              const Simbolo = SIMBOLI[voce.simbolo];
               return (
                 <li
                   key={voce.titolo}
@@ -69,7 +83,11 @@ export default function AccessibilitaPage() {
                     <Icona className="h-3.5 w-3.5" aria-hidden="true" />
                   </span>
                   <div className="min-w-0">
-                    <h3 className="text-lg font-bold leading-snug text-cinema-text">
+                    <h3 className="flex items-center gap-2 text-lg font-bold leading-snug text-cinema-text">
+                      <Simbolo
+                        className="h-5 w-5 shrink-0 text-cinema-ticket-ink"
+                        aria-hidden="true"
+                      />
                       {voce.titolo}
                       {/* Lo stato è un colore e un simbolo: da solo non basta,
                           va anche detto (WCAG 1.4.1). */}
