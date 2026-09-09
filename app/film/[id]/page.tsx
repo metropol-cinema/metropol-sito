@@ -1,4 +1,4 @@
-import { Clapperboard } from 'lucide-react';
+import { ChevronDown, Clapperboard } from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -196,31 +196,49 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
 
             <MetaLine items={meta} className="mt-4" />
 
-            {(ageRating || film.isAccessible) && (
-              <p className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
-                {ageRating && <AgeBadge rating={ageRating} showLabel />}
-                {film.isAccessible && <AccessibleBadge />}
+            {ageRating && (
+              <p className="mt-4">
+                <AgeBadge rating={ageRating} showLabel />
               </p>
             )}
 
-            {/* Qui non basta il bollino: chi lo cerca sta decidendo se venire,
-                e la domanda dopo è sempre «sì, ma io come faccio?». */}
+            {/* Il bollino da solo non basta: chi lo cerca sta decidendo se
+                venire, e la domanda dopo è sempre «sì, ma io come faccio?».
+                La risposta però non deve stare sempre aperta sotto il titolo —
+                al 99% di chi apre la scheda non serve. Quindi una tendina, che
+                si apre esattamente lì: `<details>` del browser, così funziona
+                col tasto invio, si annuncia da sola e non chiede JavaScript. */}
             {film.isAccessible && (
-              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-cinema-text-muted">
-                Di questo film esistono i sottotitoli e l&apos;audiodescrizione: puoi seguirlo dal
-                tuo telefono con MovieReading, o con un tablet e delle cuffie che ti diamo in
-                cassa.{' '}
-                <Link
-                  href="/accessibilita/sottotitoli-e-audiodescrizione"
-                  className="text-cinema-ticket-ink underline underline-offset-2"
-                >
-                  Come funziona
-                </Link>
-                {' · '}
-                <Link href="/accessibilita" className="text-cinema-ticket-ink underline underline-offset-2">
-                  Accessibilità della sala
-                </Link>
-              </p>
+              <details className="group mt-4 max-w-2xl">
+                <summary className="flex w-fit cursor-pointer list-none items-center gap-2 [&::-webkit-details-marker]:hidden">
+                  <AccessibleBadge />
+                  <span className="font-utility text-[0.68rem] font-semibold uppercase tracking-wider text-cinema-text-subtle underline underline-offset-4 group-open:hidden">
+                    Cosa vuol dire
+                  </span>
+                  <ChevronDown
+                    className="h-4 w-4 shrink-0 text-cinema-text-subtle transition-transform group-open:rotate-180"
+                    aria-hidden="true"
+                  />
+                </summary>
+                <p className="mt-3 text-sm leading-relaxed text-cinema-text-muted">
+                  Di questo film esistono i sottotitoli e l&apos;audiodescrizione: puoi seguirlo dal
+                  tuo telefono con MovieReading, o con un tablet e delle cuffie che ti diamo in
+                  cassa.{' '}
+                  <Link
+                    href="/accessibilita/sottotitoli-e-audiodescrizione"
+                    className="text-cinema-ticket-ink underline underline-offset-2"
+                  >
+                    Come funziona
+                  </Link>
+                  {' · '}
+                  <Link
+                    href="/accessibilita"
+                    className="text-cinema-ticket-ink underline underline-offset-2"
+                  >
+                    Accessibilità della sala
+                  </Link>
+                </p>
+              </details>
             )}
 
             {description && (
