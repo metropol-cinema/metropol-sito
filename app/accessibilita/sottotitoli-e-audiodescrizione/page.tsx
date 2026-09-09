@@ -1,4 +1,11 @@
-import { Accessibility, ArrowLeft, Download, Handshake, Info, Smartphone } from 'lucide-react';
+import {
+  ArrowLeft,
+  Download,
+  Handshake,
+  Info,
+  PersonStanding,
+  Smartphone,
+} from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -123,7 +130,7 @@ export default function SottotitoliAudiodescrizionePage() {
         </section>
 
         <section aria-labelledby="dipende-dal-film">
-          <Titolo id="dipende-dal-film" icona={Accessibility}>
+          <Titolo id="dipende-dal-film" icona={PersonStanding}>
             Il bollino sulla scheda del film
           </Titolo>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
@@ -135,7 +142,7 @@ export default function SottotitoliAudiodescrizionePage() {
             Per questo, quando ci sono, lo scriviamo: sulla scheda del film e negli elenchi della
             programmazione compare il simbolo{' '}
             <span className="inline-flex items-center gap-1.5 rounded border border-cinema-success/60 px-1.5 py-0.5 align-middle font-utility text-xs font-bold uppercase tracking-wide text-cinema-success">
-              <Accessibility className="h-3.5 w-3.5" aria-hidden="true" />
+              <PersonStanding className="h-3.5 w-3.5" aria-hidden="true" />
               Accessibile
             </span>
             . Se non c&apos;è, non vuol dire che sei di troppo: vuol dire che per quel film non
