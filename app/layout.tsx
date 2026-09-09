@@ -59,7 +59,13 @@ const theaterJsonLd = {
   isAccessibleForFree: false,
   amenityFeature: [
     { '@type': 'LocationFeatureSpecification', name: 'Accesso in carrozzina', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Posti attrezzati per carrozzine', value: 4 },
     { '@type': 'LocationFeatureSpecification', name: 'Servizi igienici accessibili', value: true },
+    {
+      '@type': 'LocationFeatureSpecification',
+      name: 'Sottotitoli e audiodescrizione (MovieReading, sala CinemAmico)',
+      value: true,
+    },
     { '@type': 'LocationFeatureSpecification', name: 'Anello magnetico per apparecchi acustici', value: false },
   ],
 };

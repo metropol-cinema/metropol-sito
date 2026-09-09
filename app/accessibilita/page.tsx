@@ -1,4 +1,4 @@
-import { Accessibility, Check, Info, Minus, Monitor } from 'lucide-react';
+import { Accessibility, ArrowRight, Check, Info, Minus, Monitor, Smartphone } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -75,6 +75,16 @@ export default function AccessibilitaPage() {
                     <p className="mt-1.5 text-sm leading-relaxed text-cinema-text-muted">
                       {voce.dettaglio}
                     </p>
+                    {voce.link && (
+                      <Link
+                        href={voce.link.href}
+                        className="mt-2 inline-flex items-center gap-1.5 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-ticket-ink underline underline-offset-2"
+                      >
+                        {voce.link.label}
+                        <span className="sr-only"> — {voce.titolo.toLowerCase()}</span>
+                        <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                      </Link>
+                    )}
                   </div>
                 </li>
               );
@@ -85,6 +95,33 @@ export default function AccessibilitaPage() {
             Informazioni verificate sul posto il {VERIFICATA_IL}. Se trovi che qualcosa non
             corrisponde, diccelo: è il modo più veloce perché venga corretto.
           </p>
+        </section>
+
+        {/* Non è una voce in più dell'elenco: è la cosa che al Metropol si può
+            fare da subito, e va trovata senza doverla cercare. */}
+        <section aria-labelledby="in-sala-col-telefono">
+          <h2
+            id="in-sala-col-telefono"
+            className="flex items-center gap-3 text-2xl font-black text-cinema-text"
+          >
+            <Smartphone className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" />
+            Seguire il film con il telefono
+          </h2>
+          <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
+            Siamo una sala <strong className="font-semibold text-cinema-text">CinemAmico</strong>:
+            chi non sente o non vede può seguire la proiezione con MovieReading, l&apos;app
+            gratuita che porta i sottotitoli sullo schermo del telefono e l&apos;audiodescrizione
+            in cuffia. In cassa prestiamo un tablet o delle cuffie a chi preferisce non usare il
+            proprio. Dipende dal film: sulle schede dei film che li hanno c&apos;è il bollino
+            «accessibile».
+          </p>
+          <Link
+            href="/accessibilita/sottotitoli-e-audiodescrizione"
+            className="mt-5 inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover"
+          >
+            Come funziona
+            <ArrowRight className="h-4 w-4" aria-hidden="true" />
+          </Link>
         </section>
 
         <section aria-labelledby="chiedere">

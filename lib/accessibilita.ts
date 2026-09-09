@@ -16,17 +16,19 @@ export interface VoceAccessibilita {
   stato: Stato;
   titolo: string;
   dettaglio: string;
+  /** Dove sta scritto per esteso, quando una riga non basta. */
+  link?: { href: string; label: string };
 }
 
 /** Ultima volta che queste informazioni sono state controllate sul posto. */
-export const VERIFICATA_IL = '27 agosto 2026';
+export const VERIFICATA_IL = '9 settembre 2026';
 
 export const ACCESSIBILITA_SALA: VoceAccessibilita[] = [
   {
     stato: 'disponibile',
     titolo: 'Accesso in carrozzina',
     dettaglio:
-      'Si entra e si raggiunge la sala in autonomia, e in platea ci sono posti previsti per le carrozzine. Se ci scrivi prima ti teniamo il posto migliore.',
+      'Un ascensore porta all’ingresso del cinema, e in platea ci sono quattro posti attrezzati per le carrozzine. Si entra e si raggiunge la sala in autonomia. Se ci scrivi prima ti teniamo il posto migliore.',
   },
   {
     stato: 'disponibile',
@@ -34,10 +36,44 @@ export const ACCESSIBILITA_SALA: VoceAccessibilita[] = [
     dettaglio: 'Disponibili durante tutte le proiezioni.',
   },
   {
-    stato: 'assente',
-    titolo: 'Ausili per l’udito',
+    stato: 'disponibile',
+    titolo: 'Sottotitoli e audiodescrizione',
     dettaglio:
-      'La sala non ha ancora un anello magnetico, e non programmiamo proiezioni sottotitolate in modo regolare. Lo scriviamo per non far fare viaggi a vuoto: se ti servirebbe, dircelo ci aiuta a metterlo in conto.',
+      'Siamo una sala CinemAmico: chi non sente o non vede può seguire il film con MovieReading, l’app gratuita che porta sottotitoli e audiodescrizione sul telefono. Dipende dal film: il bollino «accessibile» sulla scheda dice quali titoli li hanno.',
+    link: { href: '/accessibilita/sottotitoli-e-audiodescrizione', label: 'Come funziona' },
+  },
+  {
+    stato: 'assente',
+    titolo: 'Anello magnetico',
+    dettaglio:
+      'La sala non ha un anello magnetico per apparecchi acustici: chi lo usa non trova qui l’audio in cuffia. I sottotitoli di MovieReading sono la strada che possiamo offrire oggi. Se ti servirebbe, dircelo ci aiuta a metterlo in conto.',
+  },
+];
+
+// ── MovieReading e CinemAmico ────────────────────────────────────────────────
+// Il servizio è di Universal Multimedia Access, non nostro: qui teniamo solo i
+// link ufficiali e i passi che valgono per chi viene da noi. Se cambiano le
+// loro pagine, cambia un indirizzo — non una promessa.
+
+export const MOVIEREADING_URL = 'https://www.moviereading.com/';
+export const CINEMAMICO_URL = 'https://www.moviereading.com/cinemamico/';
+
+/** I tre passi, nell'ordine in cui li fa lo spettatore. */
+export const MOVIEREADING_PASSI: Array<{ titolo: string; dettaglio: string }> = [
+  {
+    titolo: 'Installa l’app, una volta sola',
+    dettaglio:
+      'MovieReading è gratuita e sta su App Store e Google Play. Non serve registrarsi né pagare nulla, né a noi né a loro.',
+  },
+  {
+    titolo: 'Scarica il film prima di uscire di casa',
+    dettaglio:
+      'Dentro l’app cerchi il titolo e scarichi i sottotitoli o l’audiodescrizione. Falla col wi‑fi di casa: in sala non serve internet, ma il file sì.',
+  },
+  {
+    titolo: 'In sala, premi «sincronizza»',
+    dettaglio:
+      'L’app si sincronizza da sola con la proiezione: da lì i sottotitoli scorrono sullo schermo del telefono, o l’audiodescrizione ti arriva in cuffia. Nient’altro da fare, e nessuna connessione richiesta.',
   },
 ];
 

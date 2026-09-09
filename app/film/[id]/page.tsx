@@ -101,13 +101,12 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
       ...(details?.genres.length ? { genre: details.genres } : {}),
       ...(details?.releaseYear ? { datePublished: String(details.releaseYear) } : {}),
       ...(ageRating ? { contentRating: ageRating.code } : {}),
-      // Solo quando è dichiarato: un riassunto generico, senza inventare
-      // QUALE ausilio (audiodescrizione o sottotitoli) — il gestionale dice
-      // solo che la proiezione è accessibile.
+      // Solo quando è dichiarato dal gestionale.
       ...(film.isAccessible
         ? {
+            accessibilityFeature: ['captions', 'audioDescription'],
             accessibilitySummary:
-              'Proiezione accessibile: il film si può seguire con i dispositivi per persone con disabilità.',
+              'Proiezione accessibile: sottotitoli e audiodescrizione disponibili tramite l’app MovieReading sul proprio dispositivo, o su tablet e cuffie prestati dal cinema.',
           }
         : {}),
       ...(trailerId
@@ -205,14 +204,22 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
             )}
 
             {/* Qui non basta il bollino: chi lo cerca sta decidendo se venire,
-                e la domanda dopo è sempre «e la sala?». */}
+                e la domanda dopo è sempre «sì, ma io come faccio?». */}
             {film.isAccessible && (
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-cinema-text-muted">
-                Questo film si può seguire con i dispositivi per persone con disabilità.{' '}
-                <Link href="/accessibilita" className="text-cinema-ticket-ink underline underline-offset-2">
-                  Come si entra e si sta in sala
+                Di questo film esistono i sottotitoli e l&apos;audiodescrizione: puoi seguirlo dal
+                tuo telefono con MovieReading, o con un tablet e delle cuffie che ti diamo in
+                cassa.{' '}
+                <Link
+                  href="/accessibilita/sottotitoli-e-audiodescrizione"
+                  className="text-cinema-ticket-ink underline underline-offset-2"
+                >
+                  Come funziona
                 </Link>
-                .
+                {' · '}
+                <Link href="/accessibilita" className="text-cinema-ticket-ink underline underline-offset-2">
+                  Accessibilità della sala
+                </Link>
               </p>
             )}
 

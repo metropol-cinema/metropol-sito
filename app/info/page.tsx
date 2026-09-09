@@ -71,9 +71,18 @@ export default function InfoPage() {
             Accessibilità
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
-            Si entra e si raggiunge la sala in carrozzina in autonomia, con posti dedicati in
-            platea, e ci sono servizi igienici accessibili. Il dettaglio — comprese le cose che
-            ancora non abbiamo, come gli ausili per l&apos;udito — sta nella{' '}
+            Un ascensore porta all&apos;ingresso, in platea ci sono quattro posti attrezzati per
+            le carrozzine e i servizi igienici sono accessibili. Siamo anche una sala{' '}
+            <strong className="font-semibold text-cinema-text">CinemAmico</strong>: chi non sente o
+            non vede può seguire il film con{' '}
+            <Link
+              href="/accessibilita/sottotitoli-e-audiodescrizione"
+              className="text-cinema-ticket-ink underline underline-offset-2"
+            >
+              sottotitoli e audiodescrizione
+            </Link>
+            . Il dettaglio — comprese le cose che ancora non abbiamo, come l&apos;anello magnetico
+            — sta nella{' '}
             <Link
               href="/accessibilita"
               className="text-cinema-ticket-ink underline underline-offset-2"
