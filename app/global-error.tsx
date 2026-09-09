@@ -10,7 +10,13 @@
  * Prima rispondeva la pagina di serie di Next, in inglese e senza `lang`:
  * un lettore di schermo italiano la leggeva con la pronuncia sbagliata.
  */
-export default function GlobalError({ reset }: { error: Error; reset: () => void }) {
+export default function GlobalError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
   return (
     <html lang="it">
       <body
@@ -58,6 +64,21 @@ export default function GlobalError({ reset }: { error: Error; reset: () => void
               Torna alla home
             </a>
           </p>
+          {/* Il codice che Next assegna all'errore lato server: lo stesso che
+              compare nei registri di Vercel. È l'unico ponte fra "ho visto una
+              pagina rotta" e "ecco cosa è successo" — senza, di un guasto
+              capitato una volta sola non resta niente da cercare. Gli errori
+              nati nel browser non ce l'hanno, e allora la riga non compare. */}
+          {error.digest && (
+            <p style={{ margin: '2rem 0 0', fontSize: '0.75rem', color: '#8F8A81', lineHeight: 1.5 }}>
+              Codice del guasto:{' '}
+              <code style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' }}>
+                {error.digest}
+              </code>
+              <br />
+              Serve a noi per ritrovarlo nei registri.
+            </p>
+          )}
         </main>
       </body>
     </html>

@@ -13,6 +13,8 @@
  * timeline di default (solo programmazione corrente, il comportamento storico).
  */
 
+import { TIMEOUT_GESTIONALE, withTimeout } from '@/lib/fetch-timeout';
+
 export type SlideshowKind = 'current_programming' | 'future_programming' | 'video' | 'image';
 
 export interface SlideshowItem {
@@ -44,6 +46,7 @@ export async function fetchSlideshow(): Promise<SlideshowItem[] | null> {
   try {
     const res = await fetch(url, {
       headers: { accept: 'application/json' },
+      signal: withTimeout(TIMEOUT_GESTIONALE),
       next: { revalidate: 600 },
     });
     if (!res.ok) return null;

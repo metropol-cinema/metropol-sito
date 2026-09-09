@@ -7,6 +7,8 @@
  *   PROGRAMMAZIONE_API_TOKEN = <stesso valore di CINEBOT_WEBHOOK_TOKEN del gestionale>
  */
 
+import { isTimeout, TIMEOUT_GESTIONALE, withTimeout } from '@/lib/fetch-timeout';
+
 export interface PublicPrice {
   label: string;
   type: string;
@@ -105,14 +107,29 @@ export async function fetchProgrammazione(
   if (opts.days != null) url.searchParams.set('days', String(opts.days));
   if (opts.posters === false) url.searchParams.set('posters', 'false');
 
-  const res = await fetch(url, {
-    method: 'GET',
-    headers: { accept: 'application/json' },
-    signal: opts.signal,
-    // Finestra ISR. Il gestionale può farla cadere prima chiamando
-    // /api/revalidate quando cambia qualcosa.
-    next: { revalidate: opts.revalidate ?? 600 },
-  });
+  let res: Response;
+  try {
+    res = await fetch(url, {
+      method: 'GET',
+      headers: { accept: 'application/json' },
+      // Un limite di tempo nostro: senza, una API che accetta la connessione e
+      // poi tace tiene la pagina appesa fino a far scadere la funzione, e il
+      // visitatore si becca la pagina di errore invece del cartellone.
+      signal: withTimeout(TIMEOUT_GESTIONALE, opts.signal),
+      // Finestra ISR. Il gestionale può farla cadere prima chiamando
+      // /api/revalidate quando cambia qualcosa.
+      next: { revalidate: opts.revalidate ?? 600 },
+    });
+  } catch (e) {
+    // Il messaggio finisce sotto gli occhi di chi visita, dentro <LoadError>:
+    // in italiano, e dicendo cosa è successo davvero.
+    if (isTimeout(e)) {
+      throw new Error(
+        `La programmazione non è arrivata entro ${TIMEOUT_GESTIONALE / 1000} secondi`
+      );
+    }
+    throw e;
+  }
 
   const json = (await res.json().catch(() => null)) as ProgrammazioneResponse | null;
   if (!res.ok || !json?.ok) {

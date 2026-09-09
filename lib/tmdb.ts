@@ -9,6 +9,8 @@
  * insieme ai dettagli.
  */
 
+import { TIMEOUT_TMDB, withTimeout } from '@/lib/fetch-timeout';
+
 export interface TmdbImage {
   /** Versione a piena larghezza, per il lightbox. */
   url: string;
@@ -108,7 +110,13 @@ export async function fetchTmdbDetails(tmdbId: string | null): Promise<TmdbDetai
 
   try {
     // I dati di un film non cambiano: cache lunga (24h).
-    const res = await fetch(url, { next: { revalidate: 86_400 } });
+    const res = await fetch(url, {
+      // Più stretto di quello del gestionale: qui si gioca un backdrop, non il
+      // contenuto della pagina. Se TMDB tarda, si resta sulla locandina di
+      // Cinebot — che è già quello che succede quando la chiave non c'è.
+      signal: withTimeout(TIMEOUT_TMDB),
+      next: { revalidate: 86_400 },
+    });
     if (!res.ok) return null;
     const json = (await res.json()) as RawMovie;
 

@@ -6,6 +6,8 @@
  * come già fa `lib/slideshow-client.ts`.
  */
 
+import { TIMEOUT_GESTIONALE, withTimeout } from '@/lib/fetch-timeout';
+
 export interface PublicCourseLesson {
   /** ISO, o null: una lezione può essere annunciata prima di avere la data. */
   startsAt: string | null;
@@ -55,6 +57,7 @@ export async function fetchCorsi(): Promise<PublicCourse[]> {
     url.searchParams.set('token', config.token);
     const res = await fetch(url, {
       headers: { accept: 'application/json' },
+      signal: withTimeout(TIMEOUT_GESTIONALE),
       // Finestra ISR; il gestionale la fa cadere prima con /api/revalidate.
       next: { revalidate: 600 },
     });

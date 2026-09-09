@@ -214,8 +214,27 @@ automatico) · `/associazione` (hub con card) e sottopagine `/chi-siamo`,
 `/corsi` e `/corsi/[slug]` (corsi di cinema, vedi sotto) ·
 `/info` · `/accessibilita` (vedi sotto) (statiche; le sottopagine
 dell'associazione sono linkate da `ASSOCIATION_LINKS` in hub e footer, non nel
-menu principale). `not-found.tsx` e `global-error.tsx` sono nostre: le pagine
-di serie di Next erano in inglese e senza `<main>`.
+menu principale). `not-found.tsx`, `error.tsx` e `global-error.tsx` sono
+nostre: le pagine di serie di Next erano in inglese e senza `<main>`.
+
+**Le due reti di sicurezza, in ordine di gravità.** `error.tsx` prende gli
+errori del *contenuto* e lascia in piedi testata, menu, piè di pagina e temi:
+chi ci finisce ha ancora un sito da cui ripartire. `global-error.tsx` risponde
+solo quando si rompe il layout stesso, e allora ridisegna il documento da zero
+— niente temi, niente caratteri, colori scritti a mano. Tutt'e due mostrano
+`error.digest`, il codice che Next assegna all'errore lato server e che si
+ritrova identico nei registri di Vercel: senza, di un guasto capitato una volta
+sola non resta niente da cercare.
+
+**Le chiamate esterne hanno un limite di tempo** (`lib/fetch-timeout.ts`): 8 s
+per le read-API del gestionale, 4 s per TMDB, che è arricchimento e non
+contenuto. `fetch` di suo non si arrende mai, e una API che accetta la
+connessione e poi tace tiene la pagina appesa finché non scade la funzione su
+Vercel — a quel punto il visitatore vede la rete di sicurezza al posto del
+cartellone. Col limite nostro il guasto lo governiamo noi: `fetchProgrammazione`
+lancia (con un messaggio in italiano, che finisce in `<LoadError>`), gli altri
+tre client degradano come già facevano. Durante una rigenerazione ISR in
+sottofondo Next toglie il segnale, e fa bene: lì non sta aspettando nessuno.
 
 ## Convenzioni
 
