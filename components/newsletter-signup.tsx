@@ -23,32 +23,33 @@ import Link from 'next/link';
  * non vale un modulo rotto.
  *
  * ANCHE LA NEWSLETTER È UNA CASELLA, e si può togliere. Prima era implicita:
- * qualunque cosa si spuntasse, l'iscrizione comprendeva sempre il film del
- * venerdì. Con «Film accessibili» non regge più — chi chiede di essere
+ * qualunque cosa si spuntasse, l'iscrizione comprendeva sempre la newsletter
+ * storica. Con «Film accessibili» non regge più — chi chiede di essere
  * avvisato quando c'è una proiezione che può seguire non sta chiedendo una
  * email a settimana, e dargliela lo stesso è il motivo per cui la gente preme
- * «segnala come spam». Quando l'elenco non arriva la casella non si vede e la
- * newsletter resta spuntata: il modulo torna a fare quello che ha sempre
- * fatto.
+ * «segnala come spam».
+ *
+ * QUALE CASELLA ARRIVA SPUNTATA LO DICE LA DASHBOARD, col flag `predefinita`
+ * (migrazione 0107), non questo file: cambiare la lista di partenza non deve
+ * costare un deploy del sito, che è lo stesso motivo per cui le liste sono
+ * diventate righe di una tabella. Qui resta solo la rete di sicurezza: se
+ * l'elenco non arriva, le caselle non si vedono e vale la newsletter storica,
+ * cioè quello che il modulo ha sempre fatto.
  */
 
 const API =
   process.env.NEXT_PUBLIC_NEWSLETTER_API_URL ?? 'https://app.cinemametropol.it';
 
-/** La lista storica: è il motivo per cui questo modulo esiste, ed è spuntata
- *  di partenza — ma si può togliere, se si vuole solo qualcos'altro. */
+/** La lista storica («Tutta la programmazione»). Serve solo da ripiego quando
+ *  l'elenco delle liste non arriva: in quel caso è a lei che ci si iscrive. */
 const LISTA_NEWSLETTER = 'iscritti_sito';
-
-/** Come si chiama la newsletter nella casella che la riguarda. */
-const ETICHETTA_NEWSLETTER = {
-  nome: 'Il film di venerdì',
-  descrizione: 'Una email a settimana con il film in programma.',
-};
 
 interface ListaPubblica {
   chiave: string;
   nome: string;
   descrizione: string;
+  /** La casella arriva già spuntata: lo decide la dashboard, non il sito. */
+  predefinita?: boolean;
 }
 export function NewsletterSignup() {
   const [email, setEmail] = useState('');
@@ -63,9 +64,10 @@ export function NewsletterSignup() {
      esiste davvero, e riscrivere l'indirizzo di qualcuno vorrebbe dire
      mandare la sua posta a un altro. */
   const [suggerimento, setSuggerimento] = useState<string | null>(null);
-  /* Le altre liste a cui ci si può iscrivere da qui, e tutto quello che è
-     spuntato — newsletter compresa, perché ora è una spunta anche lei. */
-  const [altreListe, setAltreListe] = useState<ListaPubblica[]>([]);
+  /* Le liste a cui ci si può iscrivere da qui, nell'ordine deciso in
+     dashboard, e quelle spuntate in questo momento. */
+  const [liste, setListe] = useState<ListaPubblica[]>([]);
+  const [predefinite, setPredefinite] = useState<string[]>([LISTA_NEWSLETTER]);
   const [scelte, setScelte] = useState<string[]>([LISTA_NEWSLETTER]);
 
   useEffect(() => {
@@ -75,7 +77,23 @@ export function NewsletterSignup() {
         const res = await fetch(`${API}/api/public/newsletter/liste`);
         const json = (await res.json()) as { ok?: boolean; liste?: ListaPubblica[] };
         if (!vivo || !json.ok) return;
-        setAltreListe((json.liste ?? []).filter((l) => l.chiave !== LISTA_NEWSLETTER));
+        const arrivate = json.liste ?? [];
+        if (arrivate.length === 0) return;
+        setListe(arrivate);
+        /* Le spuntate di partenza le dice la dashboard. Se non ne marca
+           nessuna si parte dalla lista storica invece che da niente: un
+           modulo che si apre con tutte le caselle vuote sembra rotto, e chi
+           preme «Iscriviti» senza guardare si sentirebbe dire di scegliere
+           qualcosa. */
+        const marcate = arrivate.filter((l) => l.predefinita).map((l) => l.chiave);
+        const partenza =
+          marcate.length > 0
+            ? marcate
+            : arrivate.some((l) => l.chiave === LISTA_NEWSLETTER)
+              ? [LISTA_NEWSLETTER]
+              : [arrivate[0].chiave];
+        setPredefinite(partenza);
+        setScelte(partenza);
       } catch {
         // Silenzio voluto: senza l'elenco il modulo fa quello che ha sempre
         // fatto, e chi si iscrive non deve vedere un errore per una casella
@@ -131,7 +149,7 @@ export function NewsletterSignup() {
         setEmail('');
         setNome('');
         setSito('');
-        setScelte([LISTA_NEWSLETTER]);
+        setScelte(predefinite);
       } else if (json.suggerimento) {
         // Non è un errore: è una domanda. Il modulo resta com'è e si chiede
         // conferma, così basta un clic sia per correggere sia per insistere.
@@ -160,14 +178,14 @@ export function NewsletterSignup() {
     <form onSubmit={invia} className="relative space-y-2">
       <label htmlFor="newsletter-email" className="flex items-center gap-2 text-sm font-medium text-cinema-text">
         <Mail className="h-4 w-4 text-cinema-ticket-ink" aria-hidden="true" />
-        Il film di venerdì, nella tua posta
+        I Venerdì del Metropol, nella tua posta
       </label>
       {/* «Una email a settimana» sta qui solo quando le caselle non ci sono:
-          quando ci sono, quella frase è già scritta accanto alla sua, e
-          ripeterla due volte a tre centimetri di distanza fa sembrare che
-          parlino di due cose diverse. */}
+          quando ci sono, ogni lista si descrive da sé, e ripetere la stessa
+          frase a tre centimetri di distanza fa sembrare che parlino di due
+          cose diverse. */}
       <p className="text-xs text-cinema-text-subtle">
-        {altreListe.length === 0 && 'Una email a settimana con il film in programma. '}
+        {liste.length === 0 && 'Una email a settimana con il film in programma. '}
         Ti arriverà prima una richiesta di conferma. Ti puoi cancellare quando vuoi, con un
         clic.
       </p>
@@ -253,10 +271,10 @@ export function NewsletterSignup() {
         </button>
       </div>
 
-      {altreListe.length > 0 && (
+      {liste.length > 0 && (
         <fieldset className="space-y-1.5">
           <legend className="text-xs text-cinema-text-subtle">Cosa vuoi ricevere:</legend>
-          {[{ chiave: LISTA_NEWSLETTER, ...ETICHETTA_NEWSLETTER }, ...altreListe].map((l) => (
+          {liste.map((l) => (
             <label
               key={l.chiave}
               className="flex cursor-pointer items-start gap-2 text-xs text-cinema-text"
