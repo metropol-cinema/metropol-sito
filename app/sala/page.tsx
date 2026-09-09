@@ -1,5 +1,6 @@
 import { Accessibility, Armchair, Clapperboard, MapPin, Ticket } from 'lucide-react';
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { BOX_OFFICE_NOTE, SITE } from '@/lib/site';
@@ -104,13 +105,16 @@ export default function SalaPage() {
             </Titolo>
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
               {FOTO_SALA.map((foto) => (
-                <figure key={foto.src} className="m-0">
-                  {/* Foto nostre, servite dal sito: <img> semplice, senza
-                      l'ottimizzatore, che qui non aggiungerebbe nulla. */}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                <figure key={foto.src} className={foto.larga ? 'm-0 sm:col-span-2' : 'm-0'}>
+                  {/* Foto nostre, in public/: le dimensioni vere sono in
+                      lib/sala.ts, così Next ritaglia i formati per il telefono
+                      e la pagina non salta mentre l'immagine arriva. */}
+                  <Image
                     src={foto.src}
                     alt={foto.alt}
+                    width={foto.larghezza}
+                    height={foto.altezza}
+                    sizes={foto.larga ? '(min-width: 768px) 48rem, 100vw' : '(min-width: 640px) 24rem, 100vw'}
                     className="w-full rounded-2xl border border-cinema-border object-cover"
                   />
                   {foto.didascalia && (

@@ -30,6 +30,35 @@ export interface FotoSala {
   src: string;
   alt: string;
   didascalia?: string;
+  /** Occupa tutta la larghezza della griglia, invece di una colonna sola. */
+  larga?: boolean;
+  /** Dimensioni del file originale: servono a Next per non far saltare il
+   *  layout mentre l'immagine arriva, e per generare i formati più piccoli. */
+  larghezza: number;
+  altezza: number;
 }
 
-export const FOTO_SALA: FotoSala[] = [];
+export const FOTO_SALA: FotoSala[] = [
+  {
+    src: '/foto/sala/sala.jpg',
+    alt: 'La platea vista dall’alto: lunghe file di poltrone blu su un pavimento in legno chiaro scendono a gradoni verso il palco. In fondo lo schermo bianco fra le tende blu, con i fari del teatro appesi ai lati.',
+    didascalia: 'La platea, dall’ultima fila. In fondo il palco, con lo schermo e il sipario.',
+    larga: true,
+    larghezza: 2048,
+    altezza: 1536,
+  },
+  {
+    src: '/foto/sala/esterno.jpeg',
+    alt: 'L’edificio del cinema all’imbrunire, visto dall’angolo della piazza: una facciata curva in pietra chiara con una grande vetrata illuminata di arancione, e alberi illuminati lungo il marciapiede.',
+    didascalia: 'L’edificio in Piazza Villafranchetta, la sera.',
+    larghezza: 678,
+    altezza: 452,
+  },
+  {
+    src: '/foto/sala/ingresso.jpg',
+    alt: 'Il foyer, con il pavimento di marmo a fasce chiare e scure. Sopra le porte della sala la scritta SALA ALIDA FERRARINI; accanto, un pannello rosso con le parole cinematografo, teatro, sala conferenze. Sulla destra il bancone della biglietteria.',
+    didascalia: 'Il foyer e la biglietteria, prima delle porte della sala.',
+    larghezza: 2126,
+    altezza: 1419,
+  },
+];
