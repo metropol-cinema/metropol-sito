@@ -58,6 +58,18 @@ export const NAV_LINKS = [
   { href: '/info', label: 'Info e prezzi' },
 ] as const;
 
+/**
+ * Voci in coda alla colonna "Il cinema" del footer.
+ *
+ * Sono pagine sul luogo, non sul cartellone: nel menu in alto ruberebbero
+ * spazio ai film, ma qui sotto devono esserci — chi cerca «posso venire?» non
+ * deve passare da Info e prezzi per trovarle.
+ */
+export const FOOTER_CINEMA_LINKS = [
+  { href: '/sala', label: 'La sala' },
+  { href: '/accessibilita', label: 'Accessibilità' },
+] as const;
+
 /** Sottopagine dell'associazione: linkate da /associazione e nel footer, non nel menu principale. */
 export const ASSOCIATION_LINKS = [
   { href: '/associazione/chi-siamo', label: 'Chi siamo' },

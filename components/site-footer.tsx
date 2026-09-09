@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 import { NewsletterSignup } from '@/components/newsletter-signup';
 import { visibleNavLinks } from '@/lib/nav';
-import { ASSOCIATION_LINKS, SITE } from '@/lib/site';
+import { ASSOCIATION_LINKS, FOOTER_CINEMA_LINKS, SITE } from '@/lib/site';
 
 export async function SiteFooter() {
   const navLinks = await visibleNavLinks();
@@ -46,7 +46,7 @@ export async function SiteFooter() {
         <nav aria-label="Mappa del sito">
           <h2 className="font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket-ink">Il cinema</h2>
           <ul className="mt-4 space-y-2.5">
-            {navLinks.map((link) => (
+            {[...navLinks, ...FOOTER_CINEMA_LINKS].map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
@@ -122,11 +122,10 @@ export async function SiteFooter() {
       </div>
 
       <div className="border-t border-cinema-border py-5 text-center text-xs text-cinema-text-subtle">
+        {/* L'accessibilità è salita nel menu qui sopra, insieme alla sala: è
+            una pagina che si cerca, non una riga di chiusura. Qui resta la
+            privacy, che invece si cerca proprio in fondo. */}
         © {new Date().getFullYear()} {SITE.association} · {SITE.city} ·{' '}
-        <Link href="/accessibilita" className="transition-colors hover:text-cinema-ticket-ink">
-          Accessibilità
-        </Link>{' '}
-        ·{' '}
         <Link href="/privacy" className="transition-colors hover:text-cinema-ticket-ink">
           Privacy e cookie
         </Link>
