@@ -11,6 +11,7 @@ import Link from 'next/link';
 
 import {
   CINEMAMICO_URL,
+  MOVIEREADING_APP,
   MOVIEREADING_PASSI,
   MOVIEREADING_URL,
   CONTATTO_ACCESSIBILITA,
@@ -104,6 +105,33 @@ export default function SottotitoliAudiodescrizionePage() {
                   <p className="mt-1.5 text-sm leading-relaxed text-cinema-text-muted">
                     {passo.dettaglio}
                   </p>
+                  {/* I link veri dei due store, non «cercala sul negozio»:
+                      chi ha bisogno di questa app non deve anche indovinare
+                      quale sia, fra le omonime. */}
+                  {passo.download && (
+                    <p className="mt-3 flex flex-wrap gap-2">
+                      <a
+                        href={MOVIEREADING_APP.ios}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg border border-cinema-border-strong px-3.5 py-2 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
+                      >
+                        <Download className="h-3.5 w-3.5" aria-hidden="true" />
+                        App Store · iPhone e iPad
+                        <span className="sr-only"> (si apre in una nuova scheda)</span>
+                      </a>
+                      <a
+                        href={MOVIEREADING_APP.android}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 rounded-lg border border-cinema-border-strong px-3.5 py-2 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
+                      >
+                        <Download className="h-3.5 w-3.5" aria-hidden="true" />
+                        Google Play · Android
+                        <span className="sr-only"> (si apre in una nuova scheda)</span>
+                      </a>
+                    </p>
+                  )}
                 </div>
               </li>
             ))}

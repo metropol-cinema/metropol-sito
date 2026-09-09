@@ -19,6 +19,7 @@ import {
   type Stato,
 } from '@/lib/accessibilita';
 import { SITE } from '@/lib/site';
+import { cn } from '@/lib/utils';
 
 export const metadata: Metadata = {
   title: 'Accessibilità',
@@ -75,7 +76,14 @@ export default function AccessibilitaPage() {
               return (
                 <li
                   key={voce.titolo}
-                  className="flex gap-4 rounded-2xl border border-cinema-border bg-cinema-surface p-5"
+                  // Il riquadro è per ciò che la sala offre. Quello che manca
+                  // resta scritto — nasconderlo sarebbe la cosa peggiore — ma
+                  // senza cornice: non è una scheda di ciò che troverai.
+                  className={cn(
+                    'flex gap-4 p-5',
+                    voce.stato !== 'assente' &&
+                      'rounded-2xl border border-cinema-border bg-cinema-surface'
+                  )}
                 >
                   <span
                     className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-current ${segno.classe}`}

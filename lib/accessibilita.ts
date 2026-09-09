@@ -68,12 +68,29 @@ export const ACCESSIBILITA_SALA: VoceAccessibilita[] = [
 export const MOVIEREADING_URL = 'https://www.moviereading.com/';
 export const CINEMAMICO_URL = 'https://www.moviereading.com/cinemamico/';
 
+/**
+ * I due indirizzi per scaricare l'app, presi dai link ufficiali sul sito di
+ * MovieReading. L'id App Store (460349347) è verificato: l'app è di Universal
+ * Multimedia Access Srl. Mandare qualcuno in uno store sbagliato, per un'app
+ * che gli serve per vedere il film, è il modo peggiore di essere d'aiuto.
+ */
+export const MOVIEREADING_APP = {
+  ios: 'https://apps.apple.com/it/app/moviereading/id460349347',
+  android: 'https://play.google.com/store/apps/details?id=com.unimaccess.umaclient',
+} as const;
+
 /** I tre passi, nell'ordine in cui li fa lo spettatore. */
-export const MOVIEREADING_PASSI: Array<{ titolo: string; dettaglio: string }> = [
+export const MOVIEREADING_PASSI: Array<{
+  titolo: string;
+  dettaglio: string;
+  /** Sotto questo passo la pagina mette i due bottoni degli store. */
+  download?: boolean;
+}> = [
   {
     titolo: 'Installa l’app, una volta sola',
     dettaglio:
       'MovieReading è gratuita e sta su App Store e Google Play. Non serve registrarsi né pagare nulla, né a noi né a loro.',
+    download: true,
   },
   {
     titolo: 'Scarica il film prima di uscire di casa',
