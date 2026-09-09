@@ -21,13 +21,29 @@ import Link from 'next/link';
  * richiede di toccare il sito. Se la chiamata fallisce il modulo resta quello
  * di prima e l'iscrizione funziona lo stesso: un elenco di caselle facoltative
  * non vale un modulo rotto.
+ *
+ * ANCHE LA NEWSLETTER È UNA CASELLA, e si può togliere. Prima era implicita:
+ * qualunque cosa si spuntasse, l'iscrizione comprendeva sempre il film del
+ * venerdì. Con «Film accessibili» non regge più — chi chiede di essere
+ * avvisato quando c'è una proiezione che può seguire non sta chiedendo una
+ * email a settimana, e dargliela lo stesso è il motivo per cui la gente preme
+ * «segnala come spam». Quando l'elenco non arriva la casella non si vede e la
+ * newsletter resta spuntata: il modulo torna a fare quello che ha sempre
+ * fatto.
  */
 
 const API =
   process.env.NEXT_PUBLIC_NEWSLETTER_API_URL ?? 'https://app.cinemametropol.it';
 
-/** La lista storica: è lo scopo stesso di questo modulo, non un'opzione. */
+/** La lista storica: è il motivo per cui questo modulo esiste, ed è spuntata
+ *  di partenza — ma si può togliere, se si vuole solo qualcos'altro. */
 const LISTA_NEWSLETTER = 'iscritti_sito';
+
+/** Come si chiama la newsletter nella casella che la riguarda. */
+const ETICHETTA_NEWSLETTER = {
+  nome: 'Il film di venerdì',
+  descrizione: 'Una email a settimana con il film in programma.',
+};
 
 interface ListaPubblica {
   chiave: string;
@@ -47,10 +63,10 @@ export function NewsletterSignup() {
      esiste davvero, e riscrivere l'indirizzo di qualcuno vorrebbe dire
      mandare la sua posta a un altro. */
   const [suggerimento, setSuggerimento] = useState<string | null>(null);
-  /* Le altre liste a cui ci si può iscrivere da qui, e quelle spuntate. La
-     newsletter non è fra queste: è il motivo per cui il modulo esiste. */
+  /* Le altre liste a cui ci si può iscrivere da qui, e tutto quello che è
+     spuntato — newsletter compresa, perché ora è una spunta anche lei. */
   const [altreListe, setAltreListe] = useState<ListaPubblica[]>([]);
-  const [scelte, setScelte] = useState<string[]>([]);
+  const [scelte, setScelte] = useState<string[]>([LISTA_NEWSLETTER]);
 
   useEffect(() => {
     let vivo = true;
@@ -74,6 +90,14 @@ export function NewsletterSignup() {
   async function invia(e: React.FormEvent, opzioni: { forza?: boolean; indirizzo?: string } = {}) {
     e.preventDefault();
     if (stato === 'invio') return;
+    /* Nessuna casella spuntata: non c'è niente da mandare, e iscrivere
+       qualcuno «a niente» lo lascerebbe convinto di essersi iscritto. */
+    if (scelte.length === 0) {
+      setStato('errore');
+      setMessaggio('Scegli almeno una cosa da ricevere.');
+      return;
+    }
+
     setStato('invio');
     setSuggerimento(null);
 
@@ -90,7 +114,7 @@ export function NewsletterSignup() {
             nome,
             sito,
             forza: opzioni.forza ?? false,
-            liste: [LISTA_NEWSLETTER, ...scelte],
+            liste: scelte,
           }),
         }
       );
@@ -107,7 +131,7 @@ export function NewsletterSignup() {
         setEmail('');
         setNome('');
         setSito('');
-        setScelte([]);
+        setScelte([LISTA_NEWSLETTER]);
       } else if (json.suggerimento) {
         // Non è un errore: è una domanda. Il modulo resta com'è e si chiede
         // conferma, così basta un clic sia per correggere sia per insistere.
@@ -138,9 +162,14 @@ export function NewsletterSignup() {
         <Mail className="h-4 w-4 text-cinema-ticket-ink" aria-hidden="true" />
         Il film di venerdì, nella tua posta
       </label>
+      {/* «Una email a settimana» sta qui solo quando le caselle non ci sono:
+          quando ci sono, quella frase è già scritta accanto alla sua, e
+          ripeterla due volte a tre centimetri di distanza fa sembrare che
+          parlino di due cose diverse. */}
       <p className="text-xs text-cinema-text-subtle">
-        Una email a settimana con il film in programma. Ti arriverà prima una richiesta di
-        conferma. Ti puoi cancellare quando vuoi, con un clic.
+        {altreListe.length === 0 && 'Una email a settimana con il film in programma. '}
+        Ti arriverà prima una richiesta di conferma. Ti puoi cancellare quando vuoi, con un
+        clic.
       </p>
 
       {suggerimento && (
@@ -226,8 +255,8 @@ export function NewsletterSignup() {
 
       {altreListe.length > 0 && (
         <fieldset className="space-y-1.5">
-          <legend className="text-xs text-cinema-text-subtle">Mandami anche:</legend>
-          {altreListe.map((l) => (
+          <legend className="text-xs text-cinema-text-subtle">Cosa vuoi ricevere:</legend>
+          {[{ chiave: LISTA_NEWSLETTER, ...ETICHETTA_NEWSLETTER }, ...altreListe].map((l) => (
             <label
               key={l.chiave}
               className="flex cursor-pointer items-start gap-2 text-xs text-cinema-text"
