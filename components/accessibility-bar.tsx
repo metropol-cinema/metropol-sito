@@ -1,9 +1,9 @@
 'use client';
 
 import {
-  Accessibility,
   AlignJustify,
   Pause,
+  PersonStanding,
   RotateCcw,
   Type,
   Underline,
@@ -103,7 +103,10 @@ export function AccessibilityBar() {
         aria-label={aperto ? 'Chiudi gli strumenti di lettura' : 'Strumenti di lettura e accessibilità'}
         className="fixed bottom-4 left-4 z-50 flex h-14 w-14 items-center justify-center rounded-full border-2 border-cinema-on-ticket/15 bg-cinema-ticket text-cinema-on-ticket shadow-xl shadow-black/40 transition-colors hover:bg-cinema-ticket-hover"
       >
-        <Accessibility className="h-7 w-7" aria-hidden="true" />
+        {/* Figura umana, non carrozzina: di qui si cambiano colori, testo e
+            animazioni — non si entra in sala. La carrozzina sta sulle pagine
+            della sala, dove vuol dire davvero qualcosa. */}
+        <PersonStanding className="h-7 w-7" aria-hidden="true" />
       </button>
 
       {aperto && (
