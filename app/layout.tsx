@@ -92,6 +92,19 @@ export const metadata: Metadata = {
     template: '%s · Cinema Metropol',
   },
   description: DESCRIPTION,
+  /* La bobina della scheda del browser. È lo STESSO set della dashboard e
+     degli altri strumenti (public/favicon_io/): il marchio è uno solo, e chi
+     tiene aperti sito e gestionale deve vedere la stessa icona. Il `.ico`
+     va per primo perché è quello che i browser da scrivania preferiscono. */
+  icons: {
+    icon: [
+      { url: '/favicon_io/favicon.ico', sizes: 'any' },
+      { url: '/favicon_io/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+      { url: '/favicon_io/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+    ],
+    apple: '/favicon_io/apple-touch-icon.png',
+  },
+  manifest: '/favicon_io/site.webmanifest',
   // L'immagine di anteprima è app/opengraph-image.png (il marchio a colori):
   // Next la aggancia da sola, qui restano solo i testi che l'accompagnano.
   openGraph: {
