@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 /** Ultima revisione del testo. Va aggiornata quando cambia qualcosa di sostanziale. */
-const AGGIORNATA_IL = '9 settembre 2026';
+const AGGIORNATA_IL = '16 settembre 2026';
 
 /**
  * Cosa resta sul dispositivo di chi legge. Sono quattro voci in croce perché il
@@ -54,8 +54,12 @@ const ARCHIVIO = [
 
 /** I fornitori che, per far funzionare qualcosa, vedono dei dati. */
 const FORNITORI = [
-  { nome: 'Vercel', ruolo: 'Ospita il sito e ne registra i log tecnici', dove: 'Stati Uniti (clausole contrattuali standard)' },
-  { nome: 'Supabase', ruolo: 'Banca dati del gestionale, dove finiscono le iscrizioni', dove: 'Unione Europea' },
+  {
+    nome: 'Vercel',
+    ruolo: 'Ospita il sito e ne registra i log tecnici',
+    dove: 'Server in Irlanda (Unione Europea) e rete di distribuzione in tutto il mondo; la società è statunitense e può trattare negli Stati Uniti parte dei dati tecnici, come i log (clausole contrattuali standard)',
+  },
+  { nome: 'Supabase', ruolo: 'Banca dati del gestionale, dove finiscono le iscrizioni', dove: 'Unione Europea (Irlanda)' },
   { nome: 'Brevo', ruolo: 'Spedisce la newsletter e ne gestisce le iscrizioni', dove: 'Francia' },
   { nome: 'Stripe', ruolo: 'Incassa i pagamenti dei corsi e le quote associative', dove: 'Stati Uniti (Data Privacy Framework)' },
   { nome: 'Google Ireland', ruolo: 'Statistiche di visita e trailer da YouTube', dove: 'Irlanda, con trasferimenti negli Stati Uniti (Data Privacy Framework)' },
@@ -279,7 +283,7 @@ export default function PrivacyPage() {
             Non vendiamo e non cediamo dati a nessuno. Li vedono solo i fornitori
             che ci servono per far funzionare le cose, ciascuno nominato
             responsabile del trattamento e vincolato a usarli solo per quello.
-            Quando un fornitore sta fuori dall&apos;Unione Europea, il
+            Quando un fornitore tratta dati fuori dall&apos;Unione Europea, il
             trasferimento è coperto dalle clausole contrattuali standard della
             Commissione o dal Data Privacy Framework.
           </p>
