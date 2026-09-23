@@ -9,7 +9,7 @@ import { AgeBadge } from '@/components/age-badge';
 import { Gallery } from '@/components/gallery';
 import { MetaLine } from '@/components/meta-line';
 import { PriceLegend, ShowtimesByDay, groupShowtimesByDay } from '@/components/showtimes';
-import { TicketsDialog } from '@/components/tickets-dialog';
+import { TicketsButton } from '@/components/tickets-button';
 import { Trailer } from '@/components/trailer';
 import { ageRatingFor } from '@/lib/age-rating';
 import { jsonLdScript } from '@/lib/json-ld';
@@ -264,13 +264,12 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
 
             {/* L'azione principale, dove l'occhio arriva: sopra la piega, non
                 in fondo alla pagina dopo la fotogallery. */}
-            {/* Un <div> e non un <p>: dentro c'è un <dialog>, e un paragrafo
-                non può contenerlo — il browser chiuderebbe il <p> da solo e
-                l'idratazione fallirebbe. */}
+            {/* L'azione principale, dove l'occhio arriva: sopra la piega, non
+                in fondo alla pagina dopo la fotogallery. */}
             {film.ticketsUrl && (
-              <div className="mt-6">
-                <TicketsDialog url={film.ticketsUrl} title={film.title} />
-              </div>
+              <p className="mt-6">
+                <TicketsButton url={film.ticketsUrl} title={film.title} />
+              </p>
             )}
 
             {capoversi.length > 0 && (
