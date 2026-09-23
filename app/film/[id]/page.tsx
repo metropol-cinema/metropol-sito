@@ -26,6 +26,16 @@ async function findFilm(id: string): Promise<PublicFilm | null> {
   return films.find((f) => f.id === numericId) ?? null;
 }
 
+/** Prima frase utile per la meta description: al massimo 160 caratteri. */
+function riassunto(testo: string | null | undefined): string | null {
+  const t = (testo ?? '').replace(/\s+/g, ' ').trim();
+  if (!t) return null;
+  if (t.length <= 160) return t;
+  const tagliato = t.slice(0, 160);
+  const spazio = tagliato.lastIndexOf(' ');
+  return `${(spazio > 100 ? tagliato.slice(0, spazio) : tagliato).trimEnd()}…`;
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -36,7 +46,11 @@ export async function generateMetadata({
   if (!film) return { title: 'Film non trovato' };
   return {
     title: film.title,
-    description: film.description ?? `${film.title} al Cinema Metropol di Villafranca di Verona.`,
+    // La sinossi, non il «Testo per il sito»: quello può essere lungo, e una
+    // meta description lunga viene troncata da chi la mostra, a metà frase.
+    description:
+      riassunto(film.synopsis ?? film.description) ??
+      `${film.title} al Cinema Metropol di Villafranca di Verona.`,
   };
 }
 
@@ -63,6 +77,12 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
   const details = await fetchTmdbDetails(film.tmdbId);
   const poster = details?.posterUrl ?? film.poster;
   const description = film.description ?? details?.overview ?? null;
+  // Il testo del sito può avere più capoversi, separati da una riga vuota:
+  // dentro un <p> solo diventerebbero un muro.
+  const capoversi = (description ?? '')
+    .split(/\n{2,}/)
+    .map((c) => c.trim())
+    .filter(Boolean);
 
   // Trailer: comanda quello scelto in dashboard (già preferito in italiano e
   // sovrascrivibile a mano); TMDB è solo la riserva.
@@ -241,10 +261,12 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
               </details>
             )}
 
-            {description && (
-              <p className="mt-5 max-w-3xl text-base leading-relaxed text-cinema-text-muted">
-                {description}
-              </p>
+            {capoversi.length > 0 && (
+              <div className="mt-5 max-w-3xl space-y-3 text-base leading-relaxed text-cinema-text-muted">
+                {capoversi.map((c) => (
+                  <p key={c.slice(0, 40)}>{c}</p>
+                ))}
+              </div>
             )}
           </div>
         </div>
@@ -275,6 +297,7 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
               youtubeId={trailerId}
               title={film.title}
               posterUrl={details?.backdropUrl ?? null}
+              sottotitoli={film.trailerAccessible === true}
             />
           </div>
         </section>

@@ -34,7 +34,20 @@ export interface PublicFilm {
   title: string;
   director: string | null;
   distributor: string | null;
+  /**
+   * Il testo da pubblicare: se in dashboard è stato scritto un «Testo per il
+   * sito» nella scheda del film, arriva quello; altrimenti la sinossi. Può
+   * quindi essere **lungo e su più capoversi** (separati da una riga vuota).
+   */
   description: string | null;
+  /**
+   * La **sola sinossi**, senza il testo scritto per il sito. Serve dove il
+   * testo lungo non ci sta: l'anteprima di una riga, la meta description.
+   *
+   * Opzionale perché le risposte precedenti all'introduzione del campo non ce
+   * l'hanno: quando manca si ripiega su `description`.
+   */
+  synopsis?: string | null;
   durationMinutes: number | null;
   tmdbId: string | null;
   /**
@@ -62,6 +75,17 @@ export interface PublicFilm {
    * gestionale è il modo di far restare a casa qualcuno che poteva venire.
    */
   isAccessible?: boolean;
+  /**
+   * Il **trailer si può seguire**: ha i sottotitoli attivabili o
+   * l'audiodescrizione. Lo dichiara il gestionale dopo averlo guardato — non si
+   * deduce da `isAccessible`, che riguarda la proiezione in sala: un film può
+   * avere l'uno senza l'altro.
+   *
+   * Opzionale come `isAccessible`, e per lo stesso motivo: assente o `false`
+   * vuol dire **non dichiarato**, quindi non si scrive niente. Mai il
+   * contrario.
+   */
+  trailerAccessible?: boolean;
   /** Locandina come data-URI `data:image/jpeg;base64,…`, o null. */
   poster: string | null;
   /**

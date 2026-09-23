@@ -17,7 +17,10 @@ import { fetchTmdbDetails } from '@/lib/tmdb';
 export async function FilmRow({ film }: { film: PublicFilm }) {
   const details = await fetchTmdbDetails(film.tmdbId);
   const poster = details?.posterUrl ?? film.poster;
-  const description = film.description ?? details?.overview ?? null;
+  // Nell'elenco va la sinossi, non il «Testo per il sito»: qui il testo è
+  // troncato a tre righe, e le prime tre righe di un pezzo scritto per la
+  // scheda non sono una presentazione — sono un inizio interrotto.
+  const description = film.synopsis ?? film.description ?? details?.overview ?? null;
   const ageRating = ageRatingFor(film.ageRating);
 
   const meta = [

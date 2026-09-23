@@ -34,7 +34,22 @@ export function youtubeIdFrom(input: string | null | undefined): string | null {
  * URL di embed senza cookie di profilazione: il player viene montato solo dopo
  * il click dell'utente (vedi `components/trailer.tsx`), così la pagina non
  * contatta YouTube finché non serve.
+ *
+ * Con `sottotitoli: true` il player parte con i sottotitoli già accesi
+ * (`cc_load_policy`), preferendo l'italiano. È un parametro del player e
+ * funziona qui, nel video incorporato — sulla pagina di YouTube conterebbero
+ * anche le preferenze di chi guarda.
  */
-export function youtubeEmbedUrl(id: string): string {
-  return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&modestbranding=1&hl=it`;
+export function youtubeEmbedUrl(id: string, opzioni: { sottotitoli?: boolean } = {}): string {
+  const p = new URLSearchParams({
+    autoplay: '1',
+    rel: '0',
+    modestbranding: '1',
+    hl: 'it',
+  });
+  if (opzioni.sottotitoli) {
+    p.set('cc_load_policy', '1');
+    p.set('cc_lang_pref', 'it');
+  }
+  return `https://www.youtube-nocookie.com/embed/${id}?${p.toString()}`;
 }
