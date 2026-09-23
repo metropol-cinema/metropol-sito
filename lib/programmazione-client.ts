@@ -86,6 +86,16 @@ export interface PublicFilm {
    * contrario.
    */
   trailerAccessible?: boolean;
+  /**
+   * Pagina di **acquisto biglietti online** del film, incollata a mano in
+   * dashboard. Quando c'è, si mostra il bottone «Acquista biglietti» su questo
+   * indirizzo; quando manca, nessun bottone — non si costruisce un indirizzo a
+   * intuito, mandare qualcuno su una pagina di acquisto inesistente costa una
+   * vendita e una telefonata.
+   *
+   * Opzionale: le risposte precedenti all'introduzione del campo non ce l'hanno.
+   */
+  ticketsUrl?: string | null;
   /** Locandina come data-URI `data:image/jpeg;base64,…`, o null. */
   poster: string | null;
   /**
