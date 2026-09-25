@@ -2,17 +2,20 @@
 
 import {
   AlignJustify,
+  MousePointer2,
   Pause,
   PersonStanding,
   RotateCcw,
+  Ruler,
+  SquareMousePointer,
   Type,
-  Underline,
   X,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 
 import {
+  ETICHETTE_LINK,
   ETICHETTE_TEMA,
   ETICHETTE_TESTO,
   imposta,
@@ -21,14 +24,18 @@ import {
   personalizzate,
   PREFERENZE_INIZIALI,
   sottoscrivi,
+  type Link as Collegamenti,
   type Preferenze,
   type Tema,
   type Testo,
 } from '@/lib/a11y';
 import { cn } from '@/lib/utils';
 
+import { GuidaLettura } from './guida-lettura';
+
 const TEMI = Object.keys(ETICHETTE_TEMA) as Tema[];
 const TESTI = Object.keys(ETICHETTE_TESTO) as Testo[];
+const LINK = Object.keys(ETICHETTE_LINK) as Collegamenti[];
 
 /**
  * La barra di accessibilità: un bottone in basso a sinistra che apre il
@@ -94,6 +101,10 @@ export function AccessibilityBar() {
 
   return (
     <>
+      {/* Fuori dal pannello: la guida serve mentre si legge, non mentre si
+          sceglie. Resta accesa anche a pannello chiuso. */}
+      {pref.guida && <GuidaLettura />}
+
       <button
         ref={bottoneRef}
         type="button"
@@ -184,10 +195,11 @@ export function AccessibilityBar() {
                 onChange={(v) => cambia('spaziatura', v)}
               />
               <Interruttore
-                icona={<Underline className="h-4 w-4" aria-hidden="true" />}
-                etichetta="Link sottolineati"
-                attivo={pref.link}
-                onChange={(v) => cambia('link', v)}
+                icona={<Ruler className="h-4 w-4" aria-hidden="true" />}
+                etichetta="Guida di lettura"
+                nota="Una riga segue il puntatore"
+                attivo={pref.guida}
+                onChange={(v) => cambia('guida', v)}
               />
               <Interruttore
                 icona={<Pause className="h-4 w-4" aria-hidden="true" />}
@@ -195,6 +207,49 @@ export function AccessibilityBar() {
                 nota="Scorrimento automatico, video, transizioni"
                 attivo={pref.animazioni}
                 onChange={(v) => cambia('animazioni', v)}
+              />
+            </div>
+          </Gruppo>
+
+          <Gruppo titolo="Link">
+            {/* In colonna e non in griglia: «Sottolineati» ed «Evidenziati» sono
+                parole lunghe che in tre colonne escono dal riquadro, e chi apre
+                questo pannello spesso ha anche portato il testo al 150%. */}
+            <div className="space-y-2">
+              {LINK.map((l) => (
+                <Scelta
+                  key={l}
+                  nome="link"
+                  etichetta={`Link ${ETICHETTE_LINK[l].nome.toLowerCase()}: ${ETICHETTE_LINK[
+                    l
+                  ].nota.toLowerCase()}`}
+                  attiva={pref.link === l}
+                  onChange={() => cambia('link', l)}
+                >
+                  <span className="font-semibold">{ETICHETTE_LINK[l].nome}</span>
+                  <span className="ml-1.5 text-[0.7rem] text-cinema-text-subtle">
+                    {ETICHETTE_LINK[l].nota.toLowerCase()}
+                  </span>
+                </Scelta>
+              ))}
+            </div>
+          </Gruppo>
+
+          <Gruppo titolo="Mouse e zone attive">
+            <div className="space-y-2">
+              <Interruttore
+                icona={<MousePointer2 className="h-4 w-4" aria-hidden="true" />}
+                etichetta="Puntatore grande"
+                nota="E la mano dove si può cliccare"
+                attivo={pref.cursore}
+                onChange={(v) => cambia('cursore', v)}
+              />
+              <Interruttore
+                icona={<SquareMousePointer className="h-4 w-4" aria-hidden="true" />}
+                etichetta="Evidenzia le zone attive"
+                nota="Contorno su ciò che si può cliccare"
+                attivo={pref.zone}
+                onChange={(v) => cambia('zone', v)}
               />
             </div>
           </Gruppo>

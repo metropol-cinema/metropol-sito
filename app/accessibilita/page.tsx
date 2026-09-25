@@ -211,8 +211,9 @@ export default function AccessibilitaPage() {
               «Strumenti di lettura e accessibilità»
             </strong>
             : da lì si cambiano colori e dimensione del testo, si accende un carattere ad alta
-            leggibilità e si fermano le animazioni. Le scelte restano sul tuo browser e valgono
-            anche la volta dopo.
+            leggibilità, si ingrandisce il puntatore del mouse, si mette in risalto tutto ciò che
+            si può cliccare e si fermano le animazioni. Le scelte restano sul tuo browser e
+            valgono anche la volta dopo.
           </p>
 
           <h3 className="mt-8 text-lg font-bold text-cinema-text">Cosa abbiamo fatto</h3>

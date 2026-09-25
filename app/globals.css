@@ -305,6 +305,127 @@
     text-decoration: none;
   }
 
+  /* ----- Link evidenziati --------------------------------------------------
+     Un gradino oltre la sottolineatura: il link diventa un'etichetta piena,
+     come il tagliando. Il giallo puro dei widget di terze parti qui non
+     serve — l'oro dell'insegna ha già contrasto abbondante su tutti e quattro
+     i temi, ed è il colore che sul sito significa da sempre "questo si fa".
+     Gli `!important` sono voluti e sono due: le classi `text-*`/`bg-*` di
+     Tailwind vivono in un layer successivo a questo e vincerebbero, ma chi
+     accende questa voce vuole esattamente che nulla resti nascosto. */
+  :root[data-link='evidenziati'] a:not(:has(img)):not(:has(> svg:only-child)):not(
+      [data-senza-sottolineatura]
+    ):not(.skip-link),
+  :root[data-link='evidenziati']
+    a:not(:has(img)):not(:has(> svg:only-child)):not([data-senza-sottolineatura]):not(.skip-link)
+    * {
+    background-color: rgb(var(--c-ticket)) !important;
+    color: rgb(var(--c-on-ticket)) !important;
+  }
+  :root[data-link='evidenziati'] a:not(:has(img)):not(:has(> svg:only-child)):not(
+      [data-senza-sottolineatura]
+    ):not(.skip-link) {
+    outline: 2px solid rgb(var(--c-on-ticket));
+    outline-offset: 1px;
+    border-radius: 3px;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+  /* I link che sono solo un'immagine (locandine, marchio) non possono avere un
+     fondo: il fondo è l'immagine. Prendono un contorno. */
+  :root[data-link='evidenziati'] :is(a:has(img), a:has(> svg:only-child), a[data-senza-sottolineatura]) {
+    outline: 3px solid rgb(var(--c-ticket-ink));
+    outline-offset: 2px;
+  }
+
+  /* ----- Puntatore grande --------------------------------------------------
+     Due disegni, freccia e mano, così la mano continua a dire "qui si clicca":
+     un cursore unico per tutto toglie informazione invece di darla. Chiari sui
+     temi scuri e scuri su quelli chiari, sempre con il contorno opposto — è il
+     contorno, non il riempimento, a farlo sopravvivere su un fotogramma.
+     `!important` obbligato: `cursor-pointer` di Tailwind sta in un layer che
+     viene dopo questo e a parità di specificità vincerebbe lui. */
+  :root[data-cursore='grande'],
+  :root[data-cursore='grande'] * {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 32 32'%3E%3Cpath d='M5 2 L5 27 L11.5 20.5 L15.5 29.5 L19.5 27.5 L15.5 19 L24 19 Z' fill='%23ffffff' stroke='%23000000' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 6 3, auto !important;
+  }
+  :root[data-cursore='grande'] :is(a[href], button, summary, [role='button'], label, select):not(
+      [disabled]
+    ),
+  :root[data-cursore='grande']
+    :is(a[href], button, summary, [role='button'], label, select):not([disabled])
+    * {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 32 32'%3E%3Cpath d='M11 5a2.5 2.5 0 0 1 5 0v10h1.5V9.5a2.5 2.5 0 0 1 5 0V15H24v-2.5a2.5 2.5 0 0 1 5 0V22a8 8 0 0 1-8 8h-3.5a7 7 0 0 1-5-2.1l-5.2-5.2a2.6 2.6 0 0 1 3.7-3.7L11 21Z' fill='%23ffffff' stroke='%23000000' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 17 3, pointer !important;
+  }
+  :root[data-cursore='grande'] :is(input:not([type='checkbox']):not([type='radio']), textarea),
+  :root[data-cursore='grande'] :is(input:not([type='checkbox']):not([type='radio']), textarea) * {
+    cursor: text !important;
+  }
+  :root[data-tema='chiaro'][data-cursore='grande'],
+  :root[data-tema='chiaro'][data-cursore='grande'] *,
+  :root[data-tema='contrasto-chiaro'][data-cursore='grande'],
+  :root[data-tema='contrasto-chiaro'][data-cursore='grande'] * {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 32 32'%3E%3Cpath d='M5 2 L5 27 L11.5 20.5 L15.5 29.5 L19.5 27.5 L15.5 19 L24 19 Z' fill='%23000000' stroke='%23ffffff' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 6 3, auto !important;
+  }
+  :root[data-tema='chiaro'][data-cursore='grande']
+    :is(a[href], button, summary, [role='button'], label, select):not([disabled]),
+  :root[data-tema='chiaro'][data-cursore='grande']
+    :is(a[href], button, summary, [role='button'], label, select):not([disabled])
+    *,
+  :root[data-tema='contrasto-chiaro'][data-cursore='grande']
+    :is(a[href], button, summary, [role='button'], label, select):not([disabled]),
+  :root[data-tema='contrasto-chiaro'][data-cursore='grande']
+    :is(a[href], button, summary, [role='button'], label, select):not([disabled])
+    * {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 32 32'%3E%3Cpath d='M11 5a2.5 2.5 0 0 1 5 0v10h1.5V9.5a2.5 2.5 0 0 1 5 0V15H24v-2.5a2.5 2.5 0 0 1 5 0V22a8 8 0 0 1-8 8h-3.5a7 7 0 0 1-5-2.1l-5.2-5.2a2.6 2.6 0 0 1 3.7-3.7L11 21Z' fill='%23000000' stroke='%23ffffff' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E") 17 3, pointer !important;
+  }
+
+  /* ----- Zone attive evidenziate -------------------------------------------
+     Il sito è fatto di superfici che si possono toccare ma non lo dicono: una
+     locandina, una riga di orari, una scheda intera. Chi accende questa voce
+     vede il contorno d'oro su tutto ciò che è cliccabile, al passaggio del
+     mouse *e* al focus da tastiera — le due cose insieme, perché chi naviga
+     col tabulatore ha lo stesso identico bisogno di chi passa il mouse.
+     L'outline segue da sé lo smusso dell'elemento: niente border-radius qui. */
+  :root[data-zone='evidenziate']
+    :is(
+      a[href],
+      button,
+      summary,
+      select,
+      [role='button'],
+      [role='tab'],
+      [role='link'],
+      label:has(input),
+      [tabindex]:not([tabindex='-1'])
+    ):not([disabled]):is(:hover, :focus-visible) {
+    outline: 3px solid rgb(var(--c-ticket-ink));
+    outline-offset: 3px;
+  }
+  /* Un velo caldo sotto il contenuto: sulle superfici grandi (una scheda film)
+     il solo contorno si perde ai bordi dello schermo. Non sulle immagini, dove
+     starebbe dietro e non si vedrebbe comunque.
+     È un'ombra interna e non un `background-color`: il fondo lo *sostituirebbe*,
+     e il tagliando d'acquisto — che è un link con il fondo d'oro pieno — al
+     passaggio del mouse diventerebbe inchiostro scuro su niente. L'ombra si
+     posa sopra il fondo che c'è, qualunque sia. */
+  :root[data-zone='evidenziate']
+    :is(a[href], button, summary, [role='button'], [role='tab']):not(:has(img)):not(
+      [disabled]
+    ):is(:hover, :focus-visible) {
+    box-shadow: inset 0 0 0 100vmax rgb(var(--c-ticket-ink) / 0.16);
+  }
+  /* Un elemento cliccabile dentro un altro accenderebbe due contorni uno dentro
+     l'altro: vince il più interno, quello che riceverà davvero il click. */
+  :root[data-zone='evidenziate']
+    :is(a[href], button, [role='button']):has(
+      :is(a[href], button, [role='button']):hover
+    ):not(:focus-visible) {
+    outline: none;
+    box-shadow: none;
+  }
+
   /* ----- Animazioni ferme --------------------------------------------------
      Le stesse regole di prefers-reduced-motion, per chi non l'ha impostato a
      livello di sistema ma qui e ora ha bisogno che il sito stia fermo.
@@ -357,6 +478,26 @@
   }
   .skip-link:focus-visible {
     @apply not-sr-only fixed left-4 top-4 z-50 rounded-lg bg-cinema-accent-strong px-4 py-2.5 text-sm font-semibold text-white;
+  }
+
+  /* ----- Guida di lettura --------------------------------------------------
+     Una riga che segue il puntatore per non perdere il rigo. Sta sopra tutto e
+     non intercetta niente (`pointer-events: none`), altrimenti diventerebbe un
+     velo che ingoia i click. Il posto lo decide il componente via `--guida-y`:
+     il CSS non sa dov'è il mouse, e il JS non deve sapere com'è fatta la riga.
+     L'orlo scuro serve dove la riga passa sopra l'oro dell'insegna, dove il
+     solo oro sparirebbe. */
+  .guida-lettura {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 40;
+    height: 4px;
+    width: 100%;
+    pointer-events: none;
+    background-color: rgb(var(--c-ticket-ink));
+    box-shadow: 0 0 0 1px rgb(var(--c-bg-deep) / 0.7);
+    transform: translate3d(0, var(--guida-y, -10px), 0);
   }
 
   /* ----- Occhiello ---------------------------------------------------------

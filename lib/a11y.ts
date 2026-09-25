@@ -11,6 +11,7 @@
 
 export type Tema = 'sala' | 'chiaro' | 'contrasto-scuro' | 'contrasto-chiaro';
 export type Testo = '100' | '115' | '130' | '150';
+export type Link = 'no' | 'sottolineati' | 'evidenziati';
 
 export interface Preferenze {
   tema: Tema;
@@ -20,10 +21,16 @@ export interface Preferenze {
   spaziatura: boolean;
   /** Carattere ad alta leggibilità (Atkinson Hyperlegible). */
   carattere: boolean;
-  /** Link sempre sottolineati, non solo colorati. */
-  link: boolean;
+  /** Quanto far risaltare i link: niente, sottolineati, o su fondo pieno. */
+  link: Link;
   /** Ferma scorrimento automatico, video e transizioni. */
   animazioni: boolean;
+  /** Puntatore del mouse ingrandito e ad alto contrasto. */
+  cursore: boolean;
+  /** Contorno su tutto ciò che si può cliccare, al passaggio e al focus. */
+  zone: boolean;
+  /** Riga orizzontale che segue il puntatore per non perdere il rigo. */
+  guida: boolean;
 }
 
 export const CHIAVE_STORAGE = 'metropol-accessibilita';
@@ -33,12 +40,16 @@ export const PREFERENZE_INIZIALI: Preferenze = {
   testo: '100',
   spaziatura: false,
   carattere: false,
-  link: false,
+  link: 'no',
   animazioni: false,
+  cursore: false,
+  zone: false,
+  guida: false,
 };
 
 const TEMI: Tema[] = ['sala', 'chiaro', 'contrasto-scuro', 'contrasto-chiaro'];
 const TESTI: Testo[] = ['100', '115', '130', '150'];
+const LINK: Link[] = ['no', 'sottolineati', 'evidenziati'];
 
 export const ETICHETTE_TEMA: Record<Tema, { nome: string; nota: string }> = {
   sala: { nome: 'Sala', nota: 'Chiaro su scuro' },
@@ -52,6 +63,12 @@ export const ETICHETTE_TESTO: Record<Testo, string> = {
   '115': 'Grande',
   '130': 'Più grande',
   '150': 'Massimo',
+};
+
+export const ETICHETTE_LINK: Record<Link, { nome: string; nota: string }> = {
+  no: { nome: 'Normali', nota: 'Solo colore' },
+  sottolineati: { nome: 'Sottolineati', nota: 'Riga sotto' },
+  evidenziati: { nome: 'Evidenziati', nota: 'Fondo pieno' },
 };
 
 /** True se il visitatore ha cambiato almeno una cosa. */
@@ -69,8 +86,10 @@ export function applica(p: Preferenze, radice: HTMLElement = document.documentEl
     ['data-testo', p.testo === '100' ? null : p.testo],
     ['data-spaziatura', p.spaziatura ? 'ampia' : null],
     ['data-carattere', p.carattere ? 'leggibile' : null],
-    ['data-link', p.link ? 'sottolineati' : null],
+    ['data-link', p.link === 'no' ? null : p.link],
     ['data-animazioni', p.animazioni ? 'ferme' : null],
+    ['data-cursore', p.cursore ? 'grande' : null],
+    ['data-zone', p.zone ? 'evidenziate' : null],
   ];
   for (const [nome, valore] of attributi) {
     if (valore === null) radice.removeAttribute(nome);
@@ -83,14 +102,27 @@ export function leggi(): Preferenze {
   try {
     const grezzo = window.localStorage.getItem(CHIAVE_STORAGE);
     if (!grezzo) return PREFERENZE_INIZIALI;
-    const salvate = JSON.parse(grezzo) as Partial<Preferenze>;
+    // Non è `Partial<Preferenze>`: l'ha scritto una versione qualsiasi del
+    // sito, anche di un anno fa. Va guardato campo per campo, come un modulo
+    // arrivato per posta.
+    const salvate = JSON.parse(grezzo) as Record<string, unknown>;
     return {
       tema: TEMI.includes(salvate.tema as Tema) ? (salvate.tema as Tema) : 'sala',
       testo: TESTI.includes(salvate.testo as Testo) ? (salvate.testo as Testo) : '100',
       spaziatura: salvate.spaziatura === true,
       carattere: salvate.carattere === true,
-      link: salvate.link === true,
+      // `link` era un booleano fino a settembre 2026: chi aveva acceso la
+      // sottolineatura non deve ritrovarsela spenta.
+      link:
+        salvate.link === true
+          ? 'sottolineati'
+          : LINK.includes(salvate.link as Link)
+            ? (salvate.link as Link)
+            : 'no',
       animazioni: salvate.animazioni === true,
+      cursore: salvate.cursore === true,
+      zone: salvate.zone === true,
+      guida: salvate.guida === true,
     };
   } catch {
     // Navigazione privata o storage negato: si resta sui valori di partenza.
@@ -114,7 +146,7 @@ export function salva(p: Preferenze): void {
  */
 export const SCRIPT_INIZIALE = `(function(){try{var p=JSON.parse(localStorage.getItem(${JSON.stringify(
   CHIAVE_STORAGE
-)})||"{}"),d=document.documentElement;if(p.tema&&p.tema!=="sala")d.setAttribute("data-tema",p.tema);if(p.testo&&p.testo!=="100")d.setAttribute("data-testo",p.testo);if(p.spaziatura)d.setAttribute("data-spaziatura","ampia");if(p.carattere)d.setAttribute("data-carattere","leggibile");if(p.link)d.setAttribute("data-link","sottolineati");if(p.animazioni)d.setAttribute("data-animazioni","ferme")}catch(e){}})()`;
+)})||"{}"),d=document.documentElement;if(p.tema&&p.tema!=="sala")d.setAttribute("data-tema",p.tema);if(p.testo&&p.testo!=="100")d.setAttribute("data-testo",p.testo);if(p.spaziatura)d.setAttribute("data-spaziatura","ampia");if(p.carattere)d.setAttribute("data-carattere","leggibile");if(p.link&&p.link!=="no")d.setAttribute("data-link",p.link===true?"sottolineati":p.link);if(p.animazioni)d.setAttribute("data-animazioni","ferme");if(p.cursore)d.setAttribute("data-cursore","grande");if(p.zone)d.setAttribute("data-zone","evidenziate")}catch(e){}})()`;
 
 /* ===========================================================================
    Le preferenze come "store esterno"

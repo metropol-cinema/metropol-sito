@@ -122,6 +122,10 @@ export const ACCESSIBILITA_SITO = {
     'Più spazio fra righe, lettere e parole, per chi legge meglio con l’aria intorno alle parole.',
     'Tutto il sito si usa con la sola tastiera, con il punto attivo sempre visibile, e un salto diretto al contenuto come primo passaggio.',
     'Niente animazioni per chi le ha disattivate nel proprio dispositivo, e un interruttore per fermarle comunque.',
+    'Il puntatore del mouse si può ingrandire, con la freccia e la mano distinte, chiare sui fondi scuri e scure su quelli chiari.',
+    'Un interruttore mette un contorno d’oro su tutto ciò che si può cliccare — locandine, orari, schede intere — al passaggio del mouse e all’arrivo del tabulatore.',
+    'I link si possono mostrare sottolineati oppure su fondo pieno, per chi il solo colore non lo distingue.',
+    'Una riga orizzontale può seguire il puntatore, per chi perde il rigo mentre legge.',
     'Nessuno script di terzi: le tue preferenze restano nel tuo browser e non arrivano a noi.',
   ],
   daFare: [
