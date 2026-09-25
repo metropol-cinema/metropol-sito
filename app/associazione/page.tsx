@@ -4,6 +4,7 @@ import {
   HandHeart,
   Heart,
   ScrollText,
+  Smartphone,
   Users,
 } from 'lucide-react';
 import type { Metadata } from 'next';
@@ -70,6 +71,42 @@ export default function AssociazionePage() {
           l&apos;anno organizziamo anche corsi di cinema ed eventi speciali.
         </p>
       </header>
+
+      {/* La domanda più frequente di chi arriva qui è «come faccio a
+          diventare socio?»: la risposta sta in cima, prima dell'elenco delle
+          sezioni, e non tre clic più in là. Il bottone porta fuori dal sito,
+          sul modulo dell'area soci (lo stesso di «Come associarsi»): qui non
+          c'è nessun database, e le iscrizioni vivono di là. Stessa scheda e
+          non una nuova: a chi ha poca pratica una scheda che si apre da sola
+          fa perdere la strada del ritorno. */}
+      <section
+        aria-labelledby="diventa-socio"
+        className="mb-10 rounded-2xl border border-cinema-ticket-ink/50 bg-cinema-surface p-6 sm:p-7"
+      >
+        <h2 id="diventa-socio" className="flex items-center gap-2.5 text-2xl font-black text-cinema-text">
+          <Heart className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" />
+          Diventa socio
+        </h2>
+        <p className="mt-3 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
+          Ci si iscrive online in pochi minuti: compili il modulo, paghi la quota con la carta
+          oppure in cassa, e appena la domanda è approvata la tessera è nel tuo telefono. Con la
+          tessera hai il biglietto ridotto su tutte le proiezioni.
+        </p>
+        <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
+          <a
+            href={SITE.sociSignupUrl}
+            className="inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-6 py-3 font-utility text-base font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover"
+          >
+            <Smartphone className="h-5 w-5" aria-hidden="true" /> Iscriviti online
+          </a>
+          <Link
+            href="/associazione/come-associarsi"
+            className="text-sm font-semibold text-cinema-ticket-ink underline underline-offset-2"
+          >
+            Prima vuoi sapere come funziona?
+          </Link>
+        </div>
+      </section>
 
       <nav aria-label="Sezioni dell'associazione">
         <ul className="grid gap-3 sm:grid-cols-2">
