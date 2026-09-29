@@ -6,6 +6,7 @@ import { AgeBadge } from '@/components/age-badge';
 import { MetaLine } from '@/components/meta-line';
 import { PriceLegend, ShowtimesByDay } from '@/components/showtimes';
 import { ageRatingFor } from '@/lib/age-rating';
+import { filmGenres, filmYear } from '@/lib/film-facts';
 import type { PublicFilm } from '@/lib/programmazione-client';
 import { fetchTmdbDetails } from '@/lib/tmdb';
 
@@ -26,8 +27,8 @@ export async function FilmRow({ film }: { film: PublicFilm }) {
   const meta = [
     film.director,
     film.durationMinutes ? `${film.durationMinutes}′` : null,
-    details?.releaseYear ? String(details.releaseYear) : null,
-    details?.genres.slice(0, 2).join(', ') || null,
+    filmYear(film, details)?.toString(),
+    filmGenres(film, details),
   ];
 
   return (

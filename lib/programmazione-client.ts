@@ -61,6 +61,19 @@ export interface PublicFilm {
    * TMDB non ce l'ha. null = nessuna, e allora non si mostra niente.
    */
   ageRating: string | null;
+  /**
+   * Attori principali («Timothée Chalamet, Gwyneth Paltrow, Odessa A'zion»),
+   * generi («Dramma, Thriller»), paesi di produzione («Stati Uniti») e anno.
+   * Testi già pronti, letti da TMDB dal gestionale e correggibili in
+   * dashboard. `null` = non disponibile: non si mostra niente.
+   *
+   * Opzionali perché le risposte precedenti al 29 settembre 2026 non li
+   * hanno: solo allora si ripiega su TMDB letto dal sito (`lib/film-facts.ts`).
+   */
+  cast?: string | null;
+  genres?: string | null;
+  countries?: string | null;
+  year?: number | null;
   /** Il film va mostrato nella sezione "Prossimamente". Scelta dell'Admin in
    *  dashboard, non una regola sulle date. */
   showInUpcoming: boolean;

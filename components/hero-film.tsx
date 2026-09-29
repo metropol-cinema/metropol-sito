@@ -7,6 +7,7 @@ import { AgeBadge } from '@/components/age-badge';
 import { MetaLine } from '@/components/meta-line';
 import { PriceLegend, ShowtimesByDay } from '@/components/showtimes';
 import { ageRatingFor } from '@/lib/age-rating';
+import { filmGenres } from '@/lib/film-facts';
 import type { PublicFilm } from '@/lib/programmazione-client';
 import { relativeDayIt } from '@/lib/programmazione-client';
 import { fetchTmdbDetails } from '@/lib/tmdb';
@@ -41,7 +42,7 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
   const meta = [
     film.director ? `Regia di ${film.director}` : null,
     film.durationMinutes ? `${film.durationMinutes}′` : null,
-    details?.genres.slice(0, 2).join(', ') || null,
+    filmGenres(film, details),
   ];
 
   return (

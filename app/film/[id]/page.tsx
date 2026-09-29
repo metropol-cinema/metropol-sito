@@ -12,6 +12,7 @@ import { PriceLegend, ShowtimesByDay, groupShowtimesByDay } from '@/components/s
 import { TicketsButton } from '@/components/tickets-button';
 import { Trailer } from '@/components/trailer';
 import { ageRatingFor } from '@/lib/age-rating';
+import { filmGenres, filmYear, splitList } from '@/lib/film-facts';
 import { jsonLdScript } from '@/lib/json-ld';
 import { fetchProgrammazione, type PublicFilm } from '@/lib/programmazione-client';
 import { SITE, isHomeVenue } from '@/lib/site';
@@ -95,11 +96,15 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
 
   const days = groupShowtimesByDay(film.showtimes);
 
+  // Anno, generi, paesi e cast li decide il gestionale (lib/film-facts.ts).
+  const year = filmYear(film, details);
+  const genres = filmGenres(film, details);
   const meta = [
     film.director ? `Regia di ${film.director}` : null,
     film.durationMinutes ? `${film.durationMinutes} minuti` : null,
-    details?.releaseYear ? String(details.releaseYear) : null,
-    details?.genres.join(', ') || null,
+    year?.toString(),
+    genres,
+    film.countries,
     film.distributor,
   ];
 
@@ -119,8 +124,19 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
       ...(film.durationMinutes ? { duration: `PT${film.durationMinutes}M` } : {}),
       ...(description ? { description } : {}),
       ...(details?.posterUrl ? { image: details.posterUrl } : {}),
-      ...(details?.genres.length ? { genre: details.genres } : {}),
-      ...(details?.releaseYear ? { datePublished: String(details.releaseYear) } : {}),
+      ...(genres ? { genre: splitList(genres) } : {}),
+      ...(year ? { datePublished: String(year) } : {}),
+      ...(film.cast
+        ? { actor: splitList(film.cast).map((name) => ({ '@type': 'Person', name })) }
+        : {}),
+      ...(film.countries
+        ? {
+            countryOfOrigin: splitList(film.countries).map((name) => ({
+              '@type': 'Country',
+              name,
+            })),
+          }
+        : {}),
       ...(ageRating ? { contentRating: ageRating.code } : {}),
       // Solo quando è dichiarato dal gestionale.
       ...(film.isAccessible
@@ -216,6 +232,12 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
             )}
 
             <MetaLine items={meta} className="mt-4" />
+
+            {film.cast && (
+              <p className="mt-2 max-w-2xl text-sm text-cinema-text-muted">
+                Con {film.cast}
+              </p>
+            )}
 
             {ageRating && (
               <p className="mt-4">
