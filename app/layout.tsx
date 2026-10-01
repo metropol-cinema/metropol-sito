@@ -94,13 +94,15 @@ export const metadata: Metadata = {
   description: DESCRIPTION,
   /* La bobina della scheda del browser. È lo STESSO set della dashboard e
      degli altri strumenti (public/favicon_io/): il marchio è uno solo, e chi
-     tiene aperti sito e gestionale deve vedere la stessa icona. Il `.ico`
-     va per primo perché è quello che i browser da scrivania preferiscono. */
+     tiene aperti sito e gestionale deve vedere la stessa icona. Si genera
+     nel gestionale (scripts/genera-favicon.ts) e si copia qui. L'SVG è quella
+     della linguetta, nitida a qualunque zoom; l'.ico resta per chi l'SVG non
+     lo legge. Il `sizes` dell'.ico NON va rimesso su 'any': Chrome
+     prenderebbe l'.ico al posto dell'SVG. */
   icons: {
     icon: [
-      { url: '/favicon_io/favicon.ico', sizes: 'any' },
-      { url: '/favicon_io/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
-      { url: '/favicon_io/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/favicon_io/favicon.ico', sizes: '32x32' },
+      { url: '/favicon_io/favicon.svg', type: 'image/svg+xml' },
     ],
     apple: '/favicon_io/apple-touch-icon.png',
   },
