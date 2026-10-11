@@ -4,6 +4,7 @@ import { Archivo, Atkinson_Hyperlegible, Fraunces, Inter } from 'next/font/googl
 import { AccessibilityBar } from '@/components/accessibility-bar';
 import { Analytics } from '@/components/analytics';
 import { CookieBanner } from '@/components/cookie-banner';
+import { InstallApp } from '@/components/install-app';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { SCRIPT_INIZIALE } from '@/lib/a11y';
@@ -149,6 +150,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             naviga da tastiera trova la domanda sui cookie subito, non dopo
             tutta la pagina. Dove si vede lo decide il CSS, non questa riga. */}
         <CookieBanner />
+        <InstallApp />
         <SiteHeader />
         <div id="contenuto" tabIndex={-1} className="flex-1 outline-none">
           {children}
