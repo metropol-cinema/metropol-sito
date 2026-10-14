@@ -2,19 +2,29 @@
 
 import {
   AlignJustify,
+  BookOpenText,
+  Crosshair,
+  Eye,
+  Glasses,
+  Heading,
   MousePointer2,
   Pause,
   PersonStanding,
   RotateCcw,
   Ruler,
+  ScanLine,
   SquareMousePointer,
   Type,
   X,
+  Zap,
+  ZoomIn,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore } from 'react';
 
 import {
+  accendiProfilo,
+  ETICHETTE_COLORI,
   ETICHETTE_LINK,
   ETICHETTE_TEMA,
   ETICHETTE_TESTO,
@@ -23,19 +33,35 @@ import {
   istantaneaServer,
   personalizzate,
   PREFERENZE_INIZIALI,
+  PROFILI,
+  profiloAttivo,
   sottoscrivi,
+  spegniProfilo,
+  type Colori,
   type Link as Collegamenti,
   type Preferenze,
+  type Profilo,
   type Tema,
   type Testo,
 } from '@/lib/a11y';
 import { cn } from '@/lib/utils';
 
 import { GuidaLettura } from './guida-lettura';
+import { LenteTesto } from './lente-testo';
+import { MascheraLettura } from './maschera-lettura';
 
 const TEMI = Object.keys(ETICHETTE_TEMA) as Tema[];
 const TESTI = Object.keys(ETICHETTE_TESTO) as Testo[];
 const LINK = Object.keys(ETICHETTE_LINK) as Collegamenti[];
+const COLORI = Object.keys(ETICHETTE_COLORI) as Colori[];
+
+const ICONE_PROFILO: Record<Profilo, React.ReactNode> = {
+  vista: <Eye className="h-4 w-4" aria-hidden="true" />,
+  epilessia: <Zap className="h-4 w-4" aria-hidden="true" />,
+  concentrazione: <Crosshair className="h-4 w-4" aria-hidden="true" />,
+  dislessia: <BookOpenText className="h-4 w-4" aria-hidden="true" />,
+  anziani: <Glasses className="h-4 w-4" aria-hidden="true" />,
+};
 
 /**
  * La barra di accessibilità: un bottone in basso a sinistra che apre il
@@ -47,8 +73,9 @@ const LINK = Object.keys(ETICHETTE_LINK) as Collegamenti[];
  * accessibile, questa è la stanza dei bottoni per chi vuole leggere a modo suo.
  *
  * Le preferenze le applica il CSS via attributi su <html> (lib/a11y.ts): qui
- * dentro c'è solo lo stato, più le due cose che il CSS non può fare da solo —
- * fermare i video e lo scorrimento automatico del carosello.
+ * dentro c'è solo lo stato, più le cose che il CSS non può fare da solo —
+ * fermare i video, e guida, maschera e lente, che devono sapere dov'è il
+ * puntatore. Lo scorrimento del carosello lo ferma il carosello stesso.
  */
 export function AccessibilityBar() {
   // Le preferenze arrivano già applicate dallo script inline: qui le leggiamo
@@ -101,9 +128,11 @@ export function AccessibilityBar() {
 
   return (
     <>
-      {/* Fuori dal pannello: la guida serve mentre si legge, non mentre si
-          sceglie. Resta accesa anche a pannello chiuso. */}
+      {/* Fuori dal pannello: servono mentre si legge, non mentre si sceglie.
+          Restano accese anche a pannello chiuso. */}
       {pref.guida && <GuidaLettura />}
+      {pref.maschera && <MascheraLettura />}
+      {pref.lente && <LenteTesto />}
 
       <button
         ref={bottoneRef}
@@ -141,6 +170,26 @@ export function AccessibilityBar() {
             </button>
           </div>
 
+          <Gruppo titolo="Profili">
+            <p className="-mt-1 mb-2.5 text-xs leading-relaxed text-cinema-text-subtle">
+              Accendono più voci insieme. Le ritrovi qui sotto, e puoi ritoccarle una per una.
+            </p>
+            <div className="space-y-2">
+              {(Object.keys(PROFILI) as Profilo[]).map((profilo) => (
+                <Interruttore
+                  key={profilo}
+                  icona={ICONE_PROFILO[profilo]}
+                  etichetta={PROFILI[profilo].nome}
+                  nota={PROFILI[profilo].nota}
+                  attivo={profiloAttivo(pref, profilo)}
+                  onChange={(v) =>
+                    imposta(v ? accendiProfilo(pref, profilo) : spegniProfilo(pref, profilo))
+                  }
+                />
+              ))}
+            </div>
+          </Gruppo>
+
           <Gruppo titolo="Colori">
             <div className="grid grid-cols-2 gap-2">
               {TEMI.map((t) => (
@@ -154,6 +203,27 @@ export function AccessibilityBar() {
                   <span className="block font-semibold">{ETICHETTE_TEMA[t].nome}</span>
                   <span className="mt-0.5 block text-[0.7rem] text-cinema-text-subtle">
                     {ETICHETTE_TEMA[t].nota}
+                  </span>
+                </Scelta>
+              ))}
+            </div>
+          </Gruppo>
+
+          <Gruppo titolo="Intensità dei colori">
+            <div className="grid grid-cols-2 gap-2">
+              {COLORI.map((c) => (
+                <Scelta
+                  key={c}
+                  nome="colori"
+                  etichetta={`Colori ${ETICHETTE_COLORI[c].nome.toLowerCase()}: ${ETICHETTE_COLORI[
+                    c
+                  ].nota.toLowerCase()}`}
+                  attiva={pref.colori === c}
+                  onChange={() => cambia('colori', c)}
+                >
+                  <span className="block font-semibold">{ETICHETTE_COLORI[c].nome}</span>
+                  <span className="mt-0.5 block text-[0.7rem] text-cinema-text-subtle">
+                    {ETICHETTE_COLORI[c].nota}
                   </span>
                 </Scelta>
               ))}
@@ -195,11 +265,32 @@ export function AccessibilityBar() {
                 onChange={(v) => cambia('spaziatura', v)}
               />
               <Interruttore
+                icona={<Heading className="h-4 w-4" aria-hidden="true" />}
+                etichetta="Evidenzia i titoli"
+                nota="Per orientarsi nella pagina"
+                attivo={pref.titoli}
+                onChange={(v) => cambia('titoli', v)}
+              />
+              <Interruttore
                 icona={<Ruler className="h-4 w-4" aria-hidden="true" />}
                 etichetta="Guida di lettura"
                 nota="Una riga segue il puntatore"
                 attivo={pref.guida}
                 onChange={(v) => cambia('guida', v)}
+              />
+              <Interruttore
+                icona={<ScanLine className="h-4 w-4" aria-hidden="true" />}
+                etichetta="Maschera di lettura"
+                nota="In luce solo la fascia che stai leggendo"
+                attivo={pref.maschera}
+                onChange={(v) => cambia('maschera', v)}
+              />
+              <Interruttore
+                icona={<ZoomIn className="h-4 w-4" aria-hidden="true" />}
+                etichetta="Lente sul testo"
+                nota="Ingrandisce il testo sotto il mouse"
+                attivo={pref.lente}
+                onChange={(v) => cambia('lente', v)}
               />
               <Interruttore
                 icona={<Pause className="h-4 w-4" aria-hidden="true" />}

@@ -4,8 +4,8 @@ import { useEffect, useRef } from 'react';
 
 /**
  * La riga orizzontale che segue il puntatore: un righello per non perdere il
- * rigo, che è il bisogno vero dietro alla «maschera di lettura» dei widget di
- * accessibilità — con la differenza che qui non si scurisce metà pagina.
+ * rigo. Chi preferisce oscurare il resto della pagina ha la maschera di
+ * lettura (maschera-lettura.tsx), che è un'altra voce.
  *
  * Il componente sa solo *dove*: il *come* è `.guida-lettura` in globals.css,
  * che legge `--guida-y`. La posizione non passa dallo stato di React — sono

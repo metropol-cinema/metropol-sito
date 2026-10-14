@@ -426,6 +426,34 @@
     box-shadow: none;
   }
 
+  /* ----- Intensità dei colori ---------------------------------------------
+     Un filtro su <html> e non su un contenitore: su qualunque altro elemento
+     il filtro diventerebbe il riferimento dei `position: fixed` che ha dentro,
+     e la testata, il bottone della barra, la guida e la maschera scorrerebbero
+     via con la pagina. La radice è l'unica esente (lo dice la specifica).
+     Vale sopra qualunque tema: contrasto forte e grigio si sommano. */
+  :root[data-colori='tenui'] {
+    filter: saturate(0.45);
+  }
+  :root[data-colori='vivaci'] {
+    filter: saturate(1.8);
+  }
+  :root[data-colori='grigi'] {
+    filter: grayscale(1);
+  }
+
+  /* ----- Titoli evidenziati ----------------------------------------------
+     Barretta e velo dell'oro-inchiostro, la stessa coppia delle scelte accese
+     nel pannello (testo pieno su `ticket-ink` al 15%), già verificata sui
+     quattro temi. La barretta è un'ombra interna: un bordo spingerebbe il
+     testo e farebbe saltare l'allineamento con quel che sta sotto. */
+  :root[data-titoli='evidenziati'] :is(h1, h2, h3, h4) {
+    background-color: rgb(var(--c-ticket-ink) / 0.15);
+    box-shadow: inset 4px 0 0 rgb(var(--c-ticket-ink));
+    border-radius: 4px;
+    padding: 0.2em 0.5em 0.2em 0.75em;
+  }
+
   /* ----- Animazioni ferme --------------------------------------------------
      Le stesse regole di prefers-reduced-motion, per chi non l'ha impostato a
      livello di sistema ma qui e ora ha bisogno che il sito stia fermo.
@@ -498,6 +526,53 @@
     background-color: rgb(var(--c-ticket-ink));
     box-shadow: 0 0 0 1px rgb(var(--c-bg-deep) / 0.7);
     transform: translate3d(0, var(--guida-y, -10px), 0);
+  }
+
+  /* ----- Maschera di lettura -----------------------------------------------
+     Una fascia trasparente alta qualche riga, e un'ombra enorme attorno che
+     oscura tutto il resto: un elemento solo, niente da tenere allineato.
+     Sopra la testata e il banner dei cookie (40), che altrimenti restano in
+     luce; sotto la barra (50), così il pannello si legge anche a maschera
+     accesa. Il velo è nero su ogni tema, anche i chiari: è il buio della
+     sala, non un colore della pagina. */
+  .maschera-lettura {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 45;
+    height: 7.5rem;
+    width: 100%;
+    pointer-events: none;
+    border-block: 2px solid rgb(var(--c-ticket-ink));
+    box-shadow: 0 0 0 100vmax rgb(0 0 0 / 0.6);
+    transform: translate3d(0, var(--maschera-y, 0px), 0);
+  }
+
+  /* ----- Lente sul testo -----------------------------------------------------
+     Colori del testo e del fondo scambiati: la coppia è la stessa della
+     pagina, quindi il contrasto è quello già verificato, e il riquadro non si
+     confonde con quel che c'è sotto. Sopra a tutto, pannello compreso: non
+     prende i click, quindi non ruba niente a nessuno. */
+  .lente-testo {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 60;
+    max-width: min(36rem, calc(100vw - 1rem));
+    padding: 0.6em 0.85em;
+    border-radius: 0.75rem;
+    background-color: rgb(var(--c-text));
+    color: rgb(var(--c-bg));
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+    pointer-events: none;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.45);
+    transform: translate3d(var(--lente-x, 0px), var(--lente-y, 0px), 0);
+  }
+  .lente-testo[hidden] {
+    display: none;
   }
 
   /* ----- Occhiello ---------------------------------------------------------
