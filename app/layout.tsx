@@ -55,6 +55,7 @@ const theaterJsonLd = {
   name: SITE.name,
   alternateName: SITE.venueName,
   address: SITE.venueAddress,
+  geo: { '@type': 'GeoCoordinates', latitude: SITE.venueGeo.lat, longitude: SITE.venueGeo.lng },
   url: URL_SITO,
   sameAs: [SITE.social.facebook, SITE.social.instagram],
   // Accessibilità della sala, per assistenti vocali e mappe: le stesse cose

@@ -1,5 +1,13 @@
 /** Dati anagrafici e link dell'Associazione, usati in footer e pagine statiche. */
 
+/**
+ * L'ingresso della sala in Galleria Vezza, accanto al totem rosso «Cinema
+ * Teatro»: il punto preso da Street View (ottobre 2026). Le coordinate e non
+ * l'indirizzo, perché la ricerca per indirizzo mette lo spillo dove Google
+ * crede che stia il civico — e il navigatore porta lì, non all'ingresso.
+ */
+const INGRESSO_SALA = { lat: 45.3533852, lng: 10.8438394 } as const;
+
 export const SITE = {
   name: 'Cinema Metropol',
   association: 'Associazione Culturale Metropol',
@@ -13,8 +21,9 @@ export const SITE = {
   /** Casella generale: e' anche il mittente della newsletter e il recapito privacy. */
   email: 'info@cinemametropol.com',
   pec: 'pec@pec.cinemametropol.com',
-  mapsUrl:
-    'https://www.google.com/maps/search/?api=1&query=Galleria+Vezza+4,+37069+Villafranca+di+Verona',
+  /** Dove sta l'ingresso: per lo spillo di Maps e per i dati strutturati. */
+  venueGeo: INGRESSO_SALA,
+  mapsUrl: `https://www.google.com/maps/search/?api=1&query=${INGRESSO_SALA.lat},${INGRESSO_SALA.lng}`,
   /**
    * Portale soci (gestionale `metropol-cinema`, dominio suo).
    *
