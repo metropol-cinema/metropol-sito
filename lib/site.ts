@@ -5,7 +5,7 @@ export const SITE = {
   association: 'Associazione Culturale Metropol',
   city: 'Villafranca di Verona',
   /** Sala cinematografica. */
-  venueAddress: 'Piazza Villafranchetta 1, 37069 Villafranca di Verona (VR)',
+  venueAddress: 'Galleria Vezza 4, 37069 Villafranca di Verona (VR)',
   venueName: 'Sala "Alida Ferrarini"',
   /** Sede legale dell'associazione. */
   legalAddress: 'Via Tione 25, 37069 Villafranca di Verona (VR)',
@@ -14,7 +14,7 @@ export const SITE = {
   email: 'info@cinemametropol.com',
   pec: 'pec@pec.cinemametropol.com',
   mapsUrl:
-    'https://www.google.com/maps/search/?api=1&query=Piazza+Villafranchetta+1,+37069+Villafranca+di+Verona',
+    'https://www.google.com/maps/search/?api=1&query=Galleria+Vezza+4,+37069+Villafranca+di+Verona',
   /**
    * Portale soci (gestionale `metropol-cinema`, dominio suo).
    *
