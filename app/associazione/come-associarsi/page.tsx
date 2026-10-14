@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 
 export default async function ComeAssociarsiPage() {
   // Campagna associativa (dashboard, Sito Web → Impostazioni): quando è chiusa
-  // non si offre nessuna strada per iscriversi — né online né col modulo di
-  // carta — e lo si dice, invece di lasciare una sezione monca.
+  // non si offre nessuna strada per iscriversi né per rinnovare — né online né
+  // col modulo di carta — e lo si dice, invece di lasciare una sezione monca.
   const { campagnaSoci } = await fetchImpostazioni();
 
   return (
@@ -76,8 +76,7 @@ export default async function ComeAssociarsiPage() {
           ) : (
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
               In questo momento le iscrizioni sono chiuse: riaprono con la prossima campagna
-              associativa, che annunciamo qui sul sito e sui nostri canali. Se sei già socio, il
-              rinnovo resta possibile come sempre (vedi sotto).
+              associativa, che annunciamo qui sul sito e sui nostri canali.
             </p>
           )}
         </section>
@@ -99,14 +98,23 @@ export default async function ComeAssociarsiPage() {
             <CalendarCheck className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" /> Quota e
             rinnovo
           </h2>
+          {/* A campagna chiusa anche il rinnovo è fermo (area soci e link delle
+              email lo dicono): niente link per farlo, solo quando riapre. */}
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
             La quota associativa è annuale e il suo importo è stabilito dal Consiglio Direttivo; la
-            scadenza per il rinnovo è il 30 novembre di ogni anno. Il rinnovo si fa dalla{' '}
-            <a href={SITE.sociAreaUrl} className="text-cinema-ticket-ink hover:underline">
-              propria area soci
-            </a>{' '}
-            — dove si trova anche la tessera da aggiungere al telefono — oppure in cassa. I requisiti per
-            l&apos;ammissione sono indicati nello{' '}
+            scadenza per il rinnovo è il 30 novembre di ogni anno.{' '}
+            {campagnaSoci ? (
+              <>
+                Il rinnovo si fa dalla{' '}
+                <a href={SITE.sociAreaUrl} className="text-cinema-ticket-ink hover:underline">
+                  propria area soci
+                </a>{' '}
+                — dove si trova anche la tessera da aggiungere al telefono — oppure in cassa.
+              </>
+            ) : (
+              'Come l’iscrizione, anche il rinnovo riapre con la prossima campagna associativa.'
+            )}{' '}
+            I requisiti per l&apos;ammissione sono indicati nello{' '}
             <Link href="/associazione/statuto" className="text-cinema-ticket-ink hover:underline">
               statuto e nel regolamento interno
             </Link>
