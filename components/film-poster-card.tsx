@@ -14,9 +14,14 @@ import { cn } from '@/lib/utils';
 export function FilmPosterCard({
   film,
   prominent = false,
+  titleAs: Titolo = 'h3',
 }: {
   film: PublicFilm;
   prominent?: boolean;
+  /** Livello del titolo: dipende da cosa c'è sopra nella pagina. In home la
+   *  griglia sta sotto un <h2>; su /prossimamente i film SONO le sezioni, e
+   *  un <h3> subito dopo l'<h1> salterebbe un livello per chi naviga a titoli. */
+  titleAs?: 'h2' | 'h3';
 }) {
   const first = film.showtimes[0];
 
@@ -42,14 +47,14 @@ export function FilmPosterCard({
         />
       </div>
 
-      <h3
+      <Titolo
         className={cn(
           'mt-3 line-clamp-2 font-bold leading-tight text-cinema-text transition-colors group-hover:text-cinema-ticket-ink',
           prominent ? 'text-lg sm:text-xl' : 'text-sm sm:text-base'
         )}
       >
         {film.title}
-      </h3>
+      </Titolo>
       {/* Un film annunciato può non avere ancora orari: meglio dirlo che
           lasciare la riga vuota. */}
       <p className="mt-1 font-utility text-[0.68rem] font-semibold uppercase tracking-wider text-cinema-ticket-ink">

@@ -12,10 +12,13 @@ import { cn } from '@/lib/utils';
 export function PosterGrid({
   films,
   prominent = false,
+  titleAs,
   className,
 }: {
   films: PublicFilm[];
   prominent?: boolean;
+  /** Vedi FilmPosterCard. */
+  titleAs?: 'h2' | 'h3';
   className?: string;
 }) {
   return (
@@ -28,7 +31,7 @@ export function PosterGrid({
             prominent ? 'sm:w-52 lg:w-60' : 'sm:w-40 lg:w-44'
           )}
         >
-          <FilmPosterCard film={film} prominent={prominent} />
+          <FilmPosterCard film={film} prominent={prominent} titleAs={titleAs} />
         </li>
       ))}
     </ul>

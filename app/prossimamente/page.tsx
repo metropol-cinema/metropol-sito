@@ -39,7 +39,8 @@ export default async function ProssimamentePage() {
           cosa arriva.
         </EmptyState>
       ) : (
-        <PosterGrid films={upcoming} prominent />
+        // h2: sotto l'h1 della pagina non c'è altro titolo, i film sono le sezioni.
+        <PosterGrid films={upcoming} prominent titleAs="h2" />
       )}
     </main>
   );
