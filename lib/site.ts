@@ -1,10 +1,14 @@
 /** Dati anagrafici e link dell'Associazione, usati in footer e pagine statiche. */
 
 /**
- * L'ingresso della sala in Galleria Vezza, accanto al totem rosso «Cinema
- * Teatro»: il punto preso da Street View (ottobre 2026). Le coordinate e non
- * l'indirizzo, perché la ricerca per indirizzo mette lo spillo dove Google
- * crede che stia il civico — e il navigatore porta lì, non all'ingresso.
+ * L'ingresso della sala, sul lato di Galleria Vezza, accanto al totem rosso
+ * «Cinema Teatro»: il punto preso da Street View (ottobre 2026).
+ *
+ * L'indirizzo che si LEGGE resta Piazza Villafranchetta 1 (`venueAddress`);
+ * lo spillo di Maps invece va qui, con le coordinate: la ricerca per
+ * indirizzo lo metterebbe dove Google crede che stia il civico, e il
+ * navigatore porterebbe lì invece che all'ingresso. Due cose diverse, di
+ * proposito: non riallinearle.
  */
 const INGRESSO_SALA = { lat: 45.3533852, lng: 10.8438394 } as const;
 
@@ -13,7 +17,7 @@ export const SITE = {
   association: 'Associazione Culturale Metropol',
   city: 'Villafranca di Verona',
   /** Sala cinematografica. */
-  venueAddress: 'Galleria Vezza 4, 37069 Villafranca di Verona (VR)',
+  venueAddress: 'Piazza Villafranchetta 1, 37069 Villafranca di Verona (VR)',
   venueName: 'Sala "Alida Ferrarini"',
   /** Sede legale dell'associazione. */
   legalAddress: 'Via Tione 25, 37069 Villafranca di Verona (VR)',
