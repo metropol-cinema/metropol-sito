@@ -2,6 +2,7 @@ import { ArrowLeft, CalendarCheck, Download, Heart, Smartphone, Ticket } from 'l
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { fetchImpostazioni } from '@/lib/impostazioni-client';
 import { SITE } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -10,7 +11,12 @@ export const metadata: Metadata = {
     'Come diventare soci dell’Associazione Culturale Metropol: l’iscrizione online, l’adesione in cassa e i vantaggi della tessera.',
 };
 
-export default function ComeAssociarsiPage() {
+export default async function ComeAssociarsiPage() {
+  // Campagna associativa (dashboard, Sito Web → Impostazioni): quando è chiusa
+  // non si offre nessuna strada per iscriversi — né online né col modulo di
+  // carta — e lo si dice, invece di lasciare una sezione monca.
+  const { campagnaSoci } = await fetchImpostazioni();
+
   return (
     <main className="container max-w-3xl py-10 sm:py-12">
       <nav aria-label="Torna alla pagina dell'associazione" className="mb-6">
@@ -38,32 +44,42 @@ export default function ComeAssociarsiPage() {
           <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
             <Heart className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" /> L&apos;adesione
           </h2>
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
-            Ci si associa <strong>online</strong>, compilando il modulo e pagando la quota con
-            carta: la domanda arriva in segreteria e, appena approvata, la tessera è pronta —
-            digitale, da tenere nel telefono.
-          </p>
-          {/* Il pulsante porta fuori dal sito, sul portale soci del gestionale:
-              qui non c'e' nessun database, e le iscrizioni vivono di la'. */}
-          <a
-            href={SITE.sociSignupUrl}
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover"
-          >
-            <Smartphone className="h-4 w-4" aria-hidden="true" /> Iscriviti online
-          </a>
+          {campagnaSoci ? (
+            <>
+              <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
+                Ci si associa <strong>online</strong>, compilando il modulo e pagando la quota con
+                carta: la domanda arriva in segreteria e, appena approvata, la tessera è pronta —
+                digitale, da tenere nel telefono.
+              </p>
+              {/* Il pulsante porta fuori dal sito, sul portale soci del gestionale:
+                  qui non c'e' nessun database, e le iscrizioni vivono di la'. */}
+              <a
+                href={SITE.sociSignupUrl}
+                className="mt-4 inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover"
+              >
+                <Smartphone className="h-4 w-4" aria-hidden="true" /> Iscriviti online
+              </a>
 
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
-            Preferisci di persona? L&apos;adesione si fa anche <strong>in cassa</strong>, durante i
-            weekend di spettacolo: nel modulo online puoi scegliere di pagare lì, oppure scaricare
-            il modulo cartaceo e portarlo già compilato.
-          </p>
-          <a
-            href="/docs/modulo-adesione-socio.pdf"
-            download
-            className="mt-4 inline-flex items-center gap-2 rounded-lg border border-cinema-border-strong px-5 py-2.5 font-utility text-sm font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
-          >
-            <Download className="h-4 w-4" aria-hidden="true" /> Scarica il modulo (PDF)
-          </a>
+              <p className="mt-6 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
+                Preferisci di persona? L&apos;adesione si fa anche <strong>in cassa</strong>, durante i
+                weekend di spettacolo: nel modulo online puoi scegliere di pagare lì, oppure scaricare
+                il modulo cartaceo e portarlo già compilato.
+              </p>
+              <a
+                href="/docs/modulo-adesione-socio.pdf"
+                download
+                className="mt-4 inline-flex items-center gap-2 rounded-lg border border-cinema-border-strong px-5 py-2.5 font-utility text-sm font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
+              >
+                <Download className="h-4 w-4" aria-hidden="true" /> Scarica il modulo (PDF)
+              </a>
+            </>
+          ) : (
+            <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
+              In questo momento le iscrizioni sono chiuse: riaprono con la prossima campagna
+              associativa, che annunciamo qui sul sito e sui nostri canali. Se sei già socio, il
+              rinnovo resta possibile come sempre (vedi sotto).
+            </p>
+          )}
         </section>
 
         <section id="vantaggi">

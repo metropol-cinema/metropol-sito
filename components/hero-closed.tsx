@@ -7,8 +7,11 @@ import { SITE } from '@/lib/site';
  * Ultima riserva dell'hero: né film in settimana, né film in arrivo, né video
  * caricati dalla dashboard. Invece di un buco, si dice cosa c'è da sapere e
  * dove seguirci — una schermata vuota è comunque un invito a fare qualcosa.
+ *
+ * `campagnaSoci`: a campagna associativa chiusa (dashboard, Sito Web →
+ * Impostazioni) niente bottone «Diventa socio», e il testo non lo promette.
  */
-export function HeroClosed() {
+export function HeroClosed({ campagnaSoci }: { campagnaSoci: boolean }) {
   return (
     <section
       aria-label="La sala in questo momento"
@@ -27,8 +30,9 @@ export function HeroClosed() {
         </h2>
         <p className="mt-5 max-w-xl text-base leading-relaxed text-cinema-text-muted sm:text-lg">
           Nessuna proiezione in calendario in questo momento. Il nuovo programma
-          esce qui appena è pronto: nel frattempo puoi tesserarti, darci una mano
-          come volontario o seguirci sui social.
+          esce qui appena è pronto: nel frattempo puoi{' '}
+          {campagnaSoci ? 'tesserarti, darci una mano' : 'darci una mano'} come volontario o
+          seguirci sui social.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -36,12 +40,14 @@ export function HeroClosed() {
               "Diventa socio" ha gia' deciso, e un passaggio in mezzo e' un
               punto in cui si cambia idea. Le spiegazioni restano a un link di
               distanza, in /associazione/come-associarsi. */}
-          <a
-            href={SITE.sociSignupUrl}
-            className="rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover"
-          >
-            Diventa socio
-          </a>
+          {campagnaSoci && (
+            <a
+              href={SITE.sociSignupUrl}
+              className="rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover"
+            >
+              Diventa socio
+            </a>
+          )}
           <Link
             href="/info"
             className="inline-flex items-center gap-2 rounded-lg border border-cinema-border-strong px-5 py-2.5 font-utility text-sm font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"

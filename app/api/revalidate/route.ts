@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 /**
  * Rigenerazione su richiesta: il gestionale chiama qui appena cambia qualcosa
- * di pubblico (programmazione, slideshow) e le pagine che mostrano quel dato
+ * di pubblico (programmazione, slideshow, corsi, impostazioni) e le pagine che mostrano quel dato
  * cadono subito, invece di aspettare la finestra ISR di 10 minuti.
  *
  * L'ISR resta come rete di sicurezza: se questa chiamata non parte (gestionale
@@ -42,6 +42,14 @@ const PATHS: Record<string, ReadonlyArray<[string, 'page' | 'layout']>> = {
     ['/corsi', 'page'],
     ['/corsi/[slug]', 'page'],
     ['/', 'layout'],
+  ],
+  // Sito Web → Impostazioni: la campagna associativa accende o spegne i
+  // bottoni «Diventa socio», che stanno in queste quattro pagine.
+  impostazioni: [
+    ['/', 'page'],
+    ['/associazione', 'page'],
+    ['/associazione/come-associarsi', 'page'],
+    ['/info', 'page'],
   ],
 };
 

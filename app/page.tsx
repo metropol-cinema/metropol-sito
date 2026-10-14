@@ -9,6 +9,7 @@ import { HeroFilm } from '@/components/hero-film';
 import { HeroUpcoming } from '@/components/hero-upcoming';
 import { MediaSlide } from '@/components/media-slide';
 import { LoadError } from '@/components/page-header';
+import { fetchImpostazioni } from '@/lib/impostazioni-client';
 import {
   currentWeekRange,
   fetchProgrammazione,
@@ -166,7 +167,7 @@ export default async function HomePage() {
   }
 
   const { weekFilms, upcomingFilms } = splitWeekUpcoming(films);
-  const timeline = await fetchSlideshow();
+  const [timeline, impostazioni] = await Promise.all([fetchSlideshow(), fetchImpostazioni()]);
   const specs = planHero(
     timeline && timeline.length > 0 ? timeline : DEFAULT_TIMELINE,
     weekFilms,
@@ -175,7 +176,7 @@ export default async function HomePage() {
   const slides: Slide[] =
     specs.length > 0
       ? specs.map((spec, i) => ({ node: renderSlide(spec, i === 0), duration: spec.duration }))
-      : [{ node: <HeroClosed key="closed" />, duration: 15 }];
+      : [{ node: <HeroClosed key="closed" campagnaSoci={impostazioni.campagnaSoci} />, duration: 15 }];
 
   return (
     <main>

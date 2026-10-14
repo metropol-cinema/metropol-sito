@@ -2,6 +2,7 @@ import { Accessibility, Clock, MapPin, Ticket } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { fetchImpostazioni } from '@/lib/impostazioni-client';
 import { BOX_OFFICE_NOTE, SITE, TICKET_PRICES } from '@/lib/site';
 import { formatEuro } from '@/lib/utils';
 
@@ -11,7 +12,11 @@ export const metadata: Metadata = {
     'Prezzi dei biglietti, orari della biglietteria e come raggiungere il Cinema Metropol di Villafranca di Verona.',
 };
 
-export default function InfoPage() {
+export default async function InfoPage() {
+  // A campagna associativa chiusa la frase sulla tessera sparisce del tutto:
+  // «in cassa oppure online» sarebbe vero a metà (vedi Sito Web → Impostazioni).
+  const { campagnaSoci } = await fetchImpostazioni();
+
   return (
     <main className="container max-w-3xl py-10 sm:py-12">
       <header className="mb-10">
@@ -57,11 +62,16 @@ export default function InfoPage() {
             <Clock className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" /> Biglietteria
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
-            {BOX_OFFICE_NOTE} La tessera socio si può fare in cassa oppure{' '}
-            <a href={SITE.sociSignupUrl} className="text-cinema-ticket-ink hover:underline">
-              online
-            </a>
-            .
+            {BOX_OFFICE_NOTE}
+            {campagnaSoci && (
+              <>
+                {' '}La tessera socio si può fare in cassa oppure{' '}
+                <a href={SITE.sociSignupUrl} className="text-cinema-ticket-ink hover:underline">
+                  online
+                </a>
+                .
+              </>
+            )}
           </p>
         </section>
 
