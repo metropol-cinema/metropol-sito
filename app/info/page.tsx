@@ -93,7 +93,9 @@ export default function InfoPage() {
           </p>
         </section>
 
-        <section id="dove-siamo">
+        {/* `scroll-mt`: ci arriva il vecchio /dove-siamo, e la testata fissa
+            coprirebbe il titolo. */}
+        <section id="dove-siamo" className="scroll-mt-20">
           <h2 className="flex items-center gap-3 text-2xl font-black text-cinema-text">
             <MapPin className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" /> Dove siamo
           </h2>

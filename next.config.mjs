@@ -40,7 +40,40 @@ const nextConfig = {
     remotePatterns: [{ protocol: 'https', hostname: 'image.tmdb.org' }],
   },
   async headers() {
-    return [{ source: '/:path*', headers: securityHeaders }];
+    const intestazioni = [...securityHeaders];
+    // L'anteprima (ogni branch che non è `main`) non va nei motori di ricerca:
+    // sarebbe un doppione del sito vero. L'header vale anche per immagini e
+    // file, dove il meta robots dell'HTML non arriva. Il robots.txt invece la
+    // lascia visitare, apposta: un crawler che non entra non vede il noindex,
+    // e le pagine già indicizzate dell'indirizzo Vercel non uscirebbero mai.
+    if (process.env.VERCEL_ENV !== 'production') {
+      intestazioni.push({ key: 'X-Robots-Tag', value: 'noindex, nofollow' });
+    }
+    return [{ source: '/:path*', headers: intestazioni }];
+  },
+  /**
+   * Le pagine del vecchio sito Wix, come le conosce Google (sitemap di
+   * www.cinemametropol.com, ottobre 2026). Dopo il passaggio di dominio i
+   * vecchi link — nei risultati di ricerca, nelle newsletter già mandate, sui
+   * volantini stampati — arrivano qui e devono trovare la pagina nuova, non un
+   * 404. Permanenti: dicono a Google di trasferire la pagina, non di aspettare.
+   * /prossimamente non c'è: ha lo stesso indirizzo di prima.
+   */
+  async redirects() {
+    return [
+      ['/chi-siamo', '/associazione/chi-siamo'],
+      ['/come-associarsi', '/associazione/come-associarsi'],
+      ['/diventa-volontario', '/associazione/diventa-volontario'],
+      ['/statuto', '/associazione/statuto'],
+      ['/storia-metropol', '/associazione/storia'],
+      ['/corso-cinema', '/corsi'],
+      // Una copia di pagina rimasta pubblicata su Wix: era un corso anche lei.
+      ['/copia-di-corso-cinema-1', '/corsi'],
+      ['/in-programmazione', '/programmazione'],
+      ['/venerdi-del-metropol', '/venerdi'],
+      ['/dove-siamo', '/info#dove-siamo'],
+      ['/newsletter', '/#iscriviti-newsletter'],
+    ].map(([source, destination]) => ({ source, destination, permanent: true }));
   },
 };
 

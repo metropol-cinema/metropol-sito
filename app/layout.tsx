@@ -3,11 +3,13 @@ import { Archivo, Atkinson_Hyperlegible, Fraunces, Inter } from 'next/font/googl
 
 import { AccessibilityBar } from '@/components/accessibility-bar';
 import { Analytics } from '@/components/analytics';
+import { AvvisoAnteprima } from '@/components/avviso-anteprima';
 import { CookieBanner } from '@/components/cookie-banner';
 import { InstallApp } from '@/components/install-app';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
 import { SCRIPT_INIZIALE } from '@/lib/a11y';
+import { IN_ANTEPRIMA, IN_PRODUZIONE, URL_SITO } from '@/lib/ambiente';
 import { jsonLdScript } from '@/lib/json-ld';
 import { SALA } from '@/lib/sala';
 import { SITE } from '@/lib/site';
@@ -53,7 +55,7 @@ const theaterJsonLd = {
   name: SITE.name,
   alternateName: SITE.venueName,
   address: SITE.venueAddress,
-  url: 'https://www.cinemametropol.com',
+  url: URL_SITO,
   sameAs: [SITE.social.facebook, SITE.social.instagram],
   // Accessibilità della sala, per assistenti vocali e mappe: le stesse cose
   // che stanno in /accessibilita, in una forma che le macchine sanno leggere.
@@ -77,17 +79,14 @@ const theaterJsonLd = {
 const DESCRIPTION =
   'Il cinema della comunità di Villafranca di Verona: film in programmazione, rassegne, corsi ed eventi della Sala "Alida Ferrarini".';
 
-/**
- * Base per gli URL assoluti delle anteprime di condivisione. Su Vercel arriva
- * dal progetto, quindi il giorno dello switch a www.cinemametropol.com si
- * aggiorna da sé senza toccare il codice.
- */
-const siteUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : 'http://localhost:3000';
-
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  // Base degli URL assoluti (anteprime di condivisione, link canonici): il
+  // sito ufficiale anche quando questa è l'anteprima. Vedi lib/ambiente.ts.
+  metadataBase: new URL(URL_SITO),
+  // L'anteprima non si indicizza. Lo dice anche l'header X-Robots-Tag
+  // (next.config.mjs), che vale pure per immagini e file; questo è per chi
+  // legge solo l'HTML.
+  robots: IN_PRODUZIONE ? undefined : { index: false, follow: false },
   title: {
     default: 'Cinema Metropol · Villafranca di Verona',
     template: '%s · Cinema Metropol',
@@ -151,6 +150,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             tutta la pagina. Dove si vede lo decide il CSS, non questa riga. */}
         <CookieBanner />
         <InstallApp />
+        {IN_ANTEPRIMA && <AvvisoAnteprima />}
         <SiteHeader />
         <div id="contenuto" tabIndex={-1} className="flex-1 outline-none">
           {children}

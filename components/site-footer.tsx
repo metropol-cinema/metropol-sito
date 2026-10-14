@@ -115,7 +115,10 @@ export async function SiteFooter() {
       {/* L'iscrizione alla newsletter sta in fondo e su tutta la larghezza:
           è una richiesta, non una voce di menu, e in una delle quattro colonne
           sarebbe stretta e invisibile. */}
-      <div className="border-t border-cinema-border">
+      {/* `id`: ci porta il vecchio indirizzo www.cinemametropol.com/newsletter
+          (next.config.mjs). Non `newsletter`: c'è già in /privacy. `scroll-mt`:
+          la testata fissa non lo copre. */}
+      <div id="iscriviti-newsletter" className="scroll-mt-20 border-t border-cinema-border">
         <div className="container max-w-2xl py-8">
           <NewsletterSignup />
         </div>
