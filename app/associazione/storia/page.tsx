@@ -2,6 +2,8 @@ import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { fetchImpostazioni } from '@/lib/impostazioni-client';
+
 export const metadata: Metadata = {
   title: 'La storia',
   description:
@@ -31,7 +33,17 @@ const MILESTONES = [
   },
 ];
 
-export default function StoriaPage() {
+/** "2025/26" → "settembre 2025 – agosto 2026": l'anno sociale va da settembre ad agosto. */
+function annoSocialeEsteso(esercizio: string): string {
+  const inizio = Number(esercizio.slice(0, 4));
+  return `settembre ${inizio} – agosto ${inizio + 1}`;
+}
+
+export default async function StoriaPage() {
+  // Il numero dei soci è quello dell'anno sociale concluso, letto dal
+  // gestionale: a settembre passa da solo all'anno appena finito.
+  const { sociStagionePrecedente: soci } = await fetchImpostazioni();
+
   return (
     <main className="container max-w-3xl py-10 sm:py-12">
       <nav aria-label="Torna alla pagina dell'associazione" className="mb-6">
@@ -136,7 +148,14 @@ export default function StoriaPage() {
             (biglietteria, proiezionisti, servizio in sala) che si alternano nei sette spettacoli
             che ogni fine settimana offre il Cinema Metropol, rinunciando al loro tempo libero per
             metterlo al servizio della comunità. Un sostegno forte all&apos;Associazione Culturale
-            Metropol viene anche dagli attuali 460 soci (dato del gennaio 2023).
+            Metropol viene anche dai suoi soci
+            {soci && (
+              <>
+                : {soci.soci.toLocaleString('it-IT')} nell&apos;anno sociale{' '}
+                {annoSocialeEsteso(soci.esercizio)}
+              </>
+            )}
+            .
           </p>
           <p className="mt-5 font-semibold text-cinema-text">La storia continua!</p>
         </section>
