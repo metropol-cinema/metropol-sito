@@ -57,6 +57,9 @@ const nextConfig = {
    * vecchi link — nei risultati di ricerca, nelle newsletter già mandate, sui
    * volantini stampati — arrivano qui e devono trovare la pagina nuova, non un
    * 404. Permanenti: dicono a Google di trasferire la pagina, non di aspettare.
+   * 301 e non il 308 che Next usa con `permanent: true`: lo strumento «Cambio
+   * di indirizzo» di Search Console vuole proprio 301 (ottobre 2026). Per lo
+   * stesso motivo sono 301 anche i rimandi dei domini (.com, www) su Vercel.
    * /prossimamente non c'è: ha lo stesso indirizzo di prima.
    */
   async redirects() {
@@ -73,7 +76,7 @@ const nextConfig = {
       ['/venerdi-del-metropol', '/venerdi'],
       ['/dove-siamo', '/info#dove-siamo'],
       ['/newsletter', '/#iscriviti-newsletter'],
-    ].map(([source, destination]) => ({ source, destination, permanent: true }));
+    ].map(([source, destination]) => ({ source, destination, statusCode: 301 }));
   },
 };
 
