@@ -2,6 +2,7 @@ import { Facebook, Instagram, MapPin, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { AvvisiApp } from '@/components/avvisi-app';
 import { NewsletterSignup } from '@/components/newsletter-signup';
 import { visibleNavLinks } from '@/lib/nav';
 import { ASSOCIATION_LINKS, FOOTER_CINEMA_LINKS, SITE } from '@/lib/site';
@@ -111,6 +112,9 @@ export async function SiteFooter() {
           </ul>
         </div>
       </div>
+
+      {/* Solo nell'app installata: l'interruttore degli avvisi dei nuovi film. */}
+      <AvvisiApp />
 
       {/* L'iscrizione alla newsletter sta in fondo e su tutta la larghezza:
           è una richiesta, non una voce di menu, e in una delle quattro colonne

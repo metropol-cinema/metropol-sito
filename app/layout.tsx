@@ -5,6 +5,7 @@ import { AccessibilityBar } from '@/components/accessibility-bar';
 import { Analytics } from '@/components/analytics';
 import { AvvisoAnteprima } from '@/components/avviso-anteprima';
 import { CookieBanner } from '@/components/cookie-banner';
+import { InvitoAvvisi } from '@/components/avvisi-app';
 import { InstallApp } from '@/components/install-app';
 import { SiteFooter } from '@/components/site-footer';
 import { SiteHeader } from '@/components/site-header';
@@ -151,6 +152,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             tutta la pagina. Dove si vede lo decide il CSS, non questa riga. */}
         <CookieBanner />
         <InstallApp />
+        {/* Stesso angolo di «Installa l'app», ma solo DENTRO l'app: dove c'è
+            uno non c'è mai l'altro. */}
+        <InvitoAvvisi />
         {IN_ANTEPRIMA && <AvvisoAnteprima />}
         <SiteHeader />
         <div id="contenuto" tabIndex={-1} className="flex-1 outline-none">

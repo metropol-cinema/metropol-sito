@@ -1,4 +1,4 @@
-import { BarChart3, Cookie, FileText, Mail, Newspaper, Server, ShieldCheck, Ticket, Users } from 'lucide-react';
+import { BarChart3, Bell, Cookie, FileText, Mail, Newspaper, Server, ShieldCheck, Ticket, Users } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 /** Ultima revisione del testo. Va aggiornata quando cambia qualcosa di sostanziale. */
-const AGGIORNATA_IL = '16 settembre 2026';
+const AGGIORNATA_IL = '15 ottobre 2026';
 
 /**
  * Cosa resta sul dispositivo di chi legge. Sono quattro voci in croce perché il
@@ -33,6 +33,14 @@ const ARCHIVIO = [
     chi: 'Il sito stesso',
     durata: 'Fino alla revoca; se rifiuti, sei mesi',
     perche: 'Ricorda se hai accettato o rifiutato le statistiche, per non richiedertelo a ogni pagina.',
+  },
+  {
+    nome: 'Iscrizione agli avvisi',
+    tipo: 'Service worker e permesso di notifica',
+    chi: 'Il sito stesso',
+    durata: 'Finché non spegni gli avvisi o togli l’app',
+    perche:
+      'Solo nell’app installata, e solo se attivi gli avvisi dei nuovi film: è ciò che permette al telefono di riceverli.',
   },
   {
     nome: '_ga, _ga_*',
@@ -61,6 +69,11 @@ const FORNITORI = [
   },
   { nome: 'Supabase', ruolo: 'Banca dati del gestionale, dove finiscono le iscrizioni', dove: 'Unione Europea (Irlanda)' },
   { nome: 'Brevo', ruolo: 'Spedisce la newsletter e ne gestisce le iscrizioni', dove: 'Francia' },
+  {
+    nome: 'Google, Apple, Mozilla o Microsoft',
+    ruolo: 'Recapitano gli avvisi dell’app, secondo il browser del telefono',
+    dove: 'Unione Europea o Stati Uniti, secondo il servizio; il contenuto viaggia cifrato e solo il telefono lo legge',
+  },
   { nome: 'Stripe', ruolo: 'Incassa i pagamenti dei corsi e le quote associative', dove: 'Stati Uniti (Data Privacy Framework)' },
   { nome: 'Google Ireland', ruolo: 'Statistiche di visita e trailer da YouTube', dove: 'Irlanda, con trasferimenti negli Stati Uniti (Data Privacy Framework)' },
   { nome: 'Microsoft', ruolo: 'Caselle di posta dell’associazione', dove: 'Unione Europea' },
@@ -147,6 +160,28 @@ export default function PrivacyPage() {
             quando e come hai dato il consenso perché la legge ci chiede di poterlo
             dimostrare. Le email partono da Brevo, che le spedisce per conto
             nostro e registra se sono arrivate e se sono state aperte.
+          </p>
+        </section>
+
+        <section aria-labelledby="avvisi">
+          <h2 id="avvisi" className="flex items-center gap-3 text-2xl font-black text-cinema-text">
+            <Bell className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" />
+            Se attivi gli avvisi nell&apos;app
+          </h2>
+          <p className="mt-4 leading-relaxed text-cinema-text-muted">
+            Se metti il sito sulla schermata Home e tocchi «Attiva» sugli avvisi
+            dei nuovi film, il telefono ci dà un indirizzo a cui mandare le
+            notifiche, insieme alle chiavi per cifrarle. È tutto quello che
+            conserviamo: niente nome, niente email, niente numero di telefono, e
+            da quell&apos;indirizzo non possiamo risalire a te. Lo usiamo solo
+            per avvisarti quando esce la nuova programmazione, di solito insieme
+            alla newsletter. La base giuridica è il tuo consenso, cioè il permesso
+            che dai al telefono: lo ritiri con «Disattiva» in fondo alla pagina
+            dell&apos;app, dalle impostazioni del telefono o togliendo l&apos;app,
+            e in quel caso l&apos;indirizzo si cancella — al più tardi al primo
+            avviso che non riesce più ad arrivare. Le notifiche le recapita il
+            servizio del tuo browser (Google, Apple, Mozilla o Microsoft): il
+            contenuto viaggia cifrato e lo legge solo il telefono.
           </p>
         </section>
 
