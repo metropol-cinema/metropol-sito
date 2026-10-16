@@ -5,6 +5,7 @@ import { useCallback, useEffect, useId, useRef, useState, useSyncExternalStore }
 
 import { allinea, attiva, disattiva, statoAttuale, type StatoAvviso } from '@/lib/avvisi-push';
 import { istantanea, istantaneaServer, sottoscrivi, statisticheConfigurate } from '@/lib/consenso';
+import { segnaAperturaApp } from '@/lib/uso-app';
 
 /**
  * «Avvisami dei nuovi film», dentro l'app del sito.
@@ -107,6 +108,10 @@ export function InvitoAvvisi() {
   // telefono c'è: se l'aveva perso, lo ritrova.
   useEffect(() => {
     void allinea();
+    // E il contatore d'uso dell'app (Sito Web → App nel gestionale): sta qui
+    // perché questo è il pezzo che c'è su ogni pagina, non perché c'entri con
+    // gli avvisi. Fuori dall'app non fa niente.
+    void segnaAperturaApp();
   }, []);
 
   const chiudi = useCallback(() => {

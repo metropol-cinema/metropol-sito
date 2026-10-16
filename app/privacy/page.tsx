@@ -1,4 +1,4 @@
-import { BarChart3, Bell, Cookie, FileText, Mail, Newspaper, Server, ShieldCheck, Ticket, Users } from 'lucide-react';
+import { BarChart3, Bell, Cookie, FileText, Mail, Newspaper, Server, ShieldCheck, Smartphone, Ticket, Users } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 /** Ultima revisione del testo. Va aggiornata quando cambia qualcosa di sostanziale. */
-const AGGIORNATA_IL = '15 ottobre 2026';
+const AGGIORNATA_IL = '16 ottobre 2026';
 
 /**
  * Cosa resta sul dispositivo di chi legge. Sono quattro voci in croce perché il
@@ -41,6 +41,14 @@ const ARCHIVIO = [
     durata: 'Finché non spegni gli avvisi o togli l’app',
     perche:
       'Solo nell’app installata, e solo se attivi gli avvisi dei nuovi film: è ciò che permette al telefono di riceverli.',
+  },
+  {
+    nome: 'metropol:app-codice',
+    tipo: 'Archivio locale (non è un cookie)',
+    chi: 'Il sito stesso',
+    durata: 'Finché non togli l’app o cancelli i dati del sito',
+    perche:
+      'Solo nell’app installata: un codice casuale per contare quanti telefoni usano l’app, senza contare due volte lo stesso. Non dice niente di te.',
   },
   {
     nome: '_ga, _ga_*',
@@ -182,6 +190,29 @@ export default function PrivacyPage() {
             avviso che non riesce più ad arrivare. Le notifiche le recapita il
             servizio del tuo browser (Google, Apple, Mozilla o Microsoft): il
             contenuto viaggia cifrato e lo legge solo il telefono.
+          </p>
+        </section>
+
+        <section aria-labelledby="app">
+          <h2 id="app" className="flex items-center gap-3 text-2xl font-black text-cinema-text">
+            <Smartphone className="h-5 w-5 text-cinema-ticket-ink" aria-hidden="true" />
+            Se usi il sito come app
+          </h2>
+          <p className="mt-4 leading-relaxed text-cinema-text-muted">
+            Quando apri il sito dall&apos;icona sulla schermata Home, il telefono
+            si dà un codice casuale e, al massimo una volta al giorno, ci dice
+            soltanto «oggi l&apos;app è stata aperta», insieme al tipo di
+            sistema (iPhone o Android). Ci serve a sapere quante persone usano
+            l&apos;app, un numero che altrimenti non avremmo: non registriamo le
+            pagine che guardi, e il codice non è collegato a nessun dato tuo né
+            ad altri servizi. Del tuo indirizzo IP teniamo solo
+            un&apos;impronta cifrata, per un giorno, che serve a fermare chi
+            provasse a gonfiare il conteggio. È una statistica
+            nostra, aggregata, che non serve a riconoscere nessuno: per questo
+            non ti chiediamo il consenso come per Google Analytics. Se non apri
+            l&apos;app per 90 giorni il codice e i suoi giorni si cancellano da
+            soli; dei telefoni ancora attivi teniamo al massimo gli ultimi 13
+            mesi. Nel browser normale, fuori dall&apos;app, non parte niente.
           </p>
         </section>
 
