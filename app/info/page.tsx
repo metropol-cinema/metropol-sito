@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { fetchImpostazioni } from '@/lib/impostazioni-client';
-import { BOX_OFFICE_NOTE, SITE, TICKET_PRICES } from '@/lib/site';
+import { BOX_OFFICE_NOTE, SITE } from '@/lib/site';
 import { formatEuro } from '@/lib/utils';
 
 export const metadata: Metadata = {
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default async function InfoPage() {
   // A campagna associativa chiusa la frase sulla tessera sparisce del tutto:
   // «in cassa oppure online» sarebbe vero a metà (vedi Sito Web → Impostazioni).
-  const { campagnaSoci } = await fetchImpostazioni();
+  const { campagnaSoci, listinoPrezzi } = await fetchImpostazioni();
 
   return (
     <main className="container max-w-3xl py-10 sm:py-12">
@@ -35,9 +35,9 @@ export default async function InfoPage() {
             <table className="w-full text-sm">
               <caption className="sr-only">Prezzi dei biglietti per tipologia</caption>
               <tbody>
-                {TICKET_PRICES.map((p, i) => (
+                {listinoPrezzi.map((p, i) => (
                   <tr
-                    key={p.label}
+                    key={`${i}-${p.label}`}
                     className={i % 2 === 0 ? 'bg-cinema-surface' : 'bg-cinema-surface/40'}
                   >
                     <th scope="row" className="px-4 py-3 text-left font-normal text-cinema-text-muted">

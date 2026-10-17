@@ -49,8 +49,10 @@ export const SITE = {
 } as const;
 
 /**
- * Listino di riferimento, mostrato in home e in /info. I prezzi VERI di una
- * singola proiezione arrivano dalla read-API (`prices` è per proiezione e può
+ * Listino di riferimento, mostrato in home e in /info. Lo decide la dashboard
+ * (Sito Web → Impostazioni) e arriva con `fetchImpostazioni`: questo è solo il
+ * ripiego se il gestionale non risponde. I prezzi VERI di una singola
+ * proiezione arrivano dalla read-API (`prices` è per proiezione e può
  * variare): questo è il prezzario generale, non una promessa sul singolo
  * spettacolo.
  */

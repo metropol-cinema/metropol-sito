@@ -40,9 +40,10 @@ function annoSocialeEsteso(esercizio: string): string {
 }
 
 export default async function StoriaPage() {
-  // Il numero dei soci è quello dell'anno sociale concluso, letto dal
-  // gestionale: a settembre passa da solo all'anno appena finito.
-  const { sociStagionePrecedente: soci } = await fetchImpostazioni();
+  // I numeri arrivano dal gestionale. I soci sono quelli dell'anno sociale
+  // concluso (a settembre passa da solo all'anno appena finito); i volontari
+  // sono quelli di oggi.
+  const { sociStagionePrecedente: soci, volontari } = await fetchImpostazioni();
 
   return (
     <main className="container max-w-3xl py-10 sm:py-12">
@@ -144,7 +145,8 @@ export default async function StoriaPage() {
             ad aprile, con una appendice estiva al Castello scaligero.
           </p>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
-            Da allora molta strada è stata fatta grazie al prezioso lavoro di circa 40 volontari
+            Da allora molta strada è stata fatta grazie al prezioso lavoro{' '}
+            {volontari ? `di ${volontari.toLocaleString('it-IT')} volontari` : 'dei volontari'}{' '}
             (biglietteria, proiezionisti, servizio in sala) che si alternano nei sette spettacoli
             che ogni fine settimana offre il Cinema Metropol, rinunciando al loro tempo libero per
             metterlo al servizio della comunità. Un sostegno forte all&apos;Associazione Culturale

@@ -44,7 +44,8 @@ const PATHS: Record<string, ReadonlyArray<[string, 'page' | 'layout']>> = {
     ['/', 'layout'],
   ],
   // Sito Web → Impostazioni: la campagna associativa accende o spegne i
-  // bottoni «Diventa socio», che stanno in queste quattro pagine.
+  // bottoni «Diventa socio», che stanno in queste quattro pagine; il listino
+  // prezzi sta in home e in /info, già tra queste.
   impostazioni: [
     ['/', 'page'],
     ['/associazione', 'page'],

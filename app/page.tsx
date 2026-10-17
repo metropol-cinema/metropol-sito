@@ -16,7 +16,7 @@ import {
   splitWeekUpcoming,
   type PublicFilm,
 } from '@/lib/programmazione-client';
-import { BOX_OFFICE_NOTE, SITE, TICKET_PRICES } from '@/lib/site';
+import { BOX_OFFICE_NOTE, SITE } from '@/lib/site';
 import { fetchSlideshow, type SlideshowItem } from '@/lib/slideshow-client';
 import { formatEuro } from '@/lib/utils';
 
@@ -230,9 +230,9 @@ export default async function HomePage() {
               Prezzi dei biglietti
             </h2>
             <dl className="mt-4 space-y-2 text-sm">
-              {TICKET_PRICES.map((price) => (
+              {impostazioni.listinoPrezzi.map((price, i) => (
                 <div
-                  key={price.label}
+                  key={`${i}-${price.label}`}
                   className="flex items-baseline justify-between gap-4 border-b border-cinema-border/60 pb-2 last:border-0 last:pb-0"
                 >
                   <dt className="text-cinema-text-muted">{price.label}</dt>
