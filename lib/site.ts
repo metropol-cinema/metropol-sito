@@ -12,6 +12,18 @@
  */
 const INGRESSO_SALA = { lat: 45.3533852, lng: 10.8438394 } as const;
 
+/**
+ * Dove sta l'area soci. In produzione è soci.cinemametropol.it; la
+ * pre-produzione (branch `preprod`) la sposta sull'area soci di prova con
+ * `NEXT_PUBLIC_SOCI_ORIGIN`, così chi prova l'iscrizione dal sito di prova
+ * non finisce sul portale vero. `NEXT_PUBLIC_` perché questi link stanno anche
+ * in componenti disegnati nel browser: il valore va scritto nel build, uguale
+ * per server e browser.
+ */
+const ORIGINE_SOCI = (
+  process.env.NEXT_PUBLIC_SOCI_ORIGIN?.trim() || 'https://soci.cinemametropol.it'
+).replace(/\/+$/, '');
+
 export const SITE = {
   name: 'Cinema Metropol',
   association: 'Associazione Culturale Metropol',
@@ -35,12 +47,12 @@ export const SITE = {
    * perche' cambiarlo in un posto solo e' l'unico modo di non lasciarne in giro
    * una copia vecchia. Il sito NON gestisce iscrizioni: le manda li' e basta.
    */
-  sociSignupUrl: 'https://soci.cinemametropol.it/m/iscriviti',
-  sociAreaUrl: 'https://soci.cinemametropol.it/m',
+  sociSignupUrl: `${ORIGINE_SOCI}/m/iscriviti`,
+  sociAreaUrl: `${ORIGINE_SOCI}/m`,
   /** L'informativa privacy del tesseramento: la scrive e la serve il
    *  gestionale, perche' e' li' che si raccolgono quei dati. Qui c'e' solo il
    *  rimando, per non tenerne due versioni che prima o poi divergono. */
-  sociPrivacyUrl: 'https://soci.cinemametropol.it/m/privacy',
+  sociPrivacyUrl: `${ORIGINE_SOCI}/m/privacy`,
   social: {
     facebook: 'https://www.facebook.com/metropol.cinema',
     instagram: 'https://instagram.com/metropol.cinema',
