@@ -10,6 +10,7 @@ import {
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
+import { AvvisoAssemblea } from '@/components/avviso-assemblea';
 import { fetchImpostazioni } from '@/lib/impostazioni-client';
 import { SITE } from '@/lib/site';
 
@@ -76,6 +77,8 @@ export default async function AssociazionePage() {
           l&apos;anno organizziamo anche corsi di cinema ed eventi speciali.
         </p>
       </header>
+
+      <AvvisoAssemblea variante="riquadro" />
 
       {/* La domanda più frequente di chi arriva qui è «come faccio a
           diventare socio?»: la risposta sta in cima, prima dell'elenco delle
