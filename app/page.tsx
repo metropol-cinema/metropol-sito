@@ -8,6 +8,7 @@ import { HeroCarousel } from '@/components/hero-carousel';
 import { HeroClosed } from '@/components/hero-closed';
 import { HeroFilm } from '@/components/hero-film';
 import { HeroUpcoming } from '@/components/hero-upcoming';
+import { InvitoSoci } from '@/components/invito-soci';
 import { MediaSlide } from '@/components/media-slide';
 import { LoadError } from '@/components/page-header';
 import { fetchImpostazioni } from '@/lib/impostazioni-client';
@@ -202,6 +203,10 @@ export default async function HomePage() {
           stanno già sopra gli orari di ogni film — e con proiezioni solo nel
           fine settimana mostrava quattro caselle spente su sette. */}
       <div className="h-px w-full marquee-rule" aria-hidden="true" />
+
+      {/* «Diventa socio» a campagna aperta. Non quando l'hero è `HeroClosed`,
+          che il bottone lo porta già: due inviti uno sotto l'altro. */}
+      {impostazioni.campagnaSoci && specs.length > 0 && <InvitoSoci />}
 
       <div className="container py-12 sm:py-16">
         {error ? (
