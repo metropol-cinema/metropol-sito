@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 /** Ultima revisione del testo. Va aggiornata quando cambia qualcosa di sostanziale. */
-const AGGIORNATA_IL = '16 ottobre 2026';
+const AGGIORNATA_IL = '29 ottobre 2026';
 
 /**
  * Cosa resta sul dispositivo di chi legge. Sono quattro voci in croce perché il
@@ -76,7 +76,11 @@ const FORNITORI = [
     dove: 'Server in Irlanda (Unione Europea) e rete di distribuzione in tutto il mondo; la società è statunitense e può trattare negli Stati Uniti parte dei dati tecnici, come i log (clausole contrattuali standard)',
   },
   { nome: 'Supabase', ruolo: 'Banca dati del gestionale, dove finiscono le iscrizioni', dove: 'Unione Europea (Irlanda)' },
-  { nome: 'Brevo', ruolo: 'Spedisce la newsletter e ne gestisce le iscrizioni', dove: 'Francia' },
+  {
+    nome: 'Brevo',
+    ruolo: 'Spedisce la newsletter, ne gestisce le iscrizioni e conta solo in totale aperture e click',
+    dove: 'Francia',
+  },
   {
     nome: 'Google, Apple, Mozilla o Microsoft',
     ruolo: 'Recapitano gli avvisi dell’app, secondo il browser del telefono',
@@ -167,7 +171,17 @@ export default function PrivacyPage() {
             lista. Lo conserviamo finché resti iscritto, e teniamo traccia di
             quando e come hai dato il consenso perché la legge ci chiede di poterlo
             dimostrare. Le email partono da Brevo, che le spedisce per conto
-            nostro e registra se sono arrivate e se sono state aperte.
+            nostro e registra se sono arrivate.
+          </p>
+          <p className="mt-4 leading-relaxed text-cinema-text-muted">
+            <strong className="text-cinema-text">Non sappiamo se apri le nostre email.</strong>{' '}
+            Come quasi tutte le newsletter, le nostre contengono un&apos;immagine
+            invisibile, e i link passano da Brevo prima di arrivare alla pagina:
+            servono a contare quante email vengono aperte e quanti link cliccati.
+            Noi vediamo solo questi totali, non chi ha aperto o cliccato, e non li
+            usiamo per decidere a chi scrivere. Se preferisci che la tua apertura
+            non entri nemmeno nel conteggio, basta non caricare le immagini nel tuo
+            programma di posta: l&apos;email si legge lo stesso.
           </p>
         </section>
 
