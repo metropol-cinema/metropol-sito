@@ -27,6 +27,14 @@ export interface PublicShowtime {
   /** Sala/luogo della proiezione (es. il Castello per la rassegna estiva). */
   venue: string | null;
   prices: PublicPrice[];
+  /**
+   * Nota da mostrare **accanto ai prezzi** di questa proiezione, scritta in
+   * dashboard (es. «I soci hanno l'ingresso gratuito»). null = nessuna.
+   *
+   * Opzionale perché le risposte precedenti all'introduzione del campo non ce
+   * l'hanno: quando manca vale come null.
+   */
+  note?: string | null;
 }
 
 export interface PublicFilm {

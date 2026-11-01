@@ -23,6 +23,7 @@ const PAGINE = [
   '/associazione/diventa-volontario',
   '/associazione/storia',
   '/associazione/statuto',
+  '/associazione/assemblea-2026',
   '/corsi',
   '/privacy',
 ];

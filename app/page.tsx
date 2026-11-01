@@ -2,17 +2,21 @@ import { Clock, MapPin, Ticket } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
+import { AvvisoAssemblea } from '@/components/avviso-assemblea';
 import { FilmRow } from '@/components/film-row';
 import { HeroCarousel } from '@/components/hero-carousel';
 import { HeroClosed } from '@/components/hero-closed';
 import { HeroFilm } from '@/components/hero-film';
 import { HeroUpcoming } from '@/components/hero-upcoming';
+import { InvitoSoci } from '@/components/invito-soci';
 import { MediaSlide } from '@/components/media-slide';
 import { LoadError } from '@/components/page-header';
 import { fetchImpostazioni } from '@/lib/impostazioni-client';
 import {
+  addDaysToKey,
   currentWeekRange,
   fetchProgrammazione,
+  romeDayKey,
   splitWeekUpcoming,
   type PublicFilm,
 } from '@/lib/programmazione-client';
@@ -25,6 +29,14 @@ export const revalidate = 600;
 
 /** Quante slide al massimo nell'hero: oltre, il carosello smette di essere leggibile. */
 const MAX_HERO_SLIDES = 5;
+
+/**
+ * Fin quanto indietro un'ultima proiezione fa ancora dire «il programma è in
+ * arrivo» invece di «il proiettore riposa». Due settimane: copre il buco fra
+ * la fine di una settimana e la pubblicazione della successiva anche quando
+ * salta un fine settimana; oltre, è una pausa vera (l'estate, le feste).
+ */
+const GIORNI_PAUSA_SETTIMANALE = 14;
 
 interface Slide {
   node: ReactNode;
@@ -127,6 +139,28 @@ function renderSlide(spec: SlideSpec, first: boolean): ReactNode {
   }
 }
 
+/**
+ * Il cartellone è vuoto, ma da poco: c'è stata una proiezione negli ultimi
+ * `GIORNI_PAUSA_SETTIMANALE` giorni. Vuol dire che la settimana dopo non è
+ * ancora stata pubblicata, non che la sala ha chiuso.
+ *
+ * Se la chiamata fallisce si risponde `false`, cioè il messaggio di sempre:
+ * «nessuna proiezione in calendario» resta vero anche così.
+ */
+async function inPausaSettimanale(): Promise<boolean> {
+  const oggi = romeDayKey(new Date().toISOString());
+  try {
+    const recenti = await fetchProgrammazione({
+      from: addDaysToKey(oggi, -GIORNI_PAUSA_SETTIMANALE),
+      to: oggi,
+      posters: false,
+    });
+    return recenti.some((f) => f.showtimes.length > 0);
+  } catch {
+    return false;
+  }
+}
+
 function SectionHeading({
   eyebrow,
   title,
@@ -173,10 +207,23 @@ export default async function HomePage() {
     weekFilms,
     upcomingFilms
   );
+  // Solo a cartellone vuoto: l'unico caso in cui serve sapere cosa c'è stato.
+  const pausaSettimanale = specs.length === 0 && !error && (await inPausaSettimanale());
   const slides: Slide[] =
     specs.length > 0
       ? specs.map((spec, i) => ({ node: renderSlide(spec, i === 0), duration: spec.duration }))
-      : [{ node: <HeroClosed key="closed" campagnaSoci={impostazioni.campagnaSoci} />, duration: 15 }];
+      : [
+          {
+            node: (
+              <HeroClosed
+                key="closed"
+                campagnaSoci={impostazioni.campagnaSoci}
+                pausaSettimanale={pausaSettimanale}
+              />
+            ),
+            duration: 15,
+          },
+        ];
 
   return (
     <main>
@@ -184,6 +231,8 @@ export default async function HomePage() {
       <h1 className="sr-only">
         Cinema Metropol — film in programmazione a Villafranca di Verona
       </h1>
+
+      <AvvisoAssemblea />
 
       {slides.length === 1 ? (
         slides[0].node
@@ -199,6 +248,10 @@ export default async function HomePage() {
           stanno già sopra gli orari di ogni film — e con proiezioni solo nel
           fine settimana mostrava quattro caselle spente su sette. */}
       <div className="h-px w-full marquee-rule" aria-hidden="true" />
+
+      {/* «Diventa socio» a campagna aperta. Non quando l'hero è `HeroClosed`,
+          che il bottone lo porta già: due inviti uno sotto l'altro. */}
+      {impostazioni.campagnaSoci && specs.length > 0 && <InvitoSoci />}
 
       <div className="container py-12 sm:py-16">
         {error ? (

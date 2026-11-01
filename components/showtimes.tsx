@@ -11,10 +11,13 @@ function priceText(prices: PublicPrice[]): string {
   return prices.map((p) => `${p.label} ${formatEuro(p.amount)}`).join(' · ');
 }
 
-/** Firma identica per due liste prezzi (a meno dell'ordine). */
+/**
+ * Firma identica per due liste prezzi (a meno dell'ordine). Conta l'etichetta,
+ * non il tipo SIAE: è l'etichetta che si legge, e in dashboard si può riscrivere.
+ */
 function priceKey(prices: PublicPrice[]): string {
   return [...prices]
-    .map((p) => `${p.type}:${p.amount}`)
+    .map((p) => `${p.label}:${p.amount}`)
     .sort()
     .join('|');
 }
@@ -31,7 +34,37 @@ function commonPrices(showtimes: PublicShowtime[]): PublicPrice[] | null {
   return withPrices.every((s) => priceKey(s.prices) === first) ? withPrices[0].prices : null;
 }
 
-/** Legenda prezzi del film, da mostrare una volta sopra/accanto agli orari. */
+/** La nota della proiezione, ripulita: stringa vuota o assente = nessuna. */
+function noteOf(s: PublicShowtime): string | null {
+  const t = s.note?.trim();
+  return t ? t : null;
+}
+
+/**
+ * Nota comune a TUTTE le proiezioni passate («I soci hanno l'ingresso
+ * gratuito» su ogni orario del film): si scrive una volta, accanto al listino.
+ * null se manca anche solo su una, o se cambia da un orario all'altro.
+ */
+function commonNote(showtimes: PublicShowtime[]): string | null {
+  if (showtimes.length === 0) return null;
+  const first = noteOf(showtimes[0]);
+  return first && showtimes.every((s) => noteOf(s) === first) ? first : null;
+}
+
+/** Testo della nota: a capo dove l'ha messo chi l'ha scritta in dashboard. */
+function NoteText({ children, className }: { children: string; className?: string }) {
+  return (
+    <span className={cn('whitespace-pre-line font-medium text-cinema-ticket-ink', className)}>
+      {children}
+    </span>
+  );
+}
+
+/**
+ * Legenda prezzi del film, da mostrare una volta sopra/accanto agli orari: il
+ * listino e la nota, quando sono gli stessi per tutte le proiezioni. Quello che
+ * cambia da un orario all'altro lo scrive <Showtimes> sotto ciascun orario.
+ */
 export function PriceLegend({
   showtimes,
   className,
@@ -39,13 +72,23 @@ export function PriceLegend({
   showtimes: PublicShowtime[];
   className?: string;
 }) {
-  const common = commonPrices(showtimes);
-  if (!common) return null;
+  const prices = commonPrices(showtimes);
+  const note = commonNote(showtimes);
+  if (!prices && !note) return null;
   return (
-    <p className={cn('text-xs text-cinema-text-subtle', className)}>
-      <span className="sr-only">Prezzi: </span>
-      {priceText(common)}
-    </p>
+    <div className={cn('space-y-1 text-xs text-cinema-text-subtle', className)}>
+      {prices && (
+        <p>
+          <span className="sr-only">Prezzi: </span>
+          {priceText(prices)}
+        </p>
+      )}
+      {note && (
+        <p>
+          <NoteText>{note}</NoteText>
+        </p>
+      )}
+    </div>
   );
 }
 
@@ -60,6 +103,13 @@ interface ShowtimesProps {
   showVenue?: boolean;
   /** Colore delle tacche della perforazione: deve combaciare con lo sfondo. */
   perfBg?: string;
+  /**
+   * Le proiezioni riassunte dalla <PriceLegend> che sta accanto a questa lista
+   * (default: la lista stessa). Serve quando la lista è una parte — un giorno —
+   * e la legenda copre tutto il film: è su quell'insieme che si decide se
+   * prezzi e nota sono già scritti lì, o vanno scritti sotto l'orario.
+   */
+  legendOf?: PublicShowtime[];
   ariaLabel?: string;
   className?: string;
 }
@@ -67,8 +117,8 @@ interface ShowtimesProps {
 /**
  * Orari di un film come "biglietti": orario + tagliando d'acquisto dorato.
  * È il blocco di prenotazione condiviso da hero, card, scheda e calendario.
- * I prezzi comuni vanno mostrati a parte con <PriceLegend>; qui appaiono solo
- * quando differiscono tra una proiezione e l'altra.
+ * Prezzi e nota comuni vanno mostrati a parte con <PriceLegend>; qui appaiono
+ * solo quando differiscono tra una proiezione e l'altra.
  */
 export function Showtimes({
   film,
@@ -77,11 +127,14 @@ export function Showtimes({
   withDayInLabel = false,
   showVenue = false,
   perfBg,
+  legendOf,
   ariaLabel,
   className,
 }: ShowtimesProps) {
   const list = showtimes ?? film.showtimes;
-  const perFilmCommon = commonPrices(list) !== null;
+  const legend = legendOf ?? list;
+  const pricesInLegend = commonPrices(legend) !== null;
+  const noteInLegend = commonNote(legend) !== null;
   const lg = size === 'lg';
 
   return (
@@ -94,8 +147,9 @@ export function Showtimes({
         const time = formatTimeIt(s.startsAt);
         const when = withDayInLabel ? `${formatDayIt(s.startsAt)} ore ${time}` : `ore ${time}`;
         const elsewhere = showVenue && s.venue && !isHomeVenue(s.venue);
-        // Mostra il prezzo sul singolo orario solo se NON è comune a tutto il film.
-        const ownPrice = !perFilmCommon && s.prices.length > 0 ? priceText(s.prices) : null;
+        // Prezzo e nota sul singolo orario solo se NON sono già nella legenda.
+        const ownPrice = !pricesInLegend && s.prices.length > 0 ? priceText(s.prices) : null;
+        const ownNote = noteInLegend ? null : noteOf(s);
 
         return (
           <li key={s.sourceId ?? s.startsAt} className="flex flex-col gap-1">
@@ -143,6 +197,7 @@ export function Showtimes({
               </span>
             )}
             {ownPrice && <span className="text-xs text-cinema-text-subtle">{ownPrice}</span>}
+            {ownNote && <NoteText className="max-w-[16rem] text-xs">{ownNote}</NoteText>}
           </li>
         );
       })}
@@ -218,7 +273,9 @@ export function ShowtimesByDay({
   perfBg?: string;
   className?: string;
 }) {
-  const days = groupShowtimesByDay(showtimes ?? film.showtimes);
+  // La <PriceLegend> accanto riassume tutte le proiezioni, non il singolo giorno.
+  const all = showtimes ?? film.showtimes;
+  const days = groupShowtimesByDay(all);
   const shown = maxDays ? days.slice(0, maxDays) : days;
   const nascosti = days.length - shown.length;
 
@@ -235,6 +292,7 @@ export function ShowtimesByDay({
             size={size}
             showVenue={showVenue}
             perfBg={perfBg}
+            legendOf={all}
             withDayInLabel
             ariaLabel={`Orari di ${film.title} — ${formatDayIt(ofDay[0].startsAt)}`}
             className="mt-2.5"
