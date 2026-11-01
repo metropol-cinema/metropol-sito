@@ -1,4 +1,4 @@
-import { MapPin } from 'lucide-react';
+import { Mail, MapPin } from 'lucide-react';
 import Link from 'next/link';
 
 import { SITE } from '@/lib/site';
@@ -10,8 +10,20 @@ import { SITE } from '@/lib/site';
  *
  * `campagnaSoci`: a campagna associativa chiusa (dashboard, Sito Web →
  * Impostazioni) niente bottone «Diventa socio», e il testo non lo promette.
+ *
+ * `pausaSettimanale`: il cartellone è vuoto solo perché la settimana dopo non
+ * è ancora pubblicata (l'ultima proiezione è di pochi giorni fa, vedi
+ * `app/page.tsx`). Allora non si dice «il proiettore riposa», che a chi legge
+ * suona come una chiusura, ma che il programma arriva a breve — e il secondo
+ * bottone porta alla newsletter, che è il modo di riceverlo appena esce.
  */
-export function HeroClosed({ campagnaSoci }: { campagnaSoci: boolean }) {
+export function HeroClosed({
+  campagnaSoci,
+  pausaSettimanale,
+}: {
+  campagnaSoci: boolean;
+  pausaSettimanale: boolean;
+}) {
   return (
     <section
       aria-label="La sala in questo momento"
@@ -24,16 +36,32 @@ export function HeroClosed({ campagnaSoci }: { campagnaSoci: boolean }) {
       />
       <div className="container py-16 sm:py-24">
         <p className="eyebrow">{SITE.venueName}</p>
-        <h2 className="mt-3 max-w-2xl text-4xl font-black leading-[0.98] text-cinema-text sm:text-6xl">
-          Il proiettore riposa,<br />
-          l&apos;associazione no
-        </h2>
-        <p className="mt-5 max-w-xl text-base leading-relaxed text-cinema-text-muted sm:text-lg">
-          Nessuna proiezione in calendario in questo momento. Il nuovo programma
-          esce qui appena è pronto: nel frattempo puoi{' '}
-          {campagnaSoci ? 'tesserarti, darci una mano' : 'darci una mano'} come volontario o
-          seguirci sui social.
-        </p>
+        {pausaSettimanale ? (
+          <>
+            <h2 className="mt-3 max-w-2xl text-4xl font-black leading-[0.98] text-cinema-text sm:text-6xl">
+              Il nuovo programma<br />
+              è in arrivo
+            </h2>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-cinema-text-muted sm:text-lg">
+              Le proiezioni della settimana sono finite e stiamo definendo film e
+              orari dei prossimi giorni. Il programma esce qui a breve: iscriviti
+              alla newsletter per riceverlo appena è pronto.
+            </p>
+          </>
+        ) : (
+          <>
+            <h2 className="mt-3 max-w-2xl text-4xl font-black leading-[0.98] text-cinema-text sm:text-6xl">
+              Il proiettore riposa,<br />
+              l&apos;associazione no
+            </h2>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-cinema-text-muted sm:text-lg">
+              Nessuna proiezione in calendario in questo momento. Il nuovo programma
+              esce qui appena è pronto: nel frattempo puoi{' '}
+              {campagnaSoci ? 'tesserarti, darci una mano' : 'darci una mano'} come volontario o
+              seguirci sui social.
+            </p>
+          </>
+        )}
 
         <div className="mt-8 flex flex-wrap gap-3">
           {/* Porta dritti al modulo, non alla pagina che lo spiega: chi preme
@@ -48,13 +76,24 @@ export function HeroClosed({ campagnaSoci }: { campagnaSoci: boolean }) {
               Diventa socio
             </a>
           )}
-          <Link
-            href="/info"
-            className="inline-flex items-center gap-2 rounded-lg border border-cinema-border-strong px-5 py-2.5 font-utility text-sm font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
-          >
-            <MapPin className="h-4 w-4" aria-hidden="true" />
-            Dove siamo
-          </Link>
+          {pausaSettimanale ? (
+            // Il modulo sta nel piè di pagina, con questa ancora (site-footer).
+            <a
+              href="#iscriviti-newsletter"
+              className="inline-flex items-center gap-2 rounded-lg border border-cinema-border-strong px-5 py-2.5 font-utility text-sm font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
+            >
+              <Mail className="h-4 w-4" aria-hidden="true" />
+              Avvisami per email
+            </a>
+          ) : (
+            <Link
+              href="/info"
+              className="inline-flex items-center gap-2 rounded-lg border border-cinema-border-strong px-5 py-2.5 font-utility text-sm font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
+            >
+              <MapPin className="h-4 w-4" aria-hidden="true" />
+              Dove siamo
+            </Link>
+          )}
         </div>
       </div>
     </section>
