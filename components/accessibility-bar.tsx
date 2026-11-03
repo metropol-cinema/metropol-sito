@@ -158,7 +158,9 @@ export function AccessibilityBar() {
           role="dialog"
           aria-label="Strumenti di lettura e accessibilità"
           tabIndex={-1}
-          className="fixed bottom-[5.5rem] right-4 z-50 max-h-[calc(100vh-7.5rem)] sm:left-4 sm:right-auto w-[min(21rem,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-cinema-border-strong bg-cinema-surface p-5 shadow-2xl shadow-black/60 outline-none"
+          // z-[55]: sul telefono «Installa» e «Avvisi» stanno sopra il bottone,
+          // dentro quest'area. Il pannello aperto passa davanti, non sotto.
+          className="fixed bottom-[5.5rem] right-4 z-[55] max-h-[calc(100vh-7.5rem)] sm:left-4 sm:right-auto w-[min(21rem,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-cinema-border-strong bg-cinema-surface p-5 shadow-2xl shadow-black/60 outline-none"
         >
           <div className="flex items-start justify-between gap-4">
             <h2 className="text-xl font-black leading-tight text-cinema-text">Come vuoi leggere</h2>
