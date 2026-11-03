@@ -68,18 +68,27 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
       </div>
 
       <div className="container flex flex-col gap-6 pb-6 pt-8 sm:flex-row sm:items-end sm:gap-9 sm:pb-14 sm:pt-32">
-        {/* Locandina appesa: filo d'oro come la cornice in atrio */}
-        <div className="w-32 shrink-0 overflow-hidden rounded-xl border border-cinema-ticket-ink/25 shadow-2xl shadow-black/70 sm:w-56">
+        {/* Locandina appesa: filo d'oro come la cornice in atrio.
+            Locandina, titolo e bottone portano alla scheda, ma non tutta la slide:
+            è la stessa zona in cui si scorre col dito fra un film e l'altro, e lì
+            nascerebbero i tocchi accidentali. Per chi usa tastiera o lettore di
+            schermo il link resta uno solo, come in FilmRow. */}
+        <Link
+          href={`/film/${film.id}`}
+          tabIndex={-1}
+          aria-hidden="true"
+          className="block w-32 shrink-0 overflow-hidden rounded-xl border border-cinema-ticket-ink/25 shadow-2xl shadow-black/70 transition-colors hover:border-cinema-ticket-ink sm:w-56"
+        >
           {poster ? (
             // Il poster può essere un data-URI Cinebot: <img> semplice.
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={poster} alt={`Locandina di ${film.title}`} className="w-full" />
+            <img src={poster} alt="" className="w-full" />
           ) : (
             <div className="flex aspect-[2/3] w-full items-center justify-center bg-cinema-surface-2 text-cinema-text-subtle">
               <Clapperboard className="h-10 w-10" aria-hidden="true" />
             </div>
           )}
-        </div>
+        </Link>
 
         <div className="min-w-0 flex-1 animate-rise-in">
           <RelativeEyebrow
@@ -88,7 +97,15 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
           />
 
           <h2 className="mt-3 text-[2.75rem] font-black leading-[0.95] text-cinema-text drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)] sm:text-7xl">
-            {film.title}
+            <Link
+              href={`/film/${film.id}`}
+              tabIndex={-1}
+              aria-hidden="true"
+              className="transition-colors hover:text-cinema-ticket-ink"
+            >
+              {film.title}
+            </Link>
+            <span className="sr-only">{film.title}</span>
           </h2>
 
           {details?.tagline && (
@@ -117,7 +134,7 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
 
           <Link
             href={`/film/${film.id}`}
-            className="tap-area group mt-7 inline-flex items-center gap-2 border-b border-cinema-ticket-ink/40 pb-1 font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-ticket-ink transition-colors hover:border-cinema-ticket-ink"
+            className="group mt-7 inline-flex min-h-12 items-center gap-2 rounded-lg bg-cinema-ticket px-6 py-3 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover"
           >
             Scheda del film<span className="sr-only">: {film.title}</span>
             <ArrowRight
