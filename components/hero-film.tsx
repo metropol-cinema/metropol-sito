@@ -5,11 +5,12 @@ import Link from 'next/link';
 import { AccessibleBadge } from '@/components/accessible-badge';
 import { AgeBadge } from '@/components/age-badge';
 import { MetaLine } from '@/components/meta-line';
+import { RelativeEyebrow } from '@/components/relative-day';
 import { PriceLegend, ShowtimesByDay } from '@/components/showtimes';
 import { ageRatingFor } from '@/lib/age-rating';
 import { filmGenres } from '@/lib/film-facts';
 import type { PublicFilm } from '@/lib/programmazione-client';
-import { relativeDayIt } from '@/lib/programmazione-client';
+import { relativeDayIt, romeDayKey } from '@/lib/programmazione-client';
 import { fetchTmdbDetails } from '@/lib/tmdb';
 
 /**
@@ -26,18 +27,6 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
   const poster = details?.posterUrl ?? film.poster;
   const ageRating = ageRatingFor(film.ageRating);
   const next = film.showtimes[0];
-  const relative = next ? relativeDayIt(next.startsAt) : null;
-
-  // Occhiello: solo il "quando" relativo. La data precisa sta sopra ogni
-  // gruppo di orari — metterne una sola qui era falso appena il film aveva
-  // proiezioni in giorni diversi.
-  const when = !next
-    ? 'In programmazione'
-    : relative === 'Oggi'
-      ? 'Stasera in sala'
-      : relative === 'Domani'
-        ? 'Domani in sala'
-        : 'In sala questa settimana';
 
   const meta = [
     film.director ? `Regia di ${film.director}` : null,
@@ -78,7 +67,7 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
         <div className="absolute inset-0 bg-gradient-to-t from-cinema-bg via-cinema-bg/85 to-cinema-bg/25" />
       </div>
 
-      <div className="container flex flex-col gap-6 pb-10 pt-24 sm:flex-row sm:items-end sm:gap-9 sm:pb-14 sm:pt-32">
+      <div className="container flex flex-col gap-6 pb-6 pt-8 sm:flex-row sm:items-end sm:gap-9 sm:pb-14 sm:pt-32">
         {/* Locandina appesa: filo d'oro come la cornice in atrio */}
         <div className="w-32 shrink-0 overflow-hidden rounded-xl border border-cinema-ticket-ink/25 shadow-2xl shadow-black/70 sm:w-56">
           {poster ? (
@@ -93,7 +82,10 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
         </div>
 
         <div className="min-w-0 flex-1 animate-rise-in">
-          <p className="eyebrow">{when}</p>
+          <RelativeEyebrow
+            dayKey={next ? romeDayKey(next.startsAt) : null}
+            initial={next ? relativeDayIt(next.startsAt) : null}
+          />
 
           <h2 className="mt-3 text-[2.75rem] font-black leading-[0.95] text-cinema-text drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)] sm:text-7xl">
             {film.title}
@@ -118,13 +110,14 @@ export async function HeroFilm({ film, priority = false }: { film: PublicFilm; p
             size="lg"
             showVenue
             perfBg="rgb(var(--c-bg))"
+            linkToFilm
             className="mt-7"
           />
           <PriceLegend showtimes={film.showtimes} className="mt-3 text-cinema-text-muted" />
 
           <Link
             href={`/film/${film.id}`}
-            className="group mt-7 inline-flex items-center gap-2 border-b border-cinema-ticket-ink/40 pb-1 font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-ticket-ink transition-colors hover:border-cinema-ticket-ink"
+            className="tap-area group mt-7 inline-flex items-center gap-2 border-b border-cinema-ticket-ink/40 pb-1 font-utility text-xs font-semibold uppercase tracking-marquee text-cinema-ticket-ink transition-colors hover:border-cinema-ticket-ink"
           >
             Scheda del film<span className="sr-only">: {film.title}</span>
             <ArrowRight

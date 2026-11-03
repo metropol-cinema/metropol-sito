@@ -188,7 +188,7 @@ export function InstallApp() {
         aria-expanded={aperto}
         aria-controls={pannelloId}
         aria-label={aperto ? "Chiudi «Installa l'app»" : "Installa l'app sul telefono"}
-        className="fixed bottom-4 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full border-2 border-cinema-border-strong bg-cinema-surface text-cinema-text shadow-xl shadow-black/40 transition-colors hover:border-cinema-text-subtle"
+        className="fixed bottom-[4.5rem] right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full border-2 border-cinema-border-strong bg-cinema-surface text-cinema-text shadow-xl shadow-black/40 transition-colors hover:border-cinema-text-subtle sm:bottom-4 sm:h-14 sm:w-14"
       >
         <Download className="h-6 w-6" aria-hidden="true" />
       </button>
@@ -200,7 +200,7 @@ export function InstallApp() {
           role="dialog"
           aria-label="Installa l'app"
           tabIndex={-1}
-          className="fixed bottom-[5.5rem] right-4 z-50 w-[min(20rem,calc(100vw-2rem))] rounded-2xl border border-cinema-border-strong bg-cinema-surface p-5 text-cinema-text shadow-2xl shadow-black/60 outline-none"
+          className="fixed bottom-[8.5rem] right-4 z-50 w-[min(20rem,calc(100vw-2rem))] sm:bottom-[5.5rem] rounded-2xl border border-cinema-border-strong bg-cinema-surface p-5 text-cinema-text shadow-2xl shadow-black/60 outline-none"
         >
           <div className="flex items-start justify-between gap-4">
             <h2 className="text-lg font-semibold leading-tight">Installa l&apos;app</h2>

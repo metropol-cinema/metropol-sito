@@ -630,6 +630,17 @@
     @apply inline-flex items-center gap-2 rounded-xl border border-cinema-border-strong bg-cinema-surface-2 px-3.5 py-2.5;
   }
 
+  /* Link testuale piccolo: l'area che risponde al dito arriva a 44px senza
+     spostare niente di quello che si vede. */
+  .tap-area {
+    position: relative;
+  }
+  .tap-area::before {
+    content: '';
+    position: absolute;
+    inset: -0.875rem 0;
+  }
+
   /* Filo "marquee" dorato sotto la testata: un richiamo all'insegna luminosa. */
   .marquee-rule {
     background-image: linear-gradient(

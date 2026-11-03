@@ -5,7 +5,7 @@ import { AccessibleBadge } from '@/components/accessible-badge';
 import { MetaLine } from '@/components/meta-line';
 import { DayLabel, PriceLegend, Showtimes } from '@/components/showtimes';
 import type { PublicFilm, PublicShowtime } from '@/lib/programmazione-client';
-import { romeDayKey } from '@/lib/programmazione-client';
+import { formatDayShortIt, romeDayKey } from '@/lib/programmazione-client';
 
 interface DayEntry {
   film: PublicFilm;
@@ -41,6 +41,27 @@ export function groupByDay(films: PublicFilm[]): Array<{ dayKey: string; entries
     }));
 }
 
+/**
+ * I giorni in cima alla pagina: un tocco porta alla `<section>` di quel giorno.
+ * Con un giorno solo non c'è dove saltare.
+ */
+export function DayJump({ days }: { days: Array<{ dayKey: string; entries: DayEntry[] }> }) {
+  if (days.length < 2) return null;
+  return (
+    <nav aria-label="Vai al giorno" className="mb-8 flex flex-wrap gap-2">
+      {days.map(({ dayKey, entries }) => (
+        <a
+          key={dayKey}
+          href={`#${dayKey}`}
+          className="inline-flex min-h-11 items-center rounded-lg border border-cinema-border-strong bg-cinema-surface px-3 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
+        >
+          {formatDayShortIt(entries[0].showtimes[0].startsAt)}
+        </a>
+      ))}
+    </nav>
+  );
+}
+
 /** Programmazione di un giorno: riga per film con orari, prezzi e acquisto. */
 export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayEntry[] }) {
   const firstStart = entries[0].showtimes[0].startsAt;
@@ -49,10 +70,12 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
     // L'id è la chiave giorno: permalink condivisibile a un singolo giorno
     // (es. /programmazione#2026-08-22).
     <section id={dayKey} className="scroll-mt-28">
-      <h2>
+      {/* La data resta in vista sotto la testata mentre si scorre: i film si
+          somigliano tutti, e a metà pagina non si sa più di che giorno sono. */}
+      <h2 className="sticky top-[calc(4.5rem+3px)] z-20 -mx-6 bg-cinema-bg/95 px-6 py-2 backdrop-blur-sm">
         <DayLabel startsAt={firstStart} />
       </h2>
-      <div className="mt-4 space-y-4">
+      <div className="mt-2 space-y-4">
         {entries.map(({ film, showtimes }) => (
           <article
             key={`${dayKey}-${film.id}`}
@@ -97,6 +120,7 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
                 film={film}
                 showtimes={showtimes}
                 showVenue
+                linkToFilm
                 className="mt-4"
                 perfBg="rgb(var(--c-surface))"
               />

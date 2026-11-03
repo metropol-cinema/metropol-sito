@@ -15,7 +15,16 @@ import { useEffect, useRef } from 'react';
  * chiudersi con Esc (restituendo il focus al bottone), chiudersi quando si
  * clicca fuori, e chiudersi quando si è scelta una voce e la pagina cambia.
  */
-export function MobileMenu({ links }: { links: readonly { href: string; label: string }[] }) {
+const VOCE =
+  'flex min-h-11 items-center rounded-lg px-3 font-utility text-sm font-semibold uppercase tracking-wider hover:bg-cinema-surface-2 hover:text-cinema-ticket-ink';
+
+export function MobileMenu({
+  links,
+  sociAreaUrl,
+}: {
+  links: readonly { href: string; label: string }[];
+  sociAreaUrl: string;
+}) {
   const tendina = useRef<HTMLDetailsElement>(null);
   const percorso = usePathname();
 
@@ -50,23 +59,33 @@ export function MobileMenu({ links }: { links: readonly { href: string; label: s
     <details ref={tendina} className="relative md:hidden">
       <summary
         aria-label="Menu di navigazione"
-        className="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-md text-cinema-text-muted hover:bg-cinema-surface [&::-webkit-details-marker]:hidden"
+        className="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-md text-cinema-text-muted hover:bg-cinema-surface [&::-webkit-details-marker]:hidden"
       >
-        <Menu className="h-5 w-5" aria-hidden="true" />
+        <Menu className="h-6 w-6" aria-hidden="true" />
       </summary>
       <nav
         aria-label="Navigazione principale"
         className="absolute right-0 top-12 z-50 w-60 rounded-xl border border-cinema-border bg-cinema-surface p-2 shadow-2xl shadow-black/60"
       >
-        {links.map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className="block rounded-lg px-3 py-2.5 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted hover:bg-cinema-surface-2 hover:text-cinema-ticket-ink"
-          >
-            {link.label}
-          </Link>
-        ))}
+        {links.map((link) => {
+          const current = percorso === link.href || percorso.startsWith(`${link.href}/`);
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              aria-current={current ? 'page' : undefined}
+              className={`${VOCE} ${current ? 'text-cinema-ticket-ink' : 'text-cinema-text-muted'}`}
+            >
+              {link.label}
+            </Link>
+          );
+        })}
+        <a
+          href={sociAreaUrl}
+          className={`${VOCE} mt-1 border-t border-cinema-border text-cinema-text-muted`}
+        >
+          Area soci
+        </a>
       </nav>
     </details>
   );

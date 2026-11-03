@@ -181,7 +181,7 @@ function SectionHeading({
       {action && (
         <Link
           href={action.href}
-          className="shrink-0 border-b border-cinema-border-strong pb-1 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
+          className="tap-area shrink-0 border-b border-cinema-border-strong pb-1 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
         >
           {action.label}
         </Link>
@@ -304,7 +304,7 @@ export default async function HomePage() {
             </p>
             <Link
               href="/info#prezzi"
-              className="mt-4 inline-block border-b border-cinema-border-strong pb-0.5 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
+              className="tap-area mt-4 inline-block border-b border-cinema-border-strong pb-0.5 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
             >
               Info e prezzi
             </Link>

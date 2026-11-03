@@ -8,6 +8,7 @@
  */
 
 import { isTimeout, TIMEOUT_GESTIONALE, withTimeout } from '@/lib/fetch-timeout';
+import { relativeDayOfKey } from '@/lib/giorno-relativo';
 
 export interface PublicPrice {
   label: string;
@@ -271,6 +272,16 @@ export function formatDayIt(startsAtIso: string): string {
   }).format(new Date(startsAtIso));
 }
 
+/** Etichetta corta del giorno, es. "ven 6 nov". */
+export function formatDayShortIt(startsAtIso: string): string {
+  return new Intl.DateTimeFormat('it-IT', {
+    timeZone: 'Europe/Rome',
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  }).format(new Date(startsAtIso));
+}
+
 /** Solo l'orario in ora italiana, es. "21:00". */
 export function formatTimeIt(startsAtIso: string): string {
   return new Intl.DateTimeFormat('it-IT', {
@@ -286,13 +297,7 @@ export function formatTimeIt(startsAtIso: string): string {
  * stasera senza far calcolare le date all'utente.
  */
 export function relativeDayIt(startsAtIso: string, reference: Date = new Date()): 'Oggi' | 'Domani' | null {
-  const key = romeDayKey(startsAtIso);
-  const todayKey = romeDayKey(reference.toISOString());
-  if (key === todayKey) return 'Oggi';
-  const tomorrow = new Date(reference);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  if (key === romeDayKey(tomorrow.toISOString())) return 'Domani';
-  return null;
+  return relativeDayOfKey(romeDayKey(startsAtIso), reference);
 }
 
 /** Giorno in Europe/Rome come "YYYY-MM-DD", per raggruppare le proiezioni. */

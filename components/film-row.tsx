@@ -33,12 +33,15 @@ export async function FilmRow({ film }: { film: PublicFilm }) {
 
   return (
     <article className="group relative overflow-hidden rounded-2xl border border-cinema-border bg-cinema-surface transition-colors hover:border-cinema-ticket-ink/45">
-      <div className="flex gap-4 p-4 sm:gap-6 sm:p-6">
+      {/* Sul telefono orari e prezzi scendono a tutta larghezza sotto locandina e
+          titolo: nella colonna accanto alla locandina andava a capo tutto, anche
+          la data, e tre film facevano più di due schermate. */}
+      <div className="grid grid-cols-[6rem_minmax(0,1fr)] gap-x-4 p-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:grid-rows-[auto_1fr] sm:gap-x-6 sm:p-6">
         <Link
           href={`/film/${film.id}`}
           tabIndex={-1}
           aria-hidden="true"
-          className="h-44 w-[7.5rem] shrink-0 overflow-hidden rounded-xl bg-cinema-surface-2 shadow-lg shadow-black/40 sm:h-64 sm:w-44"
+          className="h-36 w-24 overflow-hidden rounded-xl bg-cinema-surface-2 shadow-lg shadow-black/40 sm:row-span-2 sm:h-64 sm:w-44"
         >
           {poster ? (
             // Il poster può essere un data-URI Cinebot: <img> semplice.
@@ -55,7 +58,7 @@ export async function FilmRow({ film }: { film: PublicFilm }) {
           )}
         </Link>
 
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="min-w-0">
           <h3 className="text-2xl font-black leading-[1.05] sm:text-4xl">
             <Link
               href={`/film/${film.id}`}
@@ -71,23 +74,23 @@ export async function FilmRow({ film }: { film: PublicFilm }) {
           </MetaLine>
 
           {description && (
-            <p className="mt-3 line-clamp-3 max-w-2xl text-sm leading-relaxed text-cinema-text-muted">
+            <p className="mt-3 line-clamp-3 hidden max-w-2xl text-sm leading-relaxed text-cinema-text-muted sm:[display:-webkit-box]">
               {description}
             </p>
           )}
+        </div>
 
-          <div className="mt-auto pt-5">
-            <ShowtimesByDay film={film} showVenue perfBg="rgb(var(--c-surface))" size="lg" />
-            <PriceLegend showtimes={film.showtimes} className="mt-2.5" />
-            <Link
-              href={`/film/${film.id}`}
-              className="mt-4 inline-flex items-center gap-1.5 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:text-cinema-ticket-ink"
-            >
-              Trailer, foto e dettagli
-              <span className="sr-only"> di {film.title}</span>
-              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-            </Link>
-          </div>
+        <div className="col-span-2 mt-4 self-end sm:col-span-1 sm:mt-0 sm:pt-5">
+          <ShowtimesByDay film={film} showVenue perfBg="rgb(var(--c-surface))" size="lg" linkToFilm />
+          <PriceLegend showtimes={film.showtimes} className="mt-2.5" />
+          <Link
+            href={`/film/${film.id}`}
+            className="tap-area mt-4 inline-flex items-center gap-1.5 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:text-cinema-ticket-ink"
+          >
+            Trailer, foto e dettagli
+            <span className="sr-only"> di {film.title}</span>
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+          </Link>
         </div>
       </div>
     </article>

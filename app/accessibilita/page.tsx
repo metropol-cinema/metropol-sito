@@ -206,7 +206,7 @@ export default function AccessibilitaPage() {
             Questo sito
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
-            In basso a sinistra, su ogni pagina, c&apos;è il bottone{' '}
+            In basso, su ogni pagina, c&apos;è il bottone{' '}
             <strong className="font-semibold text-cinema-text">
               «Strumenti di lettura e accessibilità»
             </strong>

@@ -1,6 +1,8 @@
-import { MapPin, Ticket } from 'lucide-react';
+import { CalendarPlus, MapPin, Ticket } from 'lucide-react';
+import Link from 'next/link';
 import type { CSSProperties } from 'react';
 
+import { RelativeDayLabel } from '@/components/relative-day';
 import type { PublicFilm, PublicPrice, PublicShowtime } from '@/lib/programmazione-client';
 import { formatDayIt, formatTimeIt, relativeDayIt, romeDayKey } from '@/lib/programmazione-client';
 import { isHomeVenue } from '@/lib/site';
@@ -110,6 +112,14 @@ interface ShowtimesProps {
    * prezzi e nota sono già scritti lì, o vanno scritti sotto l'orario.
    */
   legendOf?: PublicShowtime[];
+  /**
+   * Senza biglietti online l'orario porta alla scheda del film: ha la forma di
+   * un bottone, e chi lo tocca si aspetta che succeda qualcosa. Spento sulla
+   * scheda stessa, dove sarebbe un link alla pagina in cui si è già.
+   */
+  linkToFilm?: boolean;
+  /** Sotto ogni orario, il link «Calendario» che scarica quella proiezione. */
+  calendarLinks?: boolean;
   ariaLabel?: string;
   className?: string;
 }
@@ -128,6 +138,8 @@ export function Showtimes({
   showVenue = false,
   perfBg,
   legendOf,
+  linkToFilm = false,
+  calendarLinks = false,
   ariaLabel,
   className,
 }: ShowtimesProps) {
@@ -150,22 +162,23 @@ export function Showtimes({
         // Prezzo e nota sul singolo orario solo se NON sono già nella legenda.
         const ownPrice = !pricesInLegend && s.prices.length > 0 ? priceText(s.prices) : null;
         const ownNote = noteInLegend ? null : noteOf(s);
+        const clock = (
+          <time
+            dateTime={s.startsAt}
+            className={cn(
+              'font-display font-black tabular-nums text-cinema-text',
+              lg ? 'text-2xl' : 'text-lg'
+            )}
+          >
+            {time}
+          </time>
+        );
 
         return (
           <li key={s.sourceId ?? s.startsAt} className="flex flex-col gap-1">
             {buyUrl ? (
               <div className="ticket" style={perfBg ? ({ '--perf-bg': perfBg } as CSSProperties) : undefined}>
-                <span className="ticket-body">
-                  <time
-                    dateTime={s.startsAt}
-                    className={cn(
-                      'font-display font-black tabular-nums text-cinema-text',
-                      lg ? 'text-2xl' : 'text-lg'
-                    )}
-                  >
-                    {time}
-                  </time>
-                </span>
+                <span className="ticket-body">{clock}</span>
                 <a
                   href={buyUrl}
                   target="_blank"
@@ -177,18 +190,28 @@ export function Showtimes({
                   Acquista
                 </a>
               </div>
+            ) : linkToFilm ? (
+              <Link
+                href={`/film/${film.id}`}
+                aria-label={`Scheda di ${film.title}, ${when}`}
+                className="timechip transition-colors hover:border-cinema-ticket-ink"
+              >
+                {clock}
+              </Link>
             ) : (
-              <span className="timechip">
-                <time
-                  dateTime={s.startsAt}
-                  className={cn(
-                    'font-display font-black tabular-nums text-cinema-text',
-                    lg ? 'text-2xl' : 'text-lg'
-                  )}
-                >
-                  {time}
-                </time>
-              </span>
+              <span className="timechip">{clock}</span>
+            )}
+
+            {calendarLinks && (
+              <a
+                href={`/film/${film.id}/calendario?at=${encodeURIComponent(s.startsAt)}`}
+                rel="nofollow"
+                aria-label={`Aggiungi al calendario: ${film.title}, ${when}`}
+                className="inline-flex min-h-11 w-fit items-center gap-1.5 font-utility text-xs font-semibold text-cinema-text-muted transition-colors hover:text-cinema-ticket-ink"
+              >
+                <CalendarPlus className="h-4 w-4" aria-hidden="true" />
+                Calendario
+              </a>
             )}
 
             {elsewhere && (
@@ -207,23 +230,13 @@ export function Showtimes({
 
 /** Etichetta del giorno: "Oggi" / "Domani" in evidenza, poi la data per esteso. */
 export function DayLabel({ startsAt, className }: { startsAt: string; className?: string }) {
-  const relative = relativeDayIt(startsAt);
   return (
-    <p
-      className={cn(
-        'flex flex-wrap items-center gap-x-2.5 gap-y-1 font-utility text-xs font-semibold uppercase tracking-marquee',
-        className
-      )}
-    >
-      {relative && (
-        <span className="rounded bg-cinema-ticket px-2 py-0.5 font-bold text-cinema-on-ticket">
-          {relative}
-        </span>
-      )}
-      <span className={relative ? 'text-cinema-text-muted' : 'text-cinema-ticket-ink'}>
-        {formatDayIt(startsAt)}
-      </span>
-    </p>
+    <RelativeDayLabel
+      dayKey={romeDayKey(startsAt)}
+      dayText={formatDayIt(startsAt)}
+      initial={relativeDayIt(startsAt)}
+      className={className}
+    />
   );
 }
 
@@ -263,6 +276,8 @@ export function ShowtimesByDay({
   size = 'md',
   showVenue = false,
   perfBg,
+  linkToFilm = false,
+  calendarLinks = false,
   className,
 }: {
   film: PublicFilm;
@@ -271,6 +286,8 @@ export function ShowtimesByDay({
   size?: 'md' | 'lg';
   showVenue?: boolean;
   perfBg?: string;
+  linkToFilm?: boolean;
+  calendarLinks?: boolean;
   className?: string;
 }) {
   // La <PriceLegend> accanto riassume tutte le proiezioni, non il singolo giorno.
@@ -293,6 +310,8 @@ export function ShowtimesByDay({
             showVenue={showVenue}
             perfBg={perfBg}
             legendOf={all}
+            linkToFilm={linkToFilm}
+            calendarLinks={calendarLinks}
             withDayInLabel
             ariaLabel={`Orari di ${film.title} — ${formatDayIt(ofDay[0].startsAt)}`}
             className="mt-2.5"

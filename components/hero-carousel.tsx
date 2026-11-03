@@ -44,11 +44,14 @@ export function HeroCarousel({ slides, durations }: HeroCarouselProps) {
   useEffect(() => {
     if (!emblaApi) return;
     const sync = () => setSelected(emblaApi.selectedScrollSnap());
-    const syncPlaying = () => setPlaying(autoplay.isPlaying());
+    // Niente `autoplay.isPlaying()` qui: Embla manda l'evento PRIMA di cambiare
+    // stato, e il bottone restava su «Riprendi» a carosello in movimento.
+    const onPlay = () => setPlaying(true);
+    const onStop = () => setPlaying(false);
     sync();
-    emblaApi.on('select', sync).on('autoplay:play', syncPlaying).on('autoplay:stop', syncPlaying);
+    emblaApi.on('select', sync).on('autoplay:play', onPlay).on('autoplay:stop', onStop);
     return () => {
-      emblaApi.off('select', sync).off('autoplay:play', syncPlaying).off('autoplay:stop', syncPlaying);
+      emblaApi.off('select', sync).off('autoplay:play', onPlay).off('autoplay:stop', onStop);
     };
   }, [emblaApi, autoplay]);
 
@@ -94,44 +97,49 @@ export function HeroCarousel({ slides, durations }: HeroCarouselProps) {
         </div>
       </div>
 
+      {/* Sul telefono i comandi stanno sotto la slide, su una riga loro: a misura
+          di dito non ci stanno più accanto a «Scheda del film», e sugli schermi
+          stretti gli finivano sopra. */}
       {slides.length > 1 && (
-        <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1 rounded-full border border-white/10 bg-black/65 px-1.5 py-1.5 backdrop-blur-sm">
-          <button
-            type="button"
-            onClick={() => emblaApi?.scrollPrev()}
-            aria-label="Film precedente"
-            className="flex h-8 w-8 items-center justify-center rounded-full text-white transition-colors hover:bg-white/15"
-          >
-            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
-          </button>
-          <button
-            type="button"
-            onClick={toggle}
-            aria-label={
-              playing ? 'Metti in pausa lo scorrimento automatico' : 'Riprendi lo scorrimento automatico'
-            }
-            className="flex h-8 w-8 items-center justify-center rounded-full text-white transition-colors hover:bg-white/15"
-          >
-            {playing ? (
-              <Pause className="h-4 w-4" aria-hidden="true" />
-            ) : (
-              <Play className="h-4 w-4" aria-hidden="true" />
-            )}
-          </button>
-          <button
-            type="button"
-            onClick={() => emblaApi?.scrollNext()}
-            aria-label="Film successivo"
-            className="flex h-8 w-8 items-center justify-center rounded-full text-white transition-colors hover:bg-white/15"
-          >
-            <ChevronRight className="h-4 w-4" aria-hidden="true" />
-          </button>
-          <span
-            aria-hidden="true"
-            className="px-1.5 font-utility text-xs font-semibold tabular-nums text-white"
-          >
-            {selected + 1}/{slides.length}
-          </span>
+        <div className="flex justify-end px-4 pb-3 sm:absolute sm:bottom-4 sm:right-4 sm:z-10 sm:p-0">
+          <div className="flex items-center gap-1 rounded-full border border-white/10 bg-black/65 px-1.5 py-1 backdrop-blur-sm sm:py-1.5">
+            <button
+              type="button"
+              onClick={() => emblaApi?.scrollPrev()}
+              aria-label="Film precedente"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-white transition-colors hover:bg-white/15 sm:h-8 sm:w-8"
+            >
+              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              onClick={toggle}
+              aria-label={
+                playing ? 'Metti in pausa lo scorrimento automatico' : 'Riprendi lo scorrimento automatico'
+              }
+              className="flex h-11 w-11 items-center justify-center rounded-full text-white transition-colors hover:bg-white/15 sm:h-8 sm:w-8"
+            >
+              {playing ? (
+                <Pause className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                <Play className="h-4 w-4" aria-hidden="true" />
+              )}
+            </button>
+            <button
+              type="button"
+              onClick={() => emblaApi?.scrollNext()}
+              aria-label="Film successivo"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-white transition-colors hover:bg-white/15 sm:h-8 sm:w-8"
+            >
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
+            </button>
+            <span
+              aria-hidden="true"
+              className="px-1.5 font-utility text-xs font-semibold tabular-nums text-white"
+            >
+              {selected + 1}/{slides.length}
+            </span>
+          </div>
         </div>
       )}
     </section>
