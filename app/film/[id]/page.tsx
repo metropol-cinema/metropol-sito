@@ -1,4 +1,4 @@
-import { ChevronDown, Clapperboard } from 'lucide-react';
+import { ArrowLeft, ChevronDown, Clapperboard } from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -209,7 +209,18 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
           <div className="absolute inset-0 bg-gradient-to-t from-cinema-bg via-cinema-bg/75 to-cinema-bg/25" />
         </div>
 
-        <div className="container flex flex-col gap-6 py-12 sm:flex-row sm:items-end sm:gap-9 sm:py-16">
+        {/* Si arriva qui quasi sempre dalla home: il marchio in testata ci riporta,
+            ma non lo dice. */}
+        <nav aria-label="Torna indietro" className="container pt-2 sm:pt-4">
+          <Link
+            href="/"
+            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-cinema-text transition-colors hover:text-cinema-ticket-ink"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Torna alla home
+          </Link>
+        </nav>
+
+        <div className="container flex flex-col gap-6 pb-12 pt-4 sm:flex-row sm:items-end sm:gap-9 sm:pb-16 sm:pt-6">
           <div className="w-36 shrink-0 self-center overflow-hidden rounded-xl border border-cinema-ticket-ink/25 shadow-2xl shadow-black/70 sm:w-56 sm:self-auto">
             {poster ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -357,6 +368,16 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
           </div>
         </section>
       )}
+
+      {/* Anche in fondo: la pagina è lunga, e chi ha finito di leggerla è qui. */}
+      <p className="container pb-12">
+        <Link
+          href="/"
+          className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-cinema-border-strong px-4 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Torna alla home
+        </Link>
+      </p>
     </main>
   );
 }
