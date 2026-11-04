@@ -1,6 +1,7 @@
 /**
- * Il CineCompleanno: il pacchetto di biglietti a prezzo scontato per festeggiare
- * un compleanno al cinema con uno dei film per bambini del fine settimana.
+ * Il CineCompleanno: per festeggiare un compleanno al cinema con uno dei film per
+ * bambini del fine settimana. Il festeggiato entra gratis, e c'è un pacchetto di
+ * biglietti a prezzo scontato.
  *
  * Le condizioni e la regola che riconosce quei film stanno qui, in un posto solo:
  * le usano la pagina e il banner nei film. Si importa anche dal browser, quindi
