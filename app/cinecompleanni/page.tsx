@@ -1,4 +1,4 @@
-import { ArrowDown, CalendarCheck, Clapperboard, Mail, MessageSquareHeart, Ticket } from 'lucide-react';
+import { ArrowDown, CalendarCheck, Clapperboard, Gift, Mail, Ticket } from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,7 +26,7 @@ const MINIMO = CINECOMPLEANNO.bigliettiMinimi;
 
 export const metadata: Metadata = {
   title: 'CineCompleanni',
-  description: `Festeggia il compleanno al Cinema Metropol di Villafranca: almeno ${MINIMO} biglietti a ${PREZZO} l'uno per un film per bambini e un messaggio personalizzato prima del film.`,
+  description: `Il compleanno al Cinema Metropol di Villafranca: il festeggiato entra gratis, almeno ${MINIMO} biglietti a ${PREZZO} l'uno e un messaggio personalizzato prima del film.`,
 };
 
 const PASSI = [
@@ -51,10 +51,10 @@ const PASSI = [
     )}.`,
   },
   {
-    Icona: MessageSquareHeart,
+    Icona: Gift,
     colore: '#EC4899',
-    titolo: 'Il messaggio per il festeggiato',
-    testo: "Prima del film c'è un messaggio personalizzato, tutto per chi compie gli anni.",
+    titolo: 'Il festeggiato entra gratis',
+    testo: "E prima del film c'è un messaggio personalizzato, tutto per chi compie gli anni.",
   },
 ];
 
@@ -168,12 +168,17 @@ export default async function CineCompleanniPage() {
                 className="w-full drop-shadow-[0_0.5rem_1.5rem_rgba(0,0,0,0.5)]"
               />
             </h1>
-            <p className="nastro-festa mt-4 text-sm sm:text-base">Carnet di biglietti scontati!</p>
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-2.5">
+              <p className="nastro-festa text-sm sm:text-base">Carnet di biglietti scontati!</p>
+              <p className="inline-block rotate-1 rounded-md bg-cinema-ticket px-4 py-2 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket sm:text-base">
+                Il festeggiato entra gratis!
+              </p>
+            </div>
             <p className="mt-7 font-display text-2xl font-black leading-tight text-cinema-text sm:text-4xl">
               Quest&apos;anno il compleanno si festeggia al cinema!
             </p>
             <p className="mt-4 text-base leading-relaxed text-cinema-text-muted sm:text-lg">
-              {`Porta gli amici a vedere il film del fine settimana: un carnet da almeno ${MINIMO} biglietti a ${PREZZO} l'uno e, prima del film, un messaggio personalizzato per chi compie gli anni.`}
+              {`Porta gli amici a vedere il film del fine settimana: il festeggiato entra gratis, c'è un carnet da almeno ${MINIMO} biglietti a ${PREZZO} l'uno e, prima del film, un messaggio personalizzato per chi compie gli anni.`}
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <a
