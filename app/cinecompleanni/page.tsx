@@ -193,6 +193,8 @@ export default async function CineCompleanniPage() {
             </div>
           </div>
 
+          {/* `eager`: stanno nella fascia d'apertura, e sono metà della promozione.
+              Col caricamento pigro comparivano solo dopo aver mosso la pagina. */}
           <div
             className="pointer-events-none mt-6 flex items-end justify-center gap-2 xl:absolute xl:inset-x-0 xl:bottom-0 xl:mt-0 xl:justify-between"
             aria-hidden="true"
@@ -203,6 +205,7 @@ export default async function CineCompleanniPage() {
               width={758}
               height={580}
               sizes="(min-width: 1280px) 20rem, 48vw"
+              loading="eager"
               className="w-[52%] max-w-xs animate-dondolio xl:w-[20rem] xl:max-w-none"
             />
             <Image
@@ -211,6 +214,7 @@ export default async function CineCompleanniPage() {
               width={654}
               height={567}
               sizes="(min-width: 1280px) 18rem, 44vw"
+              loading="eager"
               className="w-[44%] max-w-[17rem] animate-dondolio [animation-delay:-2.5s] xl:w-[18rem] xl:max-w-none"
             />
           </div>
