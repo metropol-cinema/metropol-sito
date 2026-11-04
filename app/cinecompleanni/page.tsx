@@ -1,4 +1,12 @@
-import { ArrowDown, CalendarCheck, Clapperboard, Gift, Mail, Ticket } from 'lucide-react';
+import {
+  ArrowDown,
+  CalendarCheck,
+  Clapperboard,
+  Gift,
+  Mail,
+  MessageSquareHeart,
+  Ticket,
+} from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,7 +34,7 @@ const MINIMO = CINECOMPLEANNO.bigliettiMinimi;
 
 export const metadata: Metadata = {
   title: 'CineCompleanni',
-  description: `Il compleanno al Cinema Metropol di Villafranca: il festeggiato entra gratis, almeno ${MINIMO} biglietti a ${PREZZO} l'uno e un messaggio personalizzato prima del film.`,
+  description: `Il compleanno al Cinema Metropol di Villafranca: con almeno ${MINIMO} biglietti a ${PREZZO} l'uno il festeggiato entra gratis e c'è un messaggio personalizzato sullo schermo.`,
 };
 
 const PASSI = [
@@ -46,7 +54,7 @@ const PASSI = [
     Icona: Ticket,
     colore: '#F97316',
     titolo: `${PREZZO} a biglietto`,
-    testo: `Un carnet da almeno ${MINIMO} biglietti a ${PREZZO} l'uno: con ${MINIMO} biglietti sono ${euroBreve(
+    testo: `Un carnet da almeno ${MINIMO} biglietti paganti a ${PREZZO} l'uno: con ${MINIMO} biglietti sono ${euroBreve(
       MINIMO * CINECOMPLEANNO.prezzoBiglietto
     )}.`,
   },
@@ -54,15 +62,21 @@ const PASSI = [
     Icona: Gift,
     colore: '#EC4899',
     titolo: 'Il festeggiato entra gratis',
-    testo: "E prima del film c'è un messaggio personalizzato, tutto per chi compie gli anni.",
+    testo: `Non rientra nei ${MINIMO} biglietti paganti: chi compie gli anni è in più, e non paga.`,
+  },
+  {
+    Icona: MessageSquareHeart,
+    colore: '#60A5FA',
+    titolo: 'Il messaggio sullo schermo',
+    testo: 'Prima del film, sullo schermo appare un messaggio personalizzato per chi compie gli anni.',
   },
 ];
 
 const DA_SCRIVERE = [
   'il film e il giorno che avete scelto',
-  `quanti biglietti vi servono (almeno ${MINIMO})`,
+  `quanti biglietti paganti vi servono (almeno ${MINIMO}, il festeggiato è in più)`,
   'il nome di chi compie gli anni',
-  'il messaggio personalizzato',
+  'il messaggio da mostrare sullo schermo',
   'un numero di telefono per ricontattarvi',
 ];
 
@@ -178,7 +192,7 @@ export default async function CineCompleanniPage() {
               Quest&apos;anno il compleanno si festeggia al cinema!
             </p>
             <p className="mt-4 text-base leading-relaxed text-cinema-text-muted sm:text-lg">
-              {`Porta gli amici a vedere il film del fine settimana: il festeggiato entra gratis, c'è un carnet da almeno ${MINIMO} biglietti a ${PREZZO} l'uno e, prima del film, un messaggio personalizzato per chi compie gli anni.`}
+              {`Porta gli amici a vedere il film del fine settimana: con almeno ${MINIMO} biglietti a ${PREZZO} l'uno il festeggiato entra gratis e, prima del film, appare sullo schermo un messaggio personalizzato per chi compie gli anni.`}
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <a
@@ -230,11 +244,11 @@ export default async function CineCompleanniPage() {
 
       <div className="container space-y-16 py-14">
         <section aria-labelledby="come-funziona">
-          <p className="eyebrow">In quattro passi</p>
+          <p className="eyebrow">In breve</p>
           <h2 id="come-funziona" className="mt-2 text-3xl font-black leading-none text-cinema-text sm:text-4xl">
             Come funziona
           </h2>
-          <ol className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
             {PASSI.map(({ Icona, colore, titolo, testo }) => (
               <li
                 key={titolo}
@@ -251,7 +265,7 @@ export default async function CineCompleanniPage() {
                 <p className="mt-2 text-sm leading-relaxed text-cinema-text-muted">{testo}</p>
               </li>
             ))}
-          </ol>
+          </ul>
         </section>
 
         {/* `scroll-mt`: ci si arriva dal bottone in alto, e la testata fissa

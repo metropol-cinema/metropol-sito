@@ -78,9 +78,9 @@ export function BannerCineCompleanno({
             Festeggia il compleanno con questo film!
           </h2>
           <p className="mt-2 max-w-2xl text-base leading-relaxed text-cinema-text-muted">
-            <strong className="font-semibold text-cinema-text">Il festeggiato entra gratis!</strong>{' '}
-            Con il CineCompleanno hai {offerta(showtimes)} e, prima del film, un messaggio
-            personalizzato per chi compie gli anni.
+            Con {offerta(showtimes)},{' '}
+            <strong className="font-semibold text-cinema-text">il festeggiato entra gratis</strong> e,
+            prima del film, appare sullo schermo un messaggio personalizzato per chi compie gli anni.
           </p>
           <ScadenzaCineCompleanno
             scadenze={scadenze}
@@ -150,7 +150,8 @@ export function InvitoCineCompleanno({
       />
       <span className="min-w-0 flex-1 text-sm leading-snug text-cinema-text-muted">
         <strong className="font-semibold text-cinema-text">Festeggia qui il compleanno:</strong>{' '}
-        il festeggiato entra gratis e con il CineCompleanno hai {offerta(showtimes)}.
+        con {offerta(showtimes)}, il festeggiato entra gratis e c&apos;è un messaggio personalizzato
+        sullo schermo.
       </span>
       <ArrowRight className="h-4 w-4 shrink-0 text-cinema-ticket-ink" aria-hidden="true" />
     </Link>

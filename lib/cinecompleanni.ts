@@ -1,7 +1,8 @@
 /**
  * Il CineCompleanno: per festeggiare un compleanno al cinema con uno dei film per
- * bambini del fine settimana. Il festeggiato entra gratis, e c'è un pacchetto di
- * biglietti a prezzo scontato.
+ * bambini del fine settimana. Con almeno 10 biglietti paganti a prezzo scontato il
+ * festeggiato entra gratis, in più, e prima del film appare sullo schermo un
+ * messaggio personalizzato.
  *
  * Le condizioni e la regola che riconosce quei film stanno qui, in un posto solo:
  * le usano la pagina e il banner nei film. Si importa anche dal browser, quindi
@@ -140,9 +141,9 @@ export function mailtoPrenotazione(filmTitle?: string): string {
     'vorrei prenotare un CineCompleanno.',
     '',
     `Film e giorno: ${filmTitle ?? ''}`,
-    `Numero di biglietti (almeno ${CINECOMPLEANNO.bigliettiMinimi}): `,
+    `Numero di biglietti paganti (almeno ${CINECOMPLEANNO.bigliettiMinimi}, il festeggiato è in più): `,
     'Nome di chi compie gli anni: ',
-    'Messaggio personalizzato: ',
+    'Messaggio da mostrare sullo schermo: ',
     'Un numero di telefono per ricontattarmi: ',
     '',
     'Grazie!',
