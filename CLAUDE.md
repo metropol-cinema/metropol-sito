@@ -210,7 +210,7 @@ la messa in produzione — è una scelta da fare a mente fredda.
 
 `/` (hero + settimana) · `/programmazione` (per giorno) ·
 `/film/[id]` · `/prossimamente` (solo film marcati, vedi sotto) · `/venerdi` (rassegna del venerdì, filtro
-automatico) · `/associazione` (hub con card) e sottopagine `/chi-siamo`,
+automatico) · `/cinecompleanni` (promozione, vedi sotto) · `/associazione` (hub con card) e sottopagine `/chi-siamo`,
 `/storia`, `/come-associarsi` (modulo PDF in `public/docs/`),
 `/diventa-volontario`, `/statuto` (testo in `content.ts` accanto alla pagina) ·
 `/corsi` e `/corsi/[slug]` (corsi di cinema, vedi sotto) ·
@@ -277,6 +277,15 @@ sottofondo Next toglie il segnale, e fa bene: lì non sta aspettando nessuno.
     che il gestionale legge dal database;
   - `/corsi/grazie` è il ritorno da Stripe e **non interroga Stripe**:
     l'iscrizione la registra il webhook, l'unica fonte attendibile.
+- **CineCompleanni** (`lib/cinecompleanni.ts`, condizioni e regole in un posto
+  solo): il film per bambini non è un dato del gestionale ma **l'orario**, sabato
+  o domenica fra le 14:00 e le 16:00, estremi compresi. Chi rientra riceve da solo
+  `<BannerCineCompleanno>` nella scheda e `<InvitoCineCompleanno>` nelle righe di
+  home e programmazione. La scadenza è il giovedì di quel fine settimana:
+  `<ScadenzaCineCompleanno>` la ricalcola nel browser, perché la copia in cache
+  può essere di ieri. Il sito non ha database, quindi si prenota per email
+  (`mailtoPrenotazione`). Titolo e mascotte in `public/cinecompleanni/` sono
+  scontornati dalla locandina dell'associazione.
 - Date/ore SEMPRE in `Europe/Rome` (l'API è in UTC) — usa gli helper del client.
 - `prices` è **per proiezione**: niente assunzioni di prezzo unico per film.
 - **Marchio**: `public/loghi/metropol-marchio-bianco.png` (versione

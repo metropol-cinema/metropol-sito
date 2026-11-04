@@ -6,6 +6,7 @@ import { notFound } from 'next/navigation';
 
 import { AccessibleBadge } from '@/components/accessible-badge';
 import { AgeBadge } from '@/components/age-badge';
+import { BannerCineCompleanno } from '@/components/banner-cinecompleanno';
 import { Gallery } from '@/components/gallery';
 import { MetaLine } from '@/components/meta-line';
 import { ShareFilm } from '@/components/share-film';
@@ -328,6 +329,10 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
             className="space-y-8"
           />
         )}
+
+        {/* Sotto gli orari: chi è arrivato qui ha appena visto il giorno che gli
+            va bene, ed è il momento di dirgli che ci si può festeggiare. */}
+        <BannerCineCompleanno showtimes={film.showtimes} className="mt-10" />
       </section>
 
       {capoversi.length > 0 && (

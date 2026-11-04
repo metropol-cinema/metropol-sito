@@ -2,6 +2,7 @@ import { Clapperboard } from 'lucide-react';
 import Link from 'next/link';
 
 import { AccessibleBadge } from '@/components/accessible-badge';
+import { InvitoCineCompleanno } from '@/components/banner-cinecompleanno';
 import { MetaLine } from '@/components/meta-line';
 import { DayLabel, PriceLegend, Showtimes } from '@/components/showtimes';
 import type { PublicFilm, PublicShowtime } from '@/lib/programmazione-client';
@@ -125,6 +126,7 @@ export function DaySchedule({ dayKey, entries }: { dayKey: string; entries: DayE
                 perfBg="rgb(var(--c-surface))"
               />
               <PriceLegend showtimes={showtimes} className="mt-2.5" />
+              <InvitoCineCompleanno showtimes={showtimes} className="mt-4" />
             </div>
           </article>
         ))}

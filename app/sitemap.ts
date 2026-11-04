@@ -13,6 +13,7 @@ const PAGINE = [
   '/programmazione',
   '/prossimamente',
   '/venerdi',
+  '/cinecompleanni',
   '/info',
   '/sala',
   '/accessibilita',
