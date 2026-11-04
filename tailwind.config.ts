@@ -76,10 +76,17 @@ const config: Config = {
           '0%': { opacity: '0', transform: 'translateY(12px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        // Le mascotte del CineCompleanno. Si ferma con le altre animazioni,
+        // dalle preferenze di sistema o dalla barra di accessibilità.
+        dondolio: {
+          '0%, 100%': { transform: 'translateY(0) rotate(-1.5deg)' },
+          '50%': { transform: 'translateY(-0.5rem) rotate(1.5deg)' },
+        },
       },
       animation: {
         'reel-in': 'reelIn 700ms cubic-bezier(0.16, 1, 0.3, 1) both',
         'rise-in': 'riseIn 600ms cubic-bezier(0.16, 1, 0.3, 1) both',
+        dondolio: 'dondolio 5s ease-in-out infinite',
       },
     },
   },

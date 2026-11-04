@@ -97,6 +97,7 @@ export const NAV_LINKS = [
  * deve passare da Info e prezzi per trovarle.
  */
 export const FOOTER_CINEMA_LINKS = [
+  { href: '/cinecompleanni', label: 'CineCompleanni' },
   { href: '/sala', label: 'La sala' },
   { href: '/accessibilita', label: 'Accessibilità' },
 ] as const;

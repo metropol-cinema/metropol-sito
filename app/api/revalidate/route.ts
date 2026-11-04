@@ -31,6 +31,7 @@ const PATHS: Record<string, ReadonlyArray<[string, 'page' | 'layout']>> = {
     ['/programmazione', 'page'],
     ['/prossimamente', 'page'],
     ['/venerdi', 'page'],
+    ['/cinecompleanni', 'page'],
     // Rotta dinamica: così cadono tutte le schede film insieme.
     ['/film/[id]', 'page'],
   ],

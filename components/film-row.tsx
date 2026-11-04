@@ -3,6 +3,7 @@ import Link from 'next/link';
 
 import { AccessibleBadge } from '@/components/accessible-badge';
 import { AgeBadge } from '@/components/age-badge';
+import { InvitoCineCompleanno } from '@/components/banner-cinecompleanno';
 import { MetaLine } from '@/components/meta-line';
 import { PriceLegend, ShowtimesByDay } from '@/components/showtimes';
 import { ageRatingFor } from '@/lib/age-rating';
@@ -83,6 +84,7 @@ export async function FilmRow({ film }: { film: PublicFilm }) {
         <div className="col-span-2 mt-4 self-end sm:col-span-1 sm:mt-0 sm:pt-5">
           <ShowtimesByDay film={film} showVenue perfBg="rgb(var(--c-surface))" size="lg" linkToFilm />
           <PriceLegend showtimes={film.showtimes} className="mt-2.5" />
+          <InvitoCineCompleanno showtimes={film.showtimes} className="mt-4" />
           <Link
             href={`/film/${film.id}`}
             className="tap-area mt-4 inline-flex items-center gap-1.5 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:text-cinema-ticket-ink"
