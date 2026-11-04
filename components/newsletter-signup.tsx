@@ -250,7 +250,8 @@ export function NewsletterSignup() {
           placeholder="Nome (facoltativo)"
           aria-label="Nome, facoltativo"
           autoComplete="given-name"
-          className="min-w-0 flex-1 rounded-md border border-cinema-border bg-cinema-surface px-3 py-2 text-sm text-cinema-text placeholder:text-cinema-text-subtle focus:border-cinema-ticket-ink focus:outline-none focus:ring-1 focus:ring-cinema-ticket-ink"
+          // text-base sul telefono: sotto i 16px Safari ingrandisce la pagina al tocco.
+          className="min-w-0 flex-1 rounded-md border border-cinema-border bg-cinema-surface px-3 py-2.5 text-base text-cinema-text sm:py-2 sm:text-sm placeholder:text-cinema-text-subtle focus:border-cinema-ticket-ink focus:outline-none focus:ring-1 focus:ring-cinema-ticket-ink"
         />
         <input
           id="newsletter-email"
@@ -260,12 +261,12 @@ export function NewsletterSignup() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="la-tua@email.it"
           autoComplete="email"
-          className="min-w-0 flex-[2] rounded-md border border-cinema-border bg-cinema-surface px-3 py-2 text-sm text-cinema-text placeholder:text-cinema-text-subtle focus:border-cinema-ticket-ink focus:outline-none focus:ring-1 focus:ring-cinema-ticket-ink"
+          className="min-w-0 flex-[2] rounded-md border border-cinema-border bg-cinema-surface px-3 py-2.5 text-base text-cinema-text sm:py-2 sm:text-sm placeholder:text-cinema-text-subtle focus:border-cinema-ticket-ink focus:outline-none focus:ring-1 focus:ring-cinema-ticket-ink"
         />
         <button
           type="submit"
           disabled={stato === 'invio'}
-          className="shrink-0 rounded-md bg-cinema-ticket-ink px-4 py-2 text-sm font-medium text-cinema-bg transition-opacity hover:opacity-90 disabled:opacity-60"
+          className="min-h-11 shrink-0 rounded-md bg-cinema-ticket-ink px-4 py-2 text-sm font-medium sm:min-h-0 text-cinema-bg transition-opacity hover:opacity-90 disabled:opacity-60"
         >
           {stato === 'invio' ? 'Attendi…' : 'Iscriviti'}
         </button>

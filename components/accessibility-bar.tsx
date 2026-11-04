@@ -64,8 +64,10 @@ const ICONE_PROFILO: Record<Profilo, React.ReactNode> = {
 };
 
 /**
- * La barra di accessibilità: un bottone in basso a sinistra che apre il
- * pannello delle preferenze di lettura.
+ * La barra di accessibilità: un bottone in basso che apre il pannello delle
+ * preferenze di lettura. Da computer sta a sinistra, nel margine; sul telefono a
+ * destra, perché il margine non c'è e a sinistra coprirebbe l'inizio delle righe,
+ * date e orari compresi.
  *
  * È roba nostra, non un widget di terzi: nessuno script esterno, nessuna
  * richiesta in uscita, tutto in italiano e con la grafica del sito. E soprattutto
@@ -141,7 +143,7 @@ export function AccessibilityBar() {
         aria-expanded={aperto}
         aria-controls={pannelloId}
         aria-label={aperto ? 'Chiudi gli strumenti di lettura' : 'Strumenti di lettura e accessibilità'}
-        className="fixed bottom-4 left-4 z-50 flex h-14 w-14 items-center justify-center rounded-full border-2 border-cinema-on-ticket/15 bg-cinema-ticket text-cinema-on-ticket shadow-xl shadow-black/40 transition-colors hover:bg-cinema-ticket-hover"
+        className="fixed bottom-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full border-2 border-cinema-on-ticket/15 bg-cinema-ticket text-cinema-on-ticket shadow-xl shadow-black/40 transition-colors hover:bg-cinema-ticket-hover sm:left-4 sm:right-auto sm:h-14 sm:w-14"
       >
         {/* Figura umana, non carrozzina: di qui si cambiano colori, testo e
             animazioni — non si entra in sala. La carrozzina sta sulle pagine
@@ -156,7 +158,9 @@ export function AccessibilityBar() {
           role="dialog"
           aria-label="Strumenti di lettura e accessibilità"
           tabIndex={-1}
-          className="fixed bottom-[5.5rem] left-4 z-50 max-h-[calc(100vh-7.5rem)] w-[min(21rem,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-cinema-border-strong bg-cinema-surface p-5 shadow-2xl shadow-black/60 outline-none"
+          // z-[55]: sul telefono «Installa» e «Avvisi» stanno sopra il bottone,
+          // dentro quest'area. Il pannello aperto passa davanti, non sotto.
+          className="fixed bottom-[5.5rem] right-4 z-[55] max-h-[calc(100vh-7.5rem)] sm:left-4 sm:right-auto w-[min(21rem,calc(100vw-2rem))] overflow-y-auto rounded-2xl border border-cinema-border-strong bg-cinema-surface p-5 shadow-2xl shadow-black/60 outline-none"
         >
           <div className="flex items-start justify-between gap-4">
             <h2 className="text-xl font-black leading-tight text-cinema-text">Come vuoi leggere</h2>

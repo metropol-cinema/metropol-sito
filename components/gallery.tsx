@@ -3,9 +3,12 @@
 import useEmblaCarousel from 'embla-carousel-react';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import Image from 'next/image';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type TouchEvent } from 'react';
 
 import type { TmdbImage } from '@/lib/tmdb';
+
+/** Sotto questa corsa è un tocco impreciso, non un gesto per sfogliare. */
+const SWIPE_MIN_PX = 40;
 
 /**
  * Fotogallery del film: una striscia di fotogrammi che scorre (trascinabile su
@@ -65,6 +68,26 @@ export function Gallery({ images, title }: { images: TmdbImage[]; title: string 
     return () => dialog.removeEventListener('keydown', onKey);
   }, [step]);
 
+  // Sul telefono si sfoglia col dito. Solo con un dito e solo se il gesto è
+  // soprattutto orizzontale: due dita sono uno zoom, in verticale non è sfogliare.
+  const swipeStart = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (e: TouchEvent<HTMLDivElement>) => {
+    swipeStart.current =
+      e.touches.length === 1 ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : null;
+  };
+  const onTouchMove = (e: TouchEvent<HTMLDivElement>) => {
+    if (e.touches.length > 1) swipeStart.current = null;
+  };
+  const onTouchEnd = (e: TouchEvent<HTMLDivElement>) => {
+    const start = swipeStart.current;
+    swipeStart.current = null;
+    if (!start) return;
+    const dx = e.changedTouches[0].clientX - start.x;
+    const dy = e.changedTouches[0].clientY - start.y;
+    if (Math.abs(dx) < SWIPE_MIN_PX || Math.abs(dx) < Math.abs(dy)) return;
+    step(dx < 0 ? 1 : -1);
+  };
+
   const current = openAt !== null ? images[openAt] : null;
 
   return (
@@ -78,7 +101,7 @@ export function Gallery({ images, title }: { images: TmdbImage[]; title: string 
           onClick={() => emblaApi?.scrollPrev()}
           disabled={!scrollable.prev}
           aria-label="Scorri le foto indietro"
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink disabled:opacity-30 disabled:hover:border-cinema-border-strong disabled:hover:text-cinema-text-muted"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink disabled:opacity-30 disabled:hover:border-cinema-border-strong disabled:hover:text-cinema-text-muted"
         >
           <ChevronLeft className="h-4 w-4" aria-hidden="true" />
         </button>
@@ -87,7 +110,7 @@ export function Gallery({ images, title }: { images: TmdbImage[]; title: string 
           onClick={() => emblaApi?.scrollNext()}
           disabled={!scrollable.next}
           aria-label="Scorri le foto avanti"
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink disabled:opacity-30 disabled:hover:border-cinema-border-strong disabled:hover:text-cinema-text-muted"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink disabled:opacity-30 disabled:hover:border-cinema-border-strong disabled:hover:text-cinema-text-muted"
         >
           <ChevronRight className="h-4 w-4" aria-hidden="true" />
         </button>
@@ -135,13 +158,18 @@ export function Gallery({ images, title }: { images: TmdbImage[]; title: string 
                 type="button"
                 onClick={close}
                 aria-label="Chiudi la foto"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
+                className="flex h-11 w-11 items-center justify-center rounded-full border border-cinema-border-strong text-cinema-text transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
               >
                 <X className="h-5 w-5" aria-hidden="true" />
               </button>
             </div>
 
-            <div className="relative min-h-0 flex-1">
+            <div
+              className="relative min-h-0 flex-1"
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
+            >
               <Image
                 key={current.url}
                 src={current.url}

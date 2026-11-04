@@ -38,11 +38,19 @@ export async function SiteHeader() {
               {link.label}
             </Link>
           ))}
+          {/* Da `lg`: sui tablet la fila è già piena e le voci andrebbero a capo.
+              Lì resta il piè di pagina. */}
+          <a
+            href={SITE.sociAreaUrl}
+            className="hidden rounded-md border-b-2 border-transparent px-3 py-2 lg:block font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-muted transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
+          >
+            Area soci
+          </a>
         </nav>
 
         {/* Nav mobile: tendina nativa con Esc, click fuori e chiusura al
             cambio pagina (components/mobile-menu.tsx). */}
-        <MobileMenu links={navLinks} />
+        <MobileMenu links={navLinks} sociAreaUrl={SITE.sociAreaUrl} />
       </div>
     </header>
   );

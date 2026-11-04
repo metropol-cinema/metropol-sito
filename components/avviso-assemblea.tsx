@@ -27,13 +27,13 @@ export function AvvisoAssemblea({ variante = 'fascia' }: { variante?: 'fascia' |
       aria-labelledby={`avviso-assemblea-${variante}`}
       className={
         fascia
-          ? 'border-b border-cinema-border bg-cinema-surface'
+          ? 'relative border-b border-cinema-border bg-cinema-surface'
           : 'mb-10 rounded-2xl border border-cinema-ticket-ink/50 bg-cinema-surface'
       }
     >
       <div
-        className={`flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-8 ${
-          fascia ? 'container py-4' : 'p-6 sm:p-7'
+        className={`flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-8 ${
+          fascia ? 'container gap-1 py-3 sm:py-4' : 'gap-4 p-6 sm:p-7'
         }`}
       >
         <div className="flex items-start gap-3">
@@ -48,7 +48,13 @@ export function AvvisoAssemblea({ variante = 'fascia' }: { variante?: 'fascia' |
         </div>
         <Link
           href={ASSEMBLEA.href}
-          className="inline-flex shrink-0 items-center gap-2 self-start rounded-lg bg-cinema-ticket px-4 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover sm:self-auto"
+          // In home, sul telefono, tutta la fascia è il link e il bottone pieno
+          // non serve: toglierebbe all'hero lo spazio che l'avviso già occupa.
+          className={
+            fascia
+              ? 'inline-flex shrink-0 items-center gap-2 self-start pl-8 font-utility text-xs font-bold uppercase tracking-wider text-cinema-ticket-ink after:absolute after:inset-0 sm:self-auto sm:rounded-lg sm:bg-cinema-ticket sm:px-4 sm:py-2.5 sm:text-sm sm:text-cinema-on-ticket sm:transition-colors sm:after:hidden sm:hover:bg-cinema-ticket-hover'
+              : 'inline-flex shrink-0 items-center gap-2 self-start rounded-lg bg-cinema-ticket px-4 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover sm:self-auto'
+          }
         >
           Leggi la convocazione
           <ArrowRight className="h-4 w-4" aria-hidden="true" />

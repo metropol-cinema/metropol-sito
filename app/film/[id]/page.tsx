@@ -1,4 +1,4 @@
-import { ChevronDown, Clapperboard } from 'lucide-react';
+import { ArrowLeft, ChevronDown, Clapperboard } from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,6 +8,7 @@ import { AccessibleBadge } from '@/components/accessible-badge';
 import { AgeBadge } from '@/components/age-badge';
 import { Gallery } from '@/components/gallery';
 import { MetaLine } from '@/components/meta-line';
+import { ShareFilm } from '@/components/share-film';
 import { PriceLegend, ShowtimesByDay, groupShowtimesByDay } from '@/components/showtimes';
 import { TicketsButton } from '@/components/tickets-button';
 import { Trailer } from '@/components/trailer';
@@ -208,7 +209,18 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
           <div className="absolute inset-0 bg-gradient-to-t from-cinema-bg via-cinema-bg/75 to-cinema-bg/25" />
         </div>
 
-        <div className="container flex flex-col gap-6 py-12 sm:flex-row sm:items-end sm:gap-9 sm:py-16">
+        {/* Si arriva qui quasi sempre dalla home: il marchio in testata ci riporta,
+            ma non lo dice. */}
+        <nav aria-label="Torna indietro" className="container pt-2 sm:pt-4">
+          <Link
+            href="/"
+            className="inline-flex min-h-11 items-center gap-1.5 text-sm font-medium text-cinema-text transition-colors hover:text-cinema-ticket-ink"
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Torna alla home
+          </Link>
+        </nav>
+
+        <div className="container flex flex-col gap-6 pb-12 pt-4 sm:flex-row sm:items-end sm:gap-9 sm:pb-16 sm:pt-6">
           <div className="w-36 shrink-0 self-center overflow-hidden rounded-xl border border-cinema-ticket-ink/25 shadow-2xl shadow-black/70 sm:w-56 sm:self-auto">
             {poster ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -286,26 +298,16 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
 
             {/* L'azione principale, dove l'occhio arriva: sopra la piega, non
                 in fondo alla pagina dopo la fotogallery. */}
-            {/* L'azione principale, dove l'occhio arriva: sopra la piega, non
-                in fondo alla pagina dopo la fotogallery. */}
-            {film.ticketsUrl && (
-              <p className="mt-6">
-                <TicketsButton url={film.ticketsUrl} title={film.title} />
-              </p>
-            )}
-
-            {capoversi.length > 0 && (
-              <div className="mt-5 max-w-3xl space-y-3 text-base leading-relaxed text-cinema-text-muted">
-                {capoversi.map((c) => (
-                  <p key={c.slice(0, 40)}>{c}</p>
-                ))}
-              </div>
-            )}
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              {film.ticketsUrl && <TicketsButton url={film.ticketsUrl} title={film.title} />}
+              <ShareFilm title={film.title} />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Proiezioni */}
+      {/* Proiezioni: subito dopo la testata e prima del testo, che può essere
+          lungo. «Quando lo fanno?» è la domanda per cui si apre questa pagina. */}
       <section className="container py-12">
         <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
           <SectionHeading eyebrow="Quando si vede" title="Date e orari" />
@@ -317,9 +319,27 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
             Non ci sono proiezioni in calendario al momento.
           </p>
         ) : (
-          <ShowtimesByDay film={film} size="lg" showVenue perfBg="rgb(var(--c-bg))" className="space-y-8" />
+          <ShowtimesByDay
+            film={film}
+            size="lg"
+            showVenue
+            perfBg="rgb(var(--c-bg))"
+            calendarLinks
+            className="space-y-8"
+          />
         )}
       </section>
+
+      {capoversi.length > 0 && (
+        <section className="container pb-12">
+          <SectionHeading eyebrow="Di cosa parla" title="Il film" />
+          <div className="max-w-3xl space-y-3 text-base leading-relaxed text-cinema-text-muted">
+            {capoversi.map((c) => (
+              <p key={c.slice(0, 40)}>{c}</p>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Trailer — assente se né la dashboard né TMDB ne hanno uno */}
       {trailerId && (
@@ -348,6 +368,16 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
           </div>
         </section>
       )}
+
+      {/* Anche in fondo: la pagina è lunga, e chi ha finito di leggerla è qui. */}
+      <p className="container pb-12">
+        <Link
+          href="/"
+          className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-cinema-border-strong px-4 font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text transition-colors hover:border-cinema-ticket-ink hover:text-cinema-ticket-ink"
+        >
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Torna alla home
+        </Link>
+      </p>
     </main>
   );
 }

@@ -90,7 +90,9 @@ giorno, es. `/programmazione#2026-08-22`.
 
 ## Accessibilità: la barra e i quattro temi
 
-In basso a sinistra c'è la **barra di accessibilità** (`components/accessibility-bar.tsx`):
+In basso (a sinistra da computer; a destra sul telefono, con «Installa» e
+«Avvisi» impilati sopra, perché lì a sinistra coprirebbe l'inizio delle righe)
+c'è la **barra di accessibilità** (`components/accessibility-bar.tsx`):
 roba nostra, non un widget di terzi — nessuno script esterno, niente richieste
 in uscita, tutto in italiano. Offre quattro temi di colore, quattro dimensioni
 del testo, il carattere ad alta leggibilità, più spazio fra righe e lettere,

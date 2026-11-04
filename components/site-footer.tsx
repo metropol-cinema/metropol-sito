@@ -7,14 +7,22 @@ import { NewsletterSignup } from '@/components/newsletter-signup';
 import { visibleNavLinks } from '@/lib/nav';
 import { ASSOCIATION_LINKS, FOOTER_CINEMA_LINKS, SITE } from '@/lib/site';
 
+// A misura di dito sul telefono, compatti da computer.
+const LINK_FOOTER =
+  'flex min-h-11 items-center text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket-ink sm:inline sm:min-h-0';
+const LINK_SOCIAL =
+  'flex min-h-11 items-center gap-2 text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket-ink sm:min-h-0';
+
 export async function SiteFooter() {
   const navLinks = await visibleNavLinks();
 
   return (
     <footer className="mt-10 border-t border-cinema-border bg-cinema-surface/30">
       <div className="h-px w-full marquee-rule" aria-hidden="true" />
-      <div className="container grid gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4">
-        <div>
+      {/* Le due colonne di link stanno affiancate anche sul telefono: a misura di
+          dito, una sotto l'altra, allontanerebbero di molto la newsletter. */}
+      <div className="container grid grid-cols-2 gap-x-6 gap-y-8 py-10 lg:grid-cols-4">
+        <div className="col-span-2 lg:col-span-1">
           {/* Il marchio porta già "Associazione Culturale Metropol": è
               l'intestazione di questa colonna, non un logo in più. */}
           <h2>
@@ -46,12 +54,12 @@ export async function SiteFooter() {
 
         <nav aria-label="Mappa del sito">
           <h2 className="font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket-ink">Il cinema</h2>
-          <ul className="mt-4 space-y-2.5">
+          <ul className="mt-2 sm:mt-4 sm:space-y-2.5">
             {[...navLinks, ...FOOTER_CINEMA_LINKS].map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket-ink"
+                  className={LINK_FOOTER}
                 >
                   {link.label}
                 </Link>
@@ -62,29 +70,34 @@ export async function SiteFooter() {
 
         <nav aria-label="Sezioni dell'associazione">
           <h2 className="font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket-ink">L&apos;associazione</h2>
-          <ul className="mt-4 space-y-2.5">
+          <ul className="mt-2 sm:mt-4 sm:space-y-2.5">
             {ASSOCIATION_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket-ink"
+                  className={LINK_FOOTER}
                 >
                   {link.label}
                 </Link>
               </li>
             ))}
+            <li>
+              <a href={SITE.sociAreaUrl} className={LINK_FOOTER}>
+                Area soci
+              </a>
+            </li>
           </ul>
         </nav>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <h2 className="font-utility text-[0.68rem] font-semibold uppercase tracking-marquee text-cinema-ticket-ink">Seguici</h2>
-          <ul className="mt-4 space-y-2.5">
+          <ul className="mt-2 sm:mt-4 sm:space-y-2.5">
             <li>
               <a
                 href={SITE.social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket-ink"
+                className={LINK_SOCIAL}
               >
                 <Facebook className="h-4 w-4 text-cinema-ticket-ink" aria-hidden="true" /> Facebook<span className="sr-only"> (si apre in una nuova scheda)</span>
               </a>
@@ -94,7 +107,7 @@ export async function SiteFooter() {
                 href={SITE.social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket-ink"
+                className={LINK_SOCIAL}
               >
                 <Instagram className="h-4 w-4 text-cinema-ticket-ink" aria-hidden="true" /> Instagram<span className="sr-only"> (si apre in una nuova scheda)</span>
               </a>
@@ -104,7 +117,7 @@ export async function SiteFooter() {
                 href={SITE.social.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-sm text-cinema-text-subtle transition-colors hover:text-cinema-ticket-ink"
+                className={LINK_SOCIAL}
               >
                 <MessageCircle className="h-4 w-4 text-cinema-ticket-ink" aria-hidden="true" /> Canale WhatsApp<span className="sr-only"> (si apre in una nuova scheda)</span>
               </a>
@@ -128,7 +141,8 @@ export async function SiteFooter() {
         </div>
       </div>
 
-      <div className="border-t border-cinema-border py-5 text-center text-xs text-cinema-text-subtle">
+      {/* `pb-20`: in fondo alla pagina il bottone dell'accessibilità non copre la riga. */}
+      <div className="border-t border-cinema-border pb-20 pt-5 text-center text-xs text-cinema-text-subtle sm:py-5">
         {/* L'accessibilità è salita nel menu qui sopra, insieme alla sala: è
             una pagina che si cerca, non una riga di chiusura. Qui resta la
             privacy, che invece si cerca proprio in fondo. */}

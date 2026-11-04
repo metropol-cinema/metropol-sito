@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { DaySchedule, groupByDay } from '@/components/day-schedule';
+import { DayJump, DaySchedule, groupByDay } from '@/components/day-schedule';
 import { EmptyState, LoadError, PageHeader } from '@/components/page-header';
 import { fetchProgrammazione, isFridayRome, type PublicFilm } from '@/lib/programmazione-client';
 
@@ -49,11 +49,14 @@ export default async function VenerdiPage() {
           della rassegna.
         </EmptyState>
       ) : (
-        <div className="space-y-12">
-          {days.map(({ dayKey, entries }) => (
-            <DaySchedule key={dayKey} dayKey={dayKey} entries={entries} />
-          ))}
-        </div>
+        <>
+          <DayJump days={days} />
+          <div className="space-y-12">
+            {days.map(({ dayKey, entries }) => (
+              <DaySchedule key={dayKey} dayKey={dayKey} entries={entries} />
+            ))}
+          </div>
+        </>
       )}
     </main>
   );
