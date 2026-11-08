@@ -1,6 +1,6 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
+import { Marchio } from '@/components/marchio';
 import { MobileMenu } from '@/components/mobile-menu';
 import { visibleNavLinks } from '@/lib/nav';
 import { SITE } from '@/lib/site';
@@ -14,17 +14,9 @@ export async function SiteHeader() {
       {/* Filo "marquee" dorato: richiamo all'insegna luminosa del cinema. */}
       <div className="h-0.5 w-full marquee-rule" aria-hidden="true" />
       <div className="container flex h-[4.5rem] items-center justify-between gap-4">
-        {/* Il marchio dell'associazione, nella versione monocromatica bianca:
-            sul nero della sala è quella giusta, e porta già il nome per esteso. */}
+        {/* Il marchio ufficiale porta già il nome per esteso. */}
         <Link href="/" className="flex shrink-0 items-center">
-          <Image
-            src="/loghi/metropol-marchio-bianco.png"
-            alt={`${SITE.association} — home`}
-            width={631}
-            height={196}
-            priority
-            className="marchio h-10 w-auto sm:h-12"
-          />
+          <Marchio titolo={`${SITE.association} — home`} className="h-10 w-auto sm:h-12" />
         </Link>
 
         {/* Nav desktop */}

@@ -59,6 +59,8 @@ function testoAccessibile(elemento) {
     if (nodo.getAttribute('aria-hidden') === 'true') continue;
     // Un'icona con alt vale come testo: è il caso del marchio nella testata.
     if (tag === 'IMG') testo += ` ${nodo.getAttribute('alt') ?? ''} `;
+    // Lo stesso per un disegno in SVG con il suo nome.
+    if (nodo.getAttribute('role') === 'img') testo += ` ${nodo.getAttribute('aria-label') ?? ''} `;
     testo += testoAccessibile(nodo);
   }
   return testo;

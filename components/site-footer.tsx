@@ -1,8 +1,8 @@
 import { Facebook, Instagram, MapPin, MessageCircle } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 import { AvvisiApp } from '@/components/avvisi-app';
+import { Marchio } from '@/components/marchio';
 import { NewsletterSignup } from '@/components/newsletter-signup';
 import { visibleNavLinks } from '@/lib/nav';
 import { ASSOCIATION_LINKS, FOOTER_CINEMA_LINKS, SITE } from '@/lib/site';
@@ -26,13 +26,7 @@ export async function SiteFooter() {
           {/* Il marchio porta già "Associazione Culturale Metropol": è
               l'intestazione di questa colonna, non un logo in più. */}
           <h2>
-            <Image
-              src="/loghi/metropol-marchio-bianco.png"
-              alt={SITE.association}
-              width={631}
-              height={196}
-              className="marchio h-10 w-auto opacity-90"
-            />
+            <Marchio titolo={SITE.association} className="h-10 w-auto" />
           </h2>
           <p className="mt-3 flex items-start gap-2 text-sm text-cinema-text-subtle">
             <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-cinema-ticket-ink" aria-hidden="true" />

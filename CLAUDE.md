@@ -288,9 +288,10 @@ sottofondo Next toglie il segnale, e fa bene: lì non sta aspettando nessuno.
   scontornati dalla locandina dell'associazione.
 - Date/ore SEMPRE in `Europe/Rome` (l'API è in UTC) — usa gli helper del client.
 - `prices` è **per proiezione**: niente assunzioni di prezzo unico per film.
-- **Marchio**: `public/loghi/metropol-marchio-bianco.png` (versione
-  monocromatica) in testata e piè di pagina — sul nero è quella giusta e porta
-  già il nome per esteso, quindi niente wordmark accanto.
+- **Marchio**: `components/marchio.tsx`, i tracciati del PDF ufficiale, in
+  testata e piè di pagina; porta già il nome per esteso, quindi niente wordmark
+  accanto. Bobina sempre turchese `#3B9DB5`; le lettere, nere nel file, sono
+  bianche sui temi scuri e nere su quelli chiari (`.marchio` in globals.css).
   `metropol-logo-colori.png` è il marchio da carta intestata (nero + petrolio
   `#3898B0`): serve solo a comporre `app/opengraph-image.png`, l'anteprima di
   condivisione. `app/icon.png` è la bobina del marchio, ritagliata per colore.
