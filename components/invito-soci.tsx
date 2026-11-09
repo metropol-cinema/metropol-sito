@@ -11,9 +11,8 @@ import { SITE } from '@/lib/site';
  * sito. Qui c'è sempre, a campagna aperta: chi la chiama decide anche quando
  * no (campagna chiusa, o `HeroClosed` che il bottone lo porta già).
  *
- * Sotto l'hero e non sopra come l'avviso dell'assemblea: quello scade fra
- * qualche giorno e va letto subito, questo resta tutta la stagione e non deve
- * spingere giù il cartellone.
+ * Sotto l'hero e non sopra: resta tutta la stagione e non deve spingere giù il
+ * cartellone.
  *
  * Il bottone porta dritto al modulo, come quello di `HeroClosed`: chi lo preme
  * ha già deciso. Le spiegazioni restano a un link di distanza.

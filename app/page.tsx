@@ -2,7 +2,6 @@ import { Clock, MapPin, Ticket } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
-import { AvvisoAssemblea } from '@/components/avviso-assemblea';
 import { FilmRow } from '@/components/film-row';
 import { HeroCarousel } from '@/components/hero-carousel';
 import { HeroClosed } from '@/components/hero-closed';
@@ -231,8 +230,6 @@ export default async function HomePage() {
       <h1 className="sr-only">
         Cinema Metropol — film in programmazione a Villafranca di Verona
       </h1>
-
-      <AvvisoAssemblea />
 
       {slides.length === 1 ? (
         slides[0].node
