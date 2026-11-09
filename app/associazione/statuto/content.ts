@@ -5,7 +5,7 @@
 
 export type Block =
   | { kind: 'p'; text: string }
-  | { kind: 'list'; items: string[] }
+  | { kind: 'list'; items: string[]; /** Rientro degli elenchi annidati. */ level?: 2 | 3 }
   /** Voce evidenziata interna a un articolo (es. nome di un ruolo). */
   | { kind: 'sub'; text: string };
 

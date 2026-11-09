@@ -1,4 +1,4 @@
-import { ArrowLeft, CalendarDays, Clock, Download, MapPin } from 'lucide-react';
+import { ArrowLeft, CalendarDays, Clock, Download, FileText, MapPin } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -118,14 +118,23 @@ export default function AssembleaPage() {
             <dd className="mt-2 font-bold text-cinema-text">{ASSEMBLEA.luogo}</dd>
           </div>
         </dl>
-        <a
-          href={ASSEMBLEA.delegaPdf}
-          download
-          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover"
-        >
-          <Download className="h-4 w-4" aria-hidden="true" />
-          Modulo di delega (PDF)
-        </a>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <a
+            href={ASSEMBLEA.delegaPdf}
+            download
+            className="inline-flex items-center gap-2 rounded-lg bg-cinema-ticket px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-on-ticket transition-colors hover:bg-cinema-ticket-hover"
+          >
+            <Download className="h-4 w-4" aria-hidden="true" />
+            Modulo di delega (PDF)
+          </a>
+          <Link
+            href={ASSEMBLEA.documentiHref}
+            className="inline-flex items-center gap-2 rounded-lg border border-cinema-ticket-ink/60 px-5 py-2.5 font-utility text-sm font-bold uppercase tracking-wider text-cinema-ticket-ink transition-colors hover:border-cinema-ticket-ink"
+          >
+            <FileText className="h-4 w-4" aria-hidden="true" />
+            Nuovo Statuto e Regolamento
+          </Link>
+        </div>
       </section>
 
       <section aria-labelledby="convocazione-titolo" className="mt-12">
@@ -176,8 +185,11 @@ export default function AssembleaPage() {
             ).
           </p>
           <p>
-            Il testo del nuovo Statuto sarà pubblicato sul sito dell&apos;Associazione e inviato ai
-            Soci{ASSEMBLEA.statutoNuovoEntro ? ` entro il ${ASSEMBLEA.statutoNuovoEntro}` : ''}.
+            <Link href={ASSEMBLEA.documentiHref} className={linkTesto}>
+              Il testo del nuovo Statuto
+            </Link>{' '}
+            sarà pubblicato sul sito dell&apos;Associazione e inviato ai Soci
+            {ASSEMBLEA.statutoNuovoEntro ? ` entro il ${ASSEMBLEA.statutoNuovoEntro}` : ''}.
           </p>
           <p>
             Per ulteriori informazioni sugli organi dell&apos;Associazione e sulle relative

@@ -10,6 +10,11 @@ export const ASSEMBLEA = {
   href: '/associazione/assemblea-2026',
   /** Il modulo da stampare, generato dal testo della delega del documento. */
   delegaPdf: '/docs/delega-assemblea-2026.pdf',
+  /** La pagina con le bozze di Statuto e Regolamento e le modifiche. */
+  documentiHref: '/associazione/assemblea-2026/documenti',
+  statutoBozzaPdf: '/docs/assemblea-2026-statuto-bozza.pdf',
+  statutoCorrezioniPdf: '/docs/assemblea-2026-statuto-correzioni.pdf',
+  regolamentoModifichePdf: '/docs/assemblea-2026-regolamento-modifiche.pdf',
   giorno: 'lunedì 9 novembre 2026',
   primaConvocazione: '8:30',
   secondaConvocazione: '20:45',
