@@ -77,6 +77,10 @@ type SlideSpec =
  * Una riga senza contenuto viene saltata (niente film in settimana, nessun
  * media caricato): meglio una slide in meno di una slide vuota.
  *
+ * Con i film della settimana in cartellone, i film in arrivo non stanno
+ * nell'hero: si raggiungono dalla pagina /prossimamente (voce di menu). Il
+ * pannello compare solo a settimana vuota (decisione di Mauro, nov 2026).
+ *
  * `fallbackOnly` è l'interruttore "solo come riserva": quelle righe compaiono
  * SOLO se nessuna riga di programmazione ha prodotto contenuto — è così che si
  * tiene un video di scorta senza che copra il film in cartellone.
@@ -105,10 +109,15 @@ function planHero(
     if (specs.length > 0) resolved.push({ item, specs });
   }
 
-  const haProgrammazione = resolved.some(
+  const haSettimana = resolved.some((r) => r.item.kind === 'current_programming');
+  const inHero = haSettimana
+    ? resolved.filter((r) => r.item.kind !== 'future_programming')
+    : resolved;
+
+  const haProgrammazione = inHero.some(
     (r) => r.item.kind === 'current_programming' || r.item.kind === 'future_programming'
   );
-  const visibili = resolved.filter((r) => !r.item.fallbackOnly || !haProgrammazione);
+  const visibili = inHero.filter((r) => !r.item.fallbackOnly || !haProgrammazione);
 
   return visibili.flatMap((r) => r.specs).slice(0, MAX_HERO_SLIDES);
 }

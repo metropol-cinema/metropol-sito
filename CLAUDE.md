@@ -58,7 +58,7 @@ in dashboard. `planHero` in `app/page.tsx` traduce ogni riga in slide:
 | Riga della timeline | Diventa |
 | --- | --- |
 | `current_programming` | **una slide per film della settimana** (non una sola), in ordine di proiezione più vicina |
-| `future_programming`  | il pannello `HeroUpcoming` coi film in arrivo |
+| `future_programming`  | il pannello `HeroUpcoming` coi film in arrivo, **solo se la settimana è vuota** |
 | `video` / `image`     | la slide media caricata |
 
 Regole di contorno:
@@ -74,8 +74,11 @@ Regole di contorno:
 - `priority` va solo alla prima slide: il backdrop è l'immagine più pesante
   della pagina.
 
-La sezione "Prossimamente" sotto la settimana non si ripete se la timeline la
-mette già nell'hero (`upcomingInHero`).
+**Film in arrivo e film della settimana non convivono nella home** (nov 2026,
+decisione dell'utente): se `current_programming` ha prodotto slide, la riga
+`future_programming` si salta e i film in arrivo si raggiungono solo dalla
+pagina `/prossimamente` (voce di menu). Il pannello torna nell'hero quando la
+settimana è vuota.
 
 **Il quadro settimana LUN→DOM è stato tolto** (ago 2026, decisione dell'utente):
 si proietta da ottobre a maggio e quasi solo nel fine settimana, quindi mostrava
