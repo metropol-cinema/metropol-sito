@@ -75,6 +75,9 @@ export default function StatutoPage() {
         {STATUTO.map((article) => (
           <ArticleSection key={article.id} article={article} level={3} />
         ))}
+        <p className="mt-8 text-sm leading-relaxed text-cinema-text-muted">
+          Villafranca di Verona, lì 9 Novembre 2026.
+        </p>
       </section>
 
       <section id="regolamento" aria-labelledby="regolamento-titolo" className="mt-14">

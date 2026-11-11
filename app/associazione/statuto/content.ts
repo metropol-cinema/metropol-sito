@@ -1,11 +1,18 @@
 /**
  * Testo integrale dello Statuto e del Regolamento Interno dell'Associazione
- * Culturale Metropol, trascritto dal sito storico (www.cinemametropol.com/statuto).
+ * Culturale Metropol.
+ *
+ * Lo Statuto è il testo portato all'assemblea del 9 novembre 2026, riportato
+ * parola per parola. Il Regolamento è trascritto dal sito storico, con le
+ * modifiche della stessa data e i rimandi alla numerazione del nuovo Statuto.
+ *
+ * I soci leggono la copia del gestionale prima di firmare la domanda
+ * (`lib/soci/statuto/testo.ts`): le due copie vanno tenute uguali.
  */
 
 export type Block =
   | { kind: 'p'; text: string }
-  | { kind: 'list'; items: string[] }
+  | { kind: 'list'; items: string[]; /** Rientro degli elenchi annidati. */ level?: 2 | 3 }
   /** Voce evidenziata interna a un articolo (es. nome di un ruolo). */
   | { kind: 'sub'; text: string };
 
@@ -24,447 +31,473 @@ export interface Chapter {
 export const STATUTO: Article[] = [
   {
     id: 'art-1',
-    title: 'Art. 1',
+    title: 'Art. 1 – Denominazione, sede e durata',
     blocks: [
-      {
-        kind: 'p',
-        text: 'È costituita l’Associazione culturale denominata “ASSOCIAZIONE CULTURALE METROPOL”, libera Associazione apolitica, con durata illimitata nel tempo e senza scopo di lucro.',
-      },
-      { kind: 'p', text: 'L’Associazione ha sede nel Comune di Villafranca di Verona (VR).' },
-      {
-        kind: 'p',
-        text: 'Il Consiglio Direttivo, con una sua deliberazione, può trasferire la sede nell’ambito dello stesso Comune, senza modifiche statutarie, fatta salva la comunicazione agli Enti preposti.',
-      },
+      { kind: 'p', text: 'L’associazione “Associazione Culturale Metropol” adegua il proprio statuto al Codice del Terzo settore (decreto legislativo 3 luglio 2017, n. 117) e assume la denominazione “Associazione Culturale Metropol APS”, in forma abbreviata “Metropol APS”, di seguito denominata anche “Associazione”.' },
+      { kind: 'p', text: 'L’Associazione è apartitica, apolitica, indipendente, non ha scopo di lucro e persegue finalità civiche, solidaristiche e di utilità sociale.' },
+      { kind: 'p', text: 'L’Associazione ha sede legale nel Comune di Villafranca di Verona (VR), attualmente in via Tione n. 25.' },
+      { kind: 'p', text: 'Il trasferimento della sede legale all’interno del medesimo Comune non comporta modifica del presente statuto ed è deliberato dal Consiglio direttivo, con obbligo di comunicazione agli enti competenti. Il trasferimento della sede in altro Comune è deliberato dall’assemblea secondo le modalità previste per le modifiche statutarie.' },
+      { kind: 'p', text: 'La durata dell’Associazione è illimitata.' },
+      { kind: 'p', text: 'L’uso della denominazione “Associazione di Promozione Sociale”, dell’acronimo “APS” e dei relativi segni distintivi è subordinato all’iscrizione dell’Associazione nella sezione “Associazioni di promozione sociale” del Registro unico nazionale del Terzo settore, ove previsto dalla normativa vigente.' },
     ],
   },
   {
     id: 'art-2',
-    title: 'Art. 2',
+    title: 'Art. 2 – Finalità',
     blocks: [
-      {
-        kind: 'p',
-        text: 'L’Associazione ha fini di solidarietà sociale e persegue i seguenti scopi:',
-      },
+      { kind: 'p', text: 'L’Associazione persegue finalità civiche, solidaristiche e di utilità sociale mediante la promozione e la diffusione della cultura, con particolare riferimento alla cultura cinematografica, audiovisiva, documentaristica e alle espressioni artistiche e culturali connesse.' },
+      { kind: 'p', text: 'In particolare, l’Associazione si propone di:' },
       {
         kind: 'list',
         items: [
-          'promuove la cultura in tutte le sue forme, in particolare attraverso il cinema, sia in ambito filmico che documentaristico;',
-          'promuove la conoscenza del cinema in tutti i suoi aspetti storici, tecnici, di genere, studi e ricerche su documenti filmici di storia e vissuto locale;',
-          'promuove la cultura attraverso il cinema, anche in campo didattico;',
-          'promuove le iniziative della sala polifunzionale di Villafranca di Verona, sia in sala che all’esterno o in modo itinerante (cinema d’estate);',
-          'promuove il rilancio del cinema in senso ampio come momento di socializzazione e sviluppo di senso di appartenenza della Comunità intesa sia come comprensorio villafranchese sia, in senso assai più ampio, di tutte le persone che, attraverso il cinema, vogliano sviluppare un legame di Comunità quali “cittadini del mondo” inclusi naturalmente anche i cittadini stranieri;',
-          'promuove eventi culturali attraverso convegni, mostre, dibattiti e iniziative di informazione pubblica su determinati temi, nonché pubblicizza le iniziative del territorio con appositi spazi (di proiezione, fisici-bacheche, virtuali);',
-          'promuove ogni sinergia in stretta collaborazione con tutte le realtà istituzionali e culturali, apportando ulteriore visibilità alle altre iniziative che promuovano le stesse finalità e a favore del territorio;',
-          'promuove il dialogo con tutte le altre associazioni culturali, Enti pubblici e privati e istituzioni sia per iniziative congiunte, sia per integrare di contenuti le proprie e le altrui iniziative.',
+          'promuovere la cultura in tutte le sue forme, con particolare riferimento al cinema, al settore filmico e documentaristico;',
+          'favorire la conoscenza del cinema sotto il profilo storico, tecnico, artistico, sociale e culturale;',
+          'promuovere la cultura cinematografica anche attraverso attività educative e didattiche rivolte a bambini, ragazzi, giovani e adulti;',
+          'favorire la partecipazione culturale, la socializzazione, il dialogo interculturale e il senso di appartenenza alla comunità;',
+          'valorizzare la storia, le tradizioni, gli usi, i costumi, il patrimonio artistico, naturalistico e monumentale del territorio;',
+          'promuovere il confronto pubblico sui temi culturali e sociali attraverso iniziative informative e divulgative;',
+          'sostenere la collaborazione tra persone, associazioni, enti pubblici, enti privati e istituzioni che perseguano finalità compatibili;',
+          'favorire l’accesso della comunità alla cultura, all’informazione e alla conoscenza, anche attraverso strumenti digitali e forme di comunicazione innovative;',
+          'promuovere la partecipazione dei cittadini, inclusi i cittadini stranieri, a iniziative culturali aperte e inclusive;',
+          'diffondere la cultura della solidarietà, della cittadinanza attiva, della partecipazione e della valorizzazione delle diversità.',
         ],
       },
     ],
   },
   {
     id: 'art-3',
-    title: 'Art. 3',
+    title: 'Art. 3 – Attività di interesse generale',
     blocks: [
-      {
-        kind: 'p',
-        text: 'L’associazione, per il raggiungimento dei suoi fini, intende promuovere varie attività, tra le quali:',
-      },
+      { kind: 'p', text: 'Per il perseguimento delle proprie finalità, l’Associazione esercita, in favore dei propri associati e di terzi, in via esclusiva o principale le seguenti attività di interesse generale ai sensi dell’articolo 5, comma 1, del decreto legislativo 3 luglio 2017, n. 117, e successive modificazioni e integrazioni:' },
       {
         kind: 'list',
         items: [
-          'la conoscenza del cinema attraverso la proiezione di rassegne cinematografiche a tema, l’organizzazione di cineforum, l’integrazione dell’opera filmica attraverso specifiche ricerche del materiale esistente ad essa relativa, la creazione di una biblioteca e videoteca specializzate;',
-          'attività culturali: convegni, conferenze, dibattiti, seminari, proiezioni di film e documenti, rappresentazioni teatrali di ogni tipo, concerti, lezioni – corsi didattici per bambini e ragazzi, per giovani ed adulti, concorsi artistici;',
-          'la massima diffusione a tutte le iniziative dell’Associazione, attraverso i normali canali di messaggistica, i siti internet, la posta elettronica e i sistemi Twitter, Facebook e simili, carta stampata, volantinaggio, affissioni in luoghi pubblici o presso attività commerciali;',
-          'l’incontro pubblico con registi, sceneggiatori, attori, tecnici, produttori e ogni altro soggetto avente parte attiva nella realizzazione di film o documentari;',
-          'la ricerca di tutto il materiale esistente sul territorio al fine di coinvolgere i residenti in un processo di rafforzamento delle proprie origini, tradizioni e storia, usi e consuetudini locali, emergenze artistico-naturalistiche e monumentali, aspetti musicali, arte, musei e simili;',
-          'attività editoriale: pubblicazione di un bollettino, di atti di convegni, di seminari, nonché degli studi e delle ricerche compiute ed ogni altra iniziativa editoriale;',
-          'promozione di convenzioni con le altre realtà esistenti.',
+          'organizzazione e gestione di attività culturali, artistiche o ricreative di interesse sociale, con particolare riferimento alla cultura cinematografica e audiovisiva, incluse attività, anche editoriali, di promozione e diffusione della cultura e della pratica del volontariato e delle attività di interesse generale (lett. i);',
+          'attività culturali di interesse sociale con finalità educativa (lett. d);',
+          'interventi di tutela e valorizzazione del patrimonio culturale e del paesaggio, ai sensi del decreto legislativo 22 gennaio 2004, n. 42, con particolare riferimento al patrimonio cinematografico e alla storia del territorio (lett. f);',
+          'promozione della cultura della legalità, della pace tra i popoli, della nonviolenza e della difesa non armata (lett. v);',
+          'promozione e tutela dei diritti umani, civili, sociali e politici, nonché promozione delle pari opportunità e delle iniziative di aiuto reciproco, anche attraverso iniziative che rendano le attività culturali accessibili alle persone con disabilità (lett. w).',
+          'Attività di promozione culturale, divulgazione, ricerca e documentazione connesse alle finalità istituzionali.',
         ],
       },
+      { kind: 'p', text: 'L’Associazione svolge le proprie attività avvalendosi in modo prevalente dell’attività di volontariato dei propri associati.' },
     ],
   },
   {
     id: 'art-4',
-    title: 'Art. 4',
+    title: 'Art. 4 – Attività diverse, strumentali e secondarie',
     blocks: [
-      {
-        kind: 'p',
-        text: 'L’associazione è aperta a tutti coloro che, interessati alla realizzazione delle finalità istituzionali, ne condividono lo spirito e gli ideali, è apolitica ed apartitica.',
-      },
-      { kind: 'p', text: 'I soci dell’Associazione si dividono in:' },
-      {
-        kind: 'list',
-        items: [
-          'soci ordinari: possono essere soci ordinari tutti coloro, persone fisiche o giuridiche, associazioni ed enti, che condividono finalità e orientamento dell’Associazione. I soci sono tenuti al versamento del contributo associativo nella misura ordinaria fissata annualmente dal Consiglio Direttivo;',
-          'soci fondatori: sono coloro che hanno contribuito fattivamente alla costituzione dell’Associazione; sono soggetti alle regole dei soci ordinari;',
-          'soci sostenitori: sono coloro che versano una quota associativa maggiore di quella ordinaria, in base a quanto stabilito annualmente dal Consiglio Direttivo;',
-          'soci onorari: possono essere persone, enti o istituzioni che abbiano contribuito in maniera determinante, con la loro opera od il loro sostegno ideale, ovvero economico, alla vita dell’Associazione. Hanno carattere di partner permanenti e sono esonerati dal versamento di quote annuali. Essi non hanno diritto di voto.',
-        ],
-      },
-      {
-        kind: 'p',
-        text: 'Le quote o il contributo associativo non sono trasmissibili, non sono soggetti a rivalutazione e non sono rimborsabili per nessun motivo.',
-      },
+      { kind: 'p', text: 'L’Associazione può esercitare attività diverse da quelle di interesse generale indicate nel presente statuto, purché siano secondarie e strumentali rispetto alle attività di interesse generale, nei limiti e alle condizioni previsti dalla normativa vigente.' },
+      { kind: 'p', text: 'Le attività diverse sono individuate dal Consiglio direttivo, che ne documenta il carattere secondario e strumentale nei documenti di bilancio o di rendicontazione previsti dalla legge.' },
+      { kind: 'p', text: 'L’Associazione può inoltre svolgere attività di raccolta fondi, anche in forma organizzata e continuativa, nel rispetto dei principi di verità, trasparenza e correttezza nei rapporti con i sostenitori e con il pubblico.' },
     ],
   },
   {
     id: 'art-5',
-    title: 'Art. 5',
+    title: 'Art. 5 – Attività concretamente esercitabili',
     blocks: [
+      { kind: 'p', text: 'Per il raggiungimento delle finalità istituzionali, l’Associazione può, a titolo esemplificativo:' },
       {
-        kind: 'p',
-        text: 'L’ammissione dei soci ordinari è deliberata, su domanda scritta del richiedente, dal Consiglio Direttivo.',
+        kind: 'list',
+        items: [
+          'organizzare proiezioni cinematografiche, rassegne, cineforum, festival, incontri e manifestazioni culturali;',
+          'organizzare proiezioni di film, documentari e altri contenuti audiovisivi in luoghi pubblici, privati, all’aperto o in forma itinerante;',
+          'promuovere attività cinematografiche e audiovisive rivolte alla comunità e ai soci;',
+          'organizzare convegni, conferenze, dibattiti, seminari, lezioni, corsi, eventi musicali, laboratori e attività formative;',
+          'realizzare incontri con registi, sceneggiatori, attori, tecnici, produttori, studiosi e altri soggetti operanti nel settore cinematografico e culturale;',
+          'effettuare studi, ricerche e attività di documentazione sul cinema, sulla storia locale, sulle tradizioni e sul patrimonio culturale del territorio;',
+          'costituire e gestire biblioteche, videoteche, archivi e raccolte documentali, nel rispetto della normativa applicabile;',
+          'realizzare mostre, esposizioni, concorsi artistici e iniziative di divulgazione culturale;',
+          'svolgere attività editoriale, mediante pubblicazione di bollettini, atti di convegni, studi, ricerche, materiali informativi e altre pubblicazioni coerenti con le finalità dell’Associazione;',
+          'utilizzare strumenti di comunicazione tradizionali e digitali, inclusi siti internet, posta elettronica, social network, piattaforme telematiche, stampa, volantinaggio e affissioni;',
+          'promuovere convenzioni e collaborazioni con enti pubblici, enti privati, istituzioni, scuole, associazioni e altri soggetti;',
+          'partecipare a reti, coordinamenti, circuiti culturali, cinematografici e associativi;',
+          'acquisire, detenere, utilizzare e amministrare beni mobili, beni mobili registrati e beni immobili necessari o utili al perseguimento delle finalità associative;',
+          'compiere ogni ulteriore attività lecita e coerente con le finalità dell’Associazione, purché non in contrasto con la natura non lucrativa e con la disciplina degli enti del Terzo settore.',
+        ],
       },
-      {
-        kind: 'p',
-        text: 'Contro il rifiuto di ammissione è ammesso appello, entro 30 giorni, al Collegio dei Probiviri.',
-      },
+      { kind: 'p', text: 'Le proiezioni cinematografiche, la vendita di titoli di accesso, le attività editoriali, i corsi, le manifestazioni e ogni altra attività eventualmente commerciale sono svolte nel rispetto della normativa fiscale, amministrativa e di settore applicabile. La natura commerciale o non commerciale delle singole attività è determinata in base alla normativa vigente e alle concrete modalità di svolgimento delle attività medesime.' },
     ],
   },
   {
     id: 'art-6',
-    title: 'Art. 6',
+    title: 'Art. 6 – Associati',
     blocks: [
+      { kind: 'p', text: 'Possono essere associati dell’Associazione le persone fisiche maggiorenni che condividono le finalità associative e intendono contribuire al loro perseguimento.' },
+      { kind: 'p', text: 'Possono altresì essere ammessi, nei limiti e alle condizioni previsti dalla normativa vigente, altri enti del Terzo settore o enti senza scopo di lucro, mediante il proprio rappresentante legale o persona delegata.' },
+      { kind: 'p', text: 'Il numero degli enti associati non può essere superiore al limite previsto dalla normativa vigente rispetto al numero delle associazioni di promozione sociale associate.' },
+      { kind: 'p', text: 'L’Associazione garantisce parità di trattamento tra gli associati e non pone discriminazioni fondate su sesso, genere, origine etnica, nazionalità, lingua, religione, convinzioni personali, condizioni sociali, disabilità, orientamento sessuale o ogni altra condizione personale o sociale non incompatibile con le finalità dell’Associazione.' },
+      { kind: 'p', text: 'Sono previste le seguenti qualifiche associative:' },
       {
-        kind: 'p',
-        text: 'Tutti i soci sono tenuti a rispettare le norme del presente statuto e l’eventuale regolamento interno, secondo le deliberazioni assunte dagli organi preposti.',
+        kind: 'list',
+        items: [
+          'associati fondatori, ossia coloro che hanno partecipato alla costituzione dell’Associazione o ne hanno promosso la costituzione;',
+          'associati ordinari, ossia coloro che sono ammessi successivamente alla costituzione secondo la procedura prevista dal presente statuto;',
+          'associati sostenitori, ossia coloro che contribuiscono in misura superiore alla quota ordinaria, senza acquisire diritti amministrativi ulteriori rispetto agli altri associati.',
+        ],
       },
-      {
-        kind: 'p',
-        text: 'In caso di comportamento difforme, che rechi pregiudizio agli scopi o al patrimonio dell’Associazione, il Consiglio Direttivo dovrà intervenire ed applicare le seguenti sanzioni con principio di gradualità: richiamo, diffida, espulsione dall’Associazione.',
-      },
-      {
-        kind: 'p',
-        text: 'I soci espulsi possono ricorrere per iscritto contro il provvedimento entro trenta giorni al Collegio dei Probiviri.',
-      },
+      { kind: 'p', text: 'Le qualifiche di fondatore, ordinario e sostenitore non determinano differenze nei diritti associativi. Tutti gli associati hanno pari diritti e pari obblighi, salvo quanto previsto dalla legge per la diversa natura del soggetto associato.' },
+      { kind: 'p', text: 'L’Associazione può conferire riconoscimenti o titoli onorifici a persone o enti che abbiano contribuito alla vita dell’Associazione. Tali riconoscimenti non attribuiscono la qualità di associato né diritti amministrativi, salvo che il soggetto sia formalmente ammesso come associato ai sensi del presente statuto.' },
+      { kind: 'p', text: 'La quota o il contributo associativo è determinato annualmente dal Consiglio direttivo, è intrasmissibile, non è rivalutabile e non è rimborsabile.' },
     ],
   },
   {
     id: 'art-7',
-    title: 'Art. 7',
+    title: 'Art. 7 – Ammissione degli associati',
     blocks: [
-      {
-        kind: 'p',
-        text: 'Tutti i soci maggiorenni hanno diritto di voto per l’approvazione e le modificazioni dello statuto e dei regolamenti, per la nomina degli organi direttivi dell’Associazione e per le altre materie di competenza.',
-      },
+      { kind: 'p', text: 'Chiunque condivida le finalità dell’Associazione può chiedere di essere ammesso come associato mediante domanda scritta, anche in formato elettronico, contenente i dati identificativi richiesti dall’Associazione e la dichiarazione di accettazione del presente statuto.' },
+      { kind: 'p', text: 'L’ammissione è deliberata dal Consiglio direttivo secondo criteri non discriminatori, coerenti con le finalità perseguite e nel rispetto delle disposizioni di legge.' },
+      { kind: 'p', text: 'Il Consiglio direttivo delibera sulla domanda entro il termine stabilito dall’eventuale regolamento interno e, in mancanza, entro sessanta giorni dalla ricezione. L’eventuale rigetto deve essere motivato e comunicato all’interessato.' },
+      { kind: 'p', text: 'L’interessato può chiedere il riesame della decisione entro trenta giorni dalla comunicazione del rigetto. Sulla richiesta decide il Collegio dei probiviri entro sessanta giorni o, se il Collegio non è istituito, l’assemblea nella prima riunione utile, in entrambi i casi previa audizione dell’interessato e nel rispetto del contraddittorio. La decisione esaurisce il procedimento associativo interno, fatta salva ogni tutela prevista dalla legge.' },
+      { kind: 'p', text: 'L’ammissione risulta dal libro degli associati, tenuto secondo le modalità previste dalla legge.' },
     ],
   },
   {
     id: 'art-8',
-    title: 'Art. 8',
+    title: 'Art. 8 – Diritti e obblighi degli associati',
     blocks: [
-      { kind: 'p', text: 'Il socio cessa di far parte dell’Associazione:' },
+      { kind: 'p', text: 'Gli associati hanno diritto di:' },
       {
         kind: 'list',
         items: [
-          'per dimissioni: il socio può recedere dall’Associazione in qualsiasi momento, dandone comunicazione scritta al Consiglio Direttivo;',
-          'per mancato pagamento o rinnovo delle quote sociali così come stabilite dal Consiglio Direttivo;',
-          'per esclusione: per decisione del Consiglio Direttivo a causa di violazioni delle norme dello statuto (o da questo richiamate) o qualora il Socio dimostri di non condividere le finalità dell’Associazione e/o risulti di turbamento nello svolgimento dell’attività dell’Associazione stessa;',
-          'per decesso: in tal caso la quota non è trasmissibile agli eredi e l’erede non subentrerà nei diritti connessi alla quota Associativa.',
+          'partecipare alla vita associativa;',
+          'partecipare alle assemblee;',
+          'votare in assemblea, purché iscritti nel libro degli associati da almeno un mese;',
+          'eleggere gli organi sociali e concorrere alla loro elezione;',
+          'esaminare i libri sociali secondo le modalità stabilite dal presente statuto e dall’eventuale regolamento;',
+          'partecipare alle attività e alle iniziative dell’Associazione;',
+          'recedere dall’Associazione in qualsiasi momento mediante comunicazione scritta;',
+          'proporre argomenti da inserire nell’ordine del giorno dell’assemblea secondo le modalità stabilite dal presente statuto o dal regolamento interno.',
         ],
       },
+      { kind: 'p', text: 'Gli associati sono tenuti a:' },
       {
-        kind: 'p',
-        text: 'In tutti i casi di interruzione del rapporto associativo le quote associative versate non verranno rimborsate e il Socio perde automaticamente ed immediatamente tutti i diritti, doveri, qualifiche e cariche sociali.',
+        kind: 'list',
+        items: [
+          'rispettare il presente statuto, gli eventuali regolamenti e le deliberazioni degli organi associativi;',
+          'versare la quota associativa annuale eventualmente stabilita;',
+          'contribuire, secondo le proprie possibilità, al perseguimento delle finalità associative;',
+          'mantenere comportamenti coerenti con i principi e le finalità dell’Associazione;',
+          'non utilizzare la denominazione, il patrimonio o le risorse dell’Associazione per finalità personali o estranee agli scopi associativi.',
+        ],
       },
+      { kind: 'p', text: 'La partecipazione alle attività associative non attribuisce diritti individuali sul patrimonio dell’Associazione.' },
     ],
   },
   {
     id: 'art-9',
-    title: 'Art. 9',
+    title: 'Art. 9 – Perdita della qualità di associato',
     blocks: [
-      { kind: 'p', text: 'Il patrimonio dell’associazione è costituito:' },
+      { kind: 'p', text: 'La qualità di associato si perde per:' },
       {
         kind: 'list',
         items: [
-          'dai beni mobili ed immobili che diverranno di proprietà dell’associazione;',
-          'dai fondi derivanti da eventuali eccedenze di bilancio;',
-          'da erogazioni, donazioni e lasciti.',
+          'recesso volontario;',
+          'decesso della persona fisica o estinzione dell’ente associato;',
+          'mancato pagamento della quota associativa, e decorso il termine stabilito dal Consiglio direttivo;',
+          'esclusione per gravi e comprovati motivi.',
         ],
       },
-      {
-        kind: 'p',
-        text: 'I proventi con cui provvedere all’attività e alla vita dell’associazione sono costituiti:',
-      },
+      { kind: 'p', text: 'L’esclusione può essere deliberata dal Consiglio direttivo esclusivamente in caso di:' },
       {
         kind: 'list',
         items: [
-          'dalle quote associative;',
-          'da eventuali altri contributi che pervengano all’associazione a qualsiasi titolo;',
-          'dal ricavato derivante da manifestazioni, raccolte fondi ed altre attività organizzate dall’associazione;',
-          'da contributi dello Stato, di enti, di istituzioni pubbliche e/o private, di organismi internazionali;',
-          'da rimborsi derivanti da convenzioni;',
-          'da ogni altra iniziativa consentita dalla legge.',
+          'grave violazione dello statuto, dei regolamenti o delle deliberazioni degli organi associativi;',
+          'compimento di atti gravemente lesivi degli interessi, del patrimonio o dell’immagine dell’Associazione, e degli associati;',
+          'comportamento incompatibile con le finalità dell’Associazione;',
+          'utilizzo improprio della denominazione, dei beni o delle risorse dell’Associazione;',
+          'mancato pagamento della quota associativa dopo formale sollecito;',
+          'ulteriori gravi motivi previsti dalla legge.',
         ],
       },
-      {
-        kind: 'p',
-        text: 'I contributi degli aderenti sono costituiti dalle quote di associazione annuale, stabilite dal Consiglio Direttivo, e da eventuali contributi straordinari stabiliti dall’assemblea, che ne determina l’ammontare.',
-      },
-      {
-        kind: 'p',
-        text: 'Le elargizioni in danaro, le donazioni e i lasciti saranno utilizzati in armonia con le finalità statutarie dell’Associazione.',
-      },
+      { kind: 'p', text: 'Prima dell’adozione del provvedimento, il Consiglio direttivo contesta per iscritto gli addebiti all’interessato, assegnandogli un termine non inferiore a quindici giorni per presentare osservazioni e difese.' },
+      { kind: 'p', text: 'Il provvedimento di esclusione deve essere motivato e comunicato all’interessato. L’associato può chiedere il riesame della decisione entro trenta giorni dalla comunicazione; il riesame si svolge con le modalità previste dall’articolo 7. Fino alla scadenza del termine per chiedere il riesame e, se richiesto, fino alla decisione, l’associato è sospeso dai diritti associativi.' },
+      { kind: 'p', text: 'La perdita della qualità di associato non dà diritto alla restituzione della quota o dei contributi versati e non attribuisce alcun diritto sul patrimonio dell’Associazione.' },
     ],
   },
   {
     id: 'art-10',
-    title: 'Art. 10',
+    title: 'Art. 10 – Volontari',
     blocks: [
-      { kind: 'p', text: 'L’anno finanziario inizia il 1° settembre e termina il 31 agosto di ogni anno.' },
-      { kind: 'p', text: 'Il Consiglio Direttivo deve redigere il bilancio consuntivo annuale.' },
-      {
-        kind: 'p',
-        text: 'Il bilancio consuntivo deve essere approvato dall’Assemblea ordinaria ogni anno entro quattro mesi dalla chiusura dell’esercizio.',
-      },
-      {
-        kind: 'p',
-        text: 'Esso deve essere depositato presso la sede dell’Associazione entro i 15 giorni precedenti la seduta per poter essere consultato da ogni associato.',
-      },
-      {
-        kind: 'p',
-        text: 'Gli utili e gli avanzi di gestione dovranno essere obbligatoriamente impiegati per la realizzazione delle attività istituzionali o di quelle ad esse direttamente connesse.',
-      },
+      { kind: 'p', text: 'L’Associazione si avvale in modo prevalente dell’attività di volontariato dei propri associati.' },
+      { kind: 'p', text: 'È volontario colui che, per sua libera scelta, svolge attività in favore dell’Associazione o della comunità in modo personale, spontaneo e gratuito, senza fini di lucro, neppure indiretti.' },
+      { kind: 'p', text: 'L’attività del volontario non può essere retribuita in alcun modo. Sono ammessi esclusivamente rimborsi delle spese effettivamente sostenute e documentate per l’attività prestata, entro i limiti e secondo le modalità stabiliti dalla legge e dall’eventuale regolamento interno.' },
+      { kind: 'p', text: 'La qualità di volontario è incompatibile con qualsiasi rapporto di lavoro subordinato o autonomo e con ogni altro rapporto a contenuto patrimoniale con l’Associazione. ' },
+      { kind: 'p', text: 'L’Associazione iscrive i volontari che svolgono attività in modo non occasionale nell’apposito registro, ove previsto dalla legge, e provvede agli obblighi assicurativi previsti dalla normativa vigente.' },
+      { kind: 'p', text: 'L’Associazione può avvalersi di lavoratori dipendenti o autonomi nei limiti e alle condizioni previsti dalla legge, quando ciò sia necessario allo svolgimento dell’attività di interesse generale e al perseguimento delle finalità istituzionali.' },
     ],
   },
   {
     id: 'art-11',
-    title: 'Art. 11',
+    title: 'Art. 11 – Patrimonio e risorse economiche',
     blocks: [
-      { kind: 'p', text: 'Gli organi dell’Associazione sono:' },
+      { kind: 'p', text: 'Il patrimonio dell’Associazione è costituito da:' },
       {
         kind: 'list',
         items: [
-          'l’Assemblea dei Soci;',
-          'il Consiglio Direttivo;',
-          'il Presidente;',
-          'il Collegio dei Probiviri.',
+          'beni mobili e immobili di proprietà;',
+          'beni mobili registrati;',
+          'fondi e disponibilità liquide;',
+          'eventuali fondi di riserva;',
+          'erogazioni liberali, donazioni e lasciti;',
+          'ogni altro bene o diritto acquisito legittimamente.',
         ],
       },
+      { kind: 'p', text: 'Le risorse economiche dell’Associazione possono derivare da:' },
+      {
+        kind: 'list',
+        items: [
+          'quote e contributi associativi;',
+          'contributi pubblici e privati;',
+          'erogazioni liberali, donazioni e lasciti testamentari;',
+          'contributi dell’Unione europea e di organismi nazionali o internazionali;',
+          'entrate derivanti da attività di interesse generale;',
+          'entrate derivanti da attività diverse, purché secondarie e strumentali;',
+          'proventi da raccolte fondi;',
+          'rimborsi derivanti da convenzioni;',
+          'rendite patrimoniali;',
+          'ogni altra entrata consentita dalla legge.',
+        ],
+      },
+      { kind: 'p', text: 'Le quote e i contributi associativi sono intrasmissibili e non rivalutabili. In caso di recesso, esclusione o perdita della qualità di associato, non è ammessa la restituzione della quota o dei contributi versati.' },
     ],
   },
   {
     id: 'art-12',
-    title: 'Art. 12',
+    title: 'Art. 12 – Divieto di distribuzione degli utili',
     blocks: [
-      {
-        kind: 'p',
-        text: 'L’Assemblea dei Soci è il momento fondamentale di confronto, atto ad assicurare una corretta gestione dell’Associazione, ed è composta da tutti i soci, ognuno dei quali ha diritto ad un voto, qualunque sia il valore della quota, con esclusione dei soci onorari. Essa è convocata almeno una volta all’anno in via ordinaria, ed in via straordinaria quando sia necessaria o sia richiesta dal Consiglio Direttivo o da almeno un terzo degli associati.',
-      },
-      {
-        kind: 'p',
-        text: 'L’assemblea sia ordinaria che straordinaria è regolarmente costituita in prima convocazione con la presenza della metà degli associati e delibera con il voto favorevole della maggioranza dei presenti. In seconda convocazione l’assemblea sia ordinaria che straordinaria è regolarmente costituita qualunque sia il numero dei presenti e delibera con il voto favorevole della maggioranza dei presenti stessi.',
-      },
-      {
-        kind: 'p',
-        text: 'L’assemblea straordinaria delibera lo scioglimento dell’associazione e la devoluzione del patrimonio con il voto favorevole di almeno tre quarti degli associati.',
-      },
-      {
-        kind: 'p',
-        text: 'La convocazione va fatta con avviso pubblico affisso presso la sede almeno 15 giorni prima della data dell’assemblea o con avviso effettuato sul sito web dell’Associazione o con mezzo, anche elettronico, che ne garantisca l’avvenuta ricezione.',
-      },
-      {
-        kind: 'p',
-        text: 'Delle delibere assembleari deve essere data pubblicità mediante affissione presso la sede.',
-      },
+      { kind: 'p', text: 'È vietata la distribuzione, anche indiretta, di utili e avanzi di gestione, fondi e riserve comunque denominati, durante la vita dell’Associazione, a fondatori, associati, lavoratori, collaboratori, amministratori e altri componenti degli organi associativi, anche nel caso in cui la distribuzione sia realizzata mediante operazioni o modalità non direttamente riconducibili alla corresponsione di utili.' },
+      { kind: 'p', text: 'Gli utili e gli avanzi di gestione sono destinati esclusivamente allo svolgimento delle attività statutarie o all’incremento del patrimonio dell’Associazione.' },
+      { kind: 'p', text: 'È vietata la corresponsione a componenti degli organi sociali di compensi individuali non proporzionati all’attività svolta, alle responsabilità assunte e alle specifiche competenze, o comunque superiori a quelli previsti per analoghe attività e condizioni.' },
     ],
   },
   {
     id: 'art-13',
-    title: 'Art. 13',
+    title: 'Art. 13 – Esercizio sociale e bilancio',
     blocks: [
-      { kind: 'p', text: 'L’Assemblea ordinaria ha i seguenti compiti:' },
-      {
-        kind: 'list',
-        items: [
-          'elegge il Consiglio Direttivo e il Collegio dei Probiviri;',
-          'approva il bilancio consuntivo;',
-          'approva il regolamento interno.',
-        ],
-      },
-      {
-        kind: 'p',
-        text: 'L’Assemblea straordinaria delibera sulle modifiche dello Statuto e l’eventuale scioglimento dell’Associazione.',
-      },
-      {
-        kind: 'p',
-        text: 'All’apertura di ogni seduta l’assemblea elegge un presidente ed un segretario che dovranno sottoscrivere il verbale finale.',
-      },
-      {
-        kind: 'p',
-        text: 'L’Assemblea, sia ordinaria che straordinaria, potrà essere convocata oltre che dal Consiglio Direttivo, anche da tanti soci che rappresentino almeno il 20% degli aventi diritto.',
-      },
+      { kind: 'p', text: 'L’esercizio sociale ha inizio il 1° settembre e termina il 31 agosto di ogni anno.' },
+      { kind: 'p', text: 'Il Consiglio direttivo redige il bilancio di esercizio nelle forme previste dalla normativa vigente, tenendo conto delle dimensioni dell’Associazione, dei ricavi, delle entrate e della natura delle attività esercitate.' },
+      { kind: 'p', text: 'Il bilancio è sottoposto all’approvazione dell’assemblea entro il termine previsto dalla legge e, in ogni caso, entro quattro mesi dalla chiusura dell’esercizio, salvo il maggior termine consentito dalla normativa vigente in presenza di particolari esigenze.' },
+      { kind: 'p', text: 'Il bilancio approvato è depositato presso il Registro unico nazionale del Terzo settore nei termini stabiliti dalla legge, ove previsto.' },
+      { kind: 'p', text: 'Il bilancio e gli ulteriori documenti contabili sono messi a disposizione degli associati secondo modalità idonee a garantirne la conoscibilità e la consultazione.' },
     ],
   },
   {
     id: 'art-14',
-    title: 'Art. 14',
+    title: 'Art. 14 – Libri sociali e diritto di esame',
     blocks: [
+      { kind: 'p', text: 'L’Associazione tiene i libri sociali e i registri previsti dalla legge, tra cui:' },
       {
-        kind: 'p',
-        text: 'Il Consiglio Direttivo è composto da 5 a 9 membri, eletti dall’Assemblea fra i propri componenti.',
+        kind: 'list',
+        items: [
+          'il libro degli associati;',
+          'il libro delle adunanze e delle deliberazioni dell’assemblea;',
+          'il libro delle adunanze e delle deliberazioni del Consiglio direttivo;',
+          'il libro delle adunanze e delle deliberazioni del Collegio dei probiviri e dell’organo di controllo, se istituiti;',
+          'il registro dei volontari non occasionali, ove previsto.',
+        ],
       },
-      {
-        kind: 'p',
-        text: 'Il Consiglio Direttivo è validamente costituito quando sono presenti la metà più uno dei suoi membri. I membri del Consiglio Direttivo svolgono la loro attività gratuitamente e durano in carica 3 anni. Il Consiglio Direttivo può essere revocato dall’assemblea con la maggioranza di 2/3 (due terzi) dei soci. Eventuali consiglieri dimissionari possono essere direttamente nominati per cooptazione dal Consiglio Direttivo purché il loro numero sia inferiore alla metà di tutti i consiglieri eletti. In caso contrario dovrà essere convocata entro 15 giorni nuova Assemblea ordinaria che provvederà a nominare un nuovo Consiglio Direttivo.',
-      },
+      { kind: 'p', text: 'Gli associati hanno diritto di esaminare i libri sociali mediante richiesta scritta al Consiglio direttivo. La consultazione avviene presso la sede dell’Associazione o con modalità telematiche idonee entro quindici giorni dalla richiesta, salvo comprovate esigenze organizzative, e nel rispetto della normativa sulla protezione dei dati personali.' },
     ],
   },
   {
     id: 'art-15',
-    title: 'Art. 15',
+    title: 'Art. 15 – Organi dell’Associazione',
     blocks: [
-      {
-        kind: 'p',
-        text: 'Il Consiglio Direttivo è l’organo esecutivo dell’Associazione ed è composto da:',
-      },
+      { kind: 'p', text: 'Sono organi dell’Associazione:' },
       {
         kind: 'list',
         items: [
-          'un Presidente;',
-          'un Vicepresidente;',
-          'un Segretario;',
-          'un Tesoriere;',
-          'nonché dai rimanenti Consiglieri, che possono essere dotati di autonome deleghe funzionali.',
+          'l’assemblea degli associati;',
+          'il Consiglio direttivo;',
+          'il presidente;',
+          'il vicepresidente, se nominato;',
+          'il collegio dei probiviri, se istituito;',
+          'l’organo di controllo e il revisore legale, quando la nomina sia obbligatoria ai sensi di legge o quando l’assemblea deliberi di istituirli.',
         ],
       },
-      { kind: 'p', text: 'Esso è convocato da:' },
-      {
-        kind: 'list',
-        items: [
-          'il Presidente, o dal Vicepresidente in sua assenza;',
-          'da almeno 3 dei componenti, su richiesta motivata.',
-        ],
-      },
-      {
-        kind: 'p',
-        text: 'Il Consiglio Direttivo ha tutti i poteri di ordinaria e straordinaria amministrazione. Nella gestione ordinaria i suoi compiti sono:',
-      },
-      {
-        kind: 'list',
-        items: [
-          'nomina il Presidente, il Vice Presidente, il Segretario, il Tesoriere (le funzioni di Segretario e di Tesoriere possono essere assegnate ad un’unica persona) fra i soggetti in precedenza nominati dall’assemblea;',
-          'predisporre gli atti da sottoporre all’assemblea;',
-          'formalizzare le proposte per la gestione dell’Associazione;',
-          'elaborare il bilancio consuntivo che deve contenere le singole voci di spesa e di entrata relative al periodo di un anno;',
-          'stabilire gli importi delle quote annuali delle varie categorie di soci.',
-        ],
-      },
+      { kind: 'p', text: 'Le cariche sociali sono elettive, hanno durata determinata e sono svolte gratuitamente, salvo quanto previsto dall’articolo 24 per l’organo di controllo e il revisore legale e salvo il rimborso delle spese effettivamente sostenute e documentate per l’attività prestata, secondo criteri e limiti stabiliti dalla legge e dall’eventuale regolamento interno.' },
     ],
   },
   {
     id: 'art-16',
-    title: 'Art. 16',
+    title: 'Art. 16 – Assemblea degli associati',
     blocks: [
-      {
-        kind: 'p',
-        text: 'Il Presidente dura in carica quanto il Consiglio Direttivo, ed è legale rappresentante dell’Associazione a tutti gli effetti. In sua assenza o impedimento è sostituito dal Vicepresidente.',
-      },
-      {
-        kind: 'p',
-        text: 'Egli convoca e presiede il Consiglio Direttivo, sottoscrive tutti gli atti amministrativi compiuti dall’Associazione.',
-      },
-      {
-        kind: 'p',
-        text: 'Conferisce ai consiglieri e ai soci deleghe ed eventuali procure speciali per la gestione di attività varie, previa approvazione del Consiglio Direttivo.',
-      },
-      { kind: 'p', text: 'Il Presidente decade dall’incarico:' },
+      { kind: 'p', text: 'L’assemblea è l’organo sovrano dell’Associazione ed è composta da tutti gli associati; il diritto di voto spetta agli associati in possesso dei requisiti di cui all’articolo 8.' },
+      { kind: 'p', text: 'Ogni associato persona fisica ha un voto. Gli enti associati partecipano mediante il proprio rappresentante legale o un delegato munito di delega scritta.' },
+      { kind: 'p', text: 'L’assemblea è convocata dal presidente su deliberazione del Consiglio direttivo almeno una volta l’anno per l’approvazione del bilancio e ogniqualvolta sia necessario.' },
+      { kind: 'p', text: 'La convocazione deve essere effettuata con avviso contenente giorno, ora, luogo e ordine del giorno, inviato almeno quindici giorni prima della riunione mediante strumenti idonei a garantire la conoscibilità da parte degli associati, inclusi posta elettronica, posta elettronica certificata, comunicazione scritta, pubblicazione sul sito internet o affissione presso la sede.' },
+      { kind: 'p', text: 'L’assemblea deve essere convocata anche quando ne faccia richiesta motivata almeno il dieci per cento degli associati aventi diritto di voto. In tal caso il presidente provvede alla convocazione entro trenta giorni dalla richiesta. Decorso inutilmente tale termine, l’assemblea può essere convocata direttamente dai richiedenti, con le modalità previste dal presente articolo.' },
+      { kind: 'p', text: 'L’assemblea può svolgersi anche mediante mezzi di telecomunicazione, purché sia possibile identificare i partecipanti, consentire loro di intervenire in tempo reale e garantire l’esercizio del diritto di voto.' },
+      { kind: 'p', text: 'L’assemblea ordinaria:' },
       {
         kind: 'list',
         items: [
-          'per dimissioni;',
-          'per decesso;',
-          'a seguito di una mozione di sfiducia, per giusta causa, proposta ed approvata da almeno 3/4 dei consiglieri in carica.',
+          'approva il bilancio di esercizio e gli eventuali bilanci o rendiconti previsti dalla legge;',
+          'nomina e revoca i componenti del Consiglio direttivo;',
+          'nomina e revoca, quando previsto, i componenti dell’organo di controllo e il revisore legale;',
+          'approva gli indirizzi generali dell’attività dell’Associazione;',
+          'approva gli eventuali regolamenti;',
+          'decide sui ricorsi in materia di ammissione ed esclusione degli associati, quando il Collegio dei probiviri non è istituito;',
+          'delibera sugli altri argomenti attribuiti alla sua competenza dalla legge o dal presente statuto.',
         ],
       },
-      {
-        kind: 'p',
-        text: 'La mozione di sfiducia nei riguardi del Presidente potrà essere presentata, per giusta causa, anche da tanti soci che rappresentino almeno il 20% degli aventi diritto.',
-      },
-      {
-        kind: 'p',
-        text: 'Il Presidente decade automaticamente in caso di dimissioni del Consiglio Direttivo.',
-      },
+      { kind: 'p', text: 'L’assemblea straordinaria delibera sulle modifiche dello statuto, sulla trasformazione, fusione, scissione, scioglimento e devoluzione del patrimonio, nonché sugli altri argomenti attribuiti alla sua competenza dalla legge o dal presente statuto.' },
     ],
   },
   {
     id: 'art-17',
-    title: 'Art. 17',
+    title: 'Art. 17 – Costituzione e deliberazioni dell’assemblea',
     blocks: [
-      {
-        kind: 'p',
-        text: 'Il Collegio dei Probiviri è composto da tre soci eletti dall’assemblea. Dura in carica quanto il Consiglio Direttivo e il Presidente. Decide, entro trenta giorni dalla presentazione del ricorso, sulle decisioni di espulsione e sui dinieghi di ammissione o di esclusione soci dall’Associazione.',
-      },
+      { kind: 'p', text: 'In prima convocazione l’assemblea ordinaria è validamente costituita con la presenza della metà degli associati aventi diritto di voto e delibera a maggioranza dei voti espressi.' },
+      { kind: 'p', text: 'In seconda convocazione l’assemblea ordinaria è validamente costituita qualunque sia il numero degli associati presenti e delibera a maggioranza dei voti espressi.' },
+      { kind: 'p', text: 'Per le modifiche dello statuto e per le deliberazioni di trasformazione, fusione e scissione, l’assemblea straordinaria è validamente costituita in prima convocazione con la presenza, in proprio o per delega, di almeno la metà degli associati aventi diritto di voto e delibera con il voto favorevole della maggioranza dei presenti; in seconda convocazione è validamente costituita qualunque sia il numero dei presenti e delibera con il voto favorevole della maggioranza dei presenti.' },
+      { kind: 'p', text: 'Lo scioglimento dell’Associazione e la devoluzione del patrimonio sono deliberati con il voto favorevole di almeno tre quarti degli associati, salvo le diverse maggioranze inderogabili previste dalla legge.' },
+      { kind: 'p', text: 'Non possono votare gli associati che si trovino in situazione di conflitto di interessi rispetto alla deliberazione.' },
+      { kind: 'p', text: 'Ogni associato può farsi rappresentare in assemblea da un altro associato mediante delega scritta, nei limiti e alle condizioni previsti dalla legge. Nessun associato può ricevere un numero di deleghe superiore a tre.' },
+      { kind: 'p', text: 'L’assemblea nomina, all’inizio di ogni riunione, il presidente e il segretario della seduta, salvo che la funzione sia svolta dal presidente dell’Associazione e dal segretario del Consiglio direttivo.' },
+      { kind: 'p', text: 'Delle riunioni è redatto verbale sottoscritto dal presidente e dal segretario della seduta e conservato nel libro delle adunanze e delle deliberazioni dell’assemblea.' },
     ],
   },
   {
     id: 'art-18',
-    title: 'Art. 18',
+    title: 'Art. 18 – Consiglio direttivo',
     blocks: [
-      {
-        kind: 'p',
-        text: 'In caso di scioglimento dell’associazione l’Assemblea nominerà uno o più liquidatori che provvederanno alla liquidazione del patrimonio secondo le norme di legge.',
-      },
-      {
-        kind: 'p',
-        text: 'Il patrimonio residuo verrà devoluto ad altra Associazione con finalità analoghe o fini di pubblica utilità.',
-      },
+      { kind: 'p', text: 'Il Consiglio direttivo è composto da un numero di membri non inferiore a cinque e non superiore a nove, eletti dall’assemblea tra gli associati persone fisiche.' },
+      { kind: 'p', text: 'I consiglieri durano in carica tre anni e sono rieleggibili. Restano in carica fino alla nomina dei nuovi componenti.' },
+      { kind: 'p', text: 'Non può essere eletto consigliere, e se eletto decade, chi si trova nelle condizioni previste dall’articolo 2382 del codice civile. Il consigliere che non partecipa senza giustificato motivo a tre riunioni consecutive del Consiglio direttivo decade dalla carica.' },
+      { kind: 'p', text: 'Il Consiglio direttivo è validamente costituito con la presenza della maggioranza dei suoi componenti e delibera a maggioranza dei presenti. In caso di parità prevale il voto del presidente.' },
+      { kind: 'p', text: 'Il Consiglio direttivo può cooptare nuovi consiglieri in sostituzione di componenti cessati, purché la maggioranza dei consiglieri rimanga di nomina assembleare e fino alla prima assemblea utile, che provvede alla conferma o alla sostituzione dei cooptati.' },
+      { kind: 'p', text: 'Qualora venga meno la maggioranza dei consiglieri eletti dall’assemblea, il presidente convoca senza indugio l’assemblea per il rinnovo dell’organo.' },
+      { kind: 'p', text: 'Il Consiglio direttivo è convocato dal presidente, oppure su richiesta motivata di almeno un terzo dei suoi componenti, con preavviso adeguato e indicazione dell’ordine del giorno.' },
     ],
   },
   {
     id: 'art-19',
-    title: 'Art. 19',
+    title: 'Art. 19 – Competenze del Consiglio direttivo',
     blocks: [
-      { kind: 'p', text: 'Tutte le cariche elettive sono gratuite.' },
+      { kind: 'p', text: 'Il Consiglio direttivo:' },
       {
-        kind: 'p',
-        text: 'Ai soci compete solo il rimborso delle spese regolarmente documentate con le modalità previste dal regolamento, che ne fissa i criteri e ne determina i limiti e, dove previsto, le preventive autorizzazioni.',
+        kind: 'list',
+        items: [
+          'cura l’amministrazione ordinaria e straordinaria dell’Associazione;',
+          'attua le deliberazioni dell’assemblea;',
+          'predispone il bilancio e gli altri documenti da sottoporre all’assemblea;',
+          'delibera sulle domande di ammissione degli associati;',
+          'delibera sull’esclusione degli associati nel rispetto del presente statuto;',
+          'determina annualmente la quota associativa;',
+          'delibera l’esercizio delle attività diverse nei limiti previsti dalla legge;',
+          'predispone i programmi annuali e pluriennali dell’Associazione;',
+          'delibera sull’apertura e gestione di conti correnti e rapporti bancari;',
+          'delibera sulla stipula di convenzioni, contratti e accordi coerenti con le finalità associative;',
+          'può conferire deleghe operative ai propri componenti;',
+          'cura la tenuta dei libri sociali e dei registri;',
+          'adotta ogni provvedimento necessario per il buon funzionamento dell’Associazione, salvo quanto riservato all’assemblea dalla legge o dal presente statuto.',
+        ],
       },
     ],
   },
   {
     id: 'art-20',
-    title: 'Art. 20',
+    title: 'Art. 20 – Presidente e vicepresidente',
     blocks: [
+      { kind: 'p', text: 'Il presidente è eletto dal Consiglio direttivo tra i propri componenti eletti dall’assemblea, dura in carica quanto il Consiglio direttivo ed è rieleggibile.' },
+      { kind: 'p', text: 'Il presidente ha la rappresentanza legale dell’Associazione di fronte ai terzi e in giudizio.' },
+      { kind: 'p', text: 'Il presidente:' },
       {
-        kind: 'p',
-        text: 'L’Associazione potrà aderire ad altre Associazioni aventi analoghe finalità, sia locali che nazionali, nonché a circuiti culturali, circoli cinematografici e associazioni legate al settore culturale e cinematografico nonché ad associazioni per la distribuzione di film, documentari, materiale ad essi legato.',
+        kind: 'list',
+        items: [
+          'convoca e presiede l’assemblea e il Consiglio direttivo;',
+          'cura l’esecuzione delle deliberazioni degli organi sociali;',
+          'sottoscrive gli atti dell’Associazione;',
+          'sovrintende al funzionamento generale dell’Associazione;',
+          'adotta, in caso di urgenza, i provvedimenti necessari, sottoponendoli alla ratifica del Consiglio direttivo nella prima riunione utile.',
+        ],
       },
-      {
-        kind: 'p',
-        text: 'Potrà inoltre stipulare convenzioni con Enti, associazioni e istituzioni di ogni tipo, convenzioni finalizzate a conseguire i propri scopi sia diretti che indiretti.',
-      },
-      {
-        kind: 'p',
-        text: 'Al solo fine di conseguire i suoi scopi potrà compiere negozi giuridici per l’acquisizione di beni mobili, immobili e mobili registrati, che costituiranno patrimonio dell’associazione; aprire conti correnti e stipulare mutui, finanziamenti e simili e predisporre domande di contributo riferite alla propria attività ed ai propri scopi.',
-      },
-      {
-        kind: 'p',
-        text: 'I contributi versati dagli associati e i beni acquistati con questi contributi costituiscono il fondo comune dell’associazione, e pertanto i singoli associati non possono chiederne la divisione, né pretendere la restituzione della quota in caso di recesso.',
-      },
-      {
-        kind: 'p',
-        text: 'Quanto versato dagli associati a titolo di quota, di liberalità o di sovvenzione, rimane comunque acquisito al patrimonio dell’Associazione.',
-      },
+      { kind: 'p', text: 'In caso di assenza o impedimento, il presidente è sostituito dal vicepresidente, se nominato, o dal consigliere più anziano per età.' },
+      { kind: 'p', text: 'Il presidente cessa dalla carica per scadenza, dimissioni, revoca, decadenza o perdita della qualità di associato. La revoca deve essere motivata e deliberata dal Consiglio direttivo, nel rispetto del diritto di difesa dell’interessato. Resta ferma la competenza dell’assemblea a revocare i componenti del Consiglio direttivo.' },
     ],
   },
   {
     id: 'art-21',
-    title: 'Art. 21',
+    title: 'Art. 21 – Segretario e tesoriere',
     blocks: [
-      {
-        kind: 'p',
-        text: 'Per meglio definire in dettaglio il funzionamento dell’Associazione, è facoltà emanare regolamenti, da esporre nelle bacheche virtuali e presso la sede. Essi impegnano tutti i soci senza distinzione.',
-      },
+      { kind: 'p', text: 'Il Consiglio direttivo può nominare tra i propri componenti un segretario e un tesoriere. Le due funzioni possono essere attribuite alla stessa persona.' },
+      { kind: 'p', text: 'Il segretario cura la redazione dei verbali, la tenuta dei libri sociali e gli adempimenti amministrativi dell’Associazione.' },
+      { kind: 'p', text: 'Il tesoriere cura la gestione contabile e finanziaria, predispone la documentazione necessaria alla redazione del bilancio e opera secondo le direttive del Consiglio direttivo.' },
     ],
   },
   {
     id: 'art-22',
-    title: 'Art. 22',
+    title: 'Art. 22 – Collegio dei probiviri',
     blocks: [
-      {
-        kind: 'p',
-        text: 'Per quanto non previsto dal presente statuto valgono le norme di legge vigenti in materia.',
-      },
+      { kind: 'p', text: 'L’assemblea può istituire un collegio dei probiviri composto da tre membri scelti tra gli associati, che durano in carica quanto il Consiglio direttivo e sono rieleggibili.' },
+      { kind: 'p', text: 'La carica di componente del Collegio dei probiviri è incompatibile con quella di consigliere. Il Collegio elegge al proprio interno il presidente. In caso di cessazione di un componente subentra il primo dei non eletti o, in mancanza, provvede l’assemblea nella prima riunione utile.' },
+      { kind: 'p', text: 'Il Collegio delibera con la presenza di tutti i suoi componenti e a maggioranza; le decisioni sono motivate, comunicate per iscritto agli interessati e trascritte nel libro delle adunanze del Collegio.' },
+      { kind: 'p', text: 'Il collegio dei probiviri può svolgere funzioni di conciliazione e di garanzia interna e decide sulle richieste di riesame dei provvedimenti di rigetto della domanda di ammissione e di esclusione, secondo quanto previsto dagli articoli 7 e 9 del presente Statuto.' },
+      { kind: 'p', text: 'Il procedimento deve garantire l’imparzialità, la contestazione degli addebiti, il diritto di difesa e la motivazione della decisione.' },
+      { kind: 'p', text: 'La competenza del collegio dei probiviri non esclude i diritti e le tutele riconosciuti dalla legge agli associati.' },
+    ],
+  },
+  {
+    id: 'art-23',
+    title: 'Art. 23 – Organo di controllo e revisione legale',
+    blocks: [
+      { kind: 'p', text: 'La nomina dell’organo di controllo e del revisore legale dei conti è effettuata quando ricorrono i presupposti previsti dalla normativa vigente o quando l’assemblea lo ritenga opportuno.' },
+      { kind: 'p', text: 'L’organo di controllo e il revisore legale esercitano le funzioni e possiedono i requisiti previsti dalla legge.' },
+    ],
+  },
+  {
+    id: 'art-24',
+    title: 'Art. 24 – Rimborsi e gratuità delle cariche',
+    blocks: [
+      { kind: 'p', text: 'Tutte le cariche associative sono gratuite, ad eccezione di quelle di componente dell’organo di controllo e di revisore legale, se nominati, per le quali può essere previsto un compenso nel rispetto dei limiti di cui all’articolo 12.' },
+      { kind: 'p', text: 'Ai componenti degli organi sociali, agli associati e ai volontari possono essere rimborsate esclusivamente le spese effettivamente sostenute, documentate e autorizzate, secondo criteri e limiti stabiliti dalla legge e dall’eventuale regolamento interno.' },
+      { kind: 'p', text: 'Non sono ammessi rimborsi forfetari, salvo i casi espressamente consentiti dalla normativa vigente.' },
+    ],
+  },
+  {
+    id: 'art-25',
+    title: 'Art. 25 – Rapporti con altri enti e convenzioni',
+    blocks: [
+      { kind: 'p', text: 'L’Associazione può aderire ad altre associazioni, reti, federazioni, coordinamenti, circuiti culturali e cinematografici e altri enti compatibili con le proprie finalità.' },
+      { kind: 'p', text: 'Può stipulare convenzioni e accordi con enti pubblici, enti privati, istituzioni, associazioni, fondazioni e altri soggetti, purché tali rapporti siano coerenti con le finalità associative e rispettino la normativa vigente.' },
+    ],
+  },
+  {
+    id: 'art-26',
+    title: 'Art. 26 – Scioglimento e devoluzione del patrimonio',
+    blocks: [
+      { kind: 'p', text: 'Lo scioglimento dell’Associazione è deliberato dall’assemblea straordinaria con le maggioranze previste dal presente statuto e dalla legge.' },
+      { kind: 'p', text: 'In caso di estinzione o scioglimento, l’assemblea nomina uno o più liquidatori e determina le modalità della liquidazione.' },
+      { kind: 'p', text: 'Il patrimonio residuo, esaurita la liquidazione, è devoluto, previo parere positivo dell’ufficio competente del Registro unico nazionale del Terzo settore e salva diversa destinazione imposta dalla legge, ad altro ente del Terzo settore individuato dall’assemblea, preferibilmente avente finalità analoghe o comunque coerenti con quelle dell’Associazione.' },
+      { kind: 'p', text: 'È vietata qualsiasi attribuzione del patrimonio residuo agli associati, agli amministratori, ai fondatori o ad altri soggetti privati.' },
+    ],
+  },
+  {
+    id: 'art-27',
+    title: 'Art. 27 – Regolamenti',
+    blocks: [
+      { kind: 'p', text: 'Per disciplinare il funzionamento dell’Associazione e lo svolgimento delle attività, l’assemblea può approvare regolamenti interni.' },
+      { kind: 'p', text: 'Il Consiglio direttivo può adottare disposizioni organizzative interne, purché non contrastino con la legge, il presente statuto e i regolamenti approvati dall’assemblea.' },
+    ],
+  },
+  {
+    id: 'art-28',
+    title: 'Art. 28 – Rinvio',
+    blocks: [
+      { kind: 'p', text: 'Per quanto non previsto dal presente statuto si applicano le disposizioni del decreto legislativo 3 luglio 2017, n. 117, del codice civile e della normativa vigente in materia di enti del Terzo settore, associazioni di promozione sociale, volontariato, attività culturali e spettacolo.' },
+    ],
+  },
+  {
+    id: 'art-29',
+    title: 'Art. 29 – Norme transitorie',
+    blocks: [
+      { kind: 'p', text: 'Il presente statuto sostituisce integralmente lo statuto approvato dall’assemblea del 3 dicembre 2018.' },
+      { kind: 'p', text: 'Fino all’iscrizione nella sezione “Associazioni di promozione sociale” del Registro unico nazionale del Terzo settore, l’Associazione utilizza la denominazione “Associazione Culturale Metropol”. Dopo l’iscrizione, assume la denominazione “Associazione Culturale Metropol APS” e può utilizzare l’acronimo “APS”, nei limiti previsti dalla legge.' },
+      { kind: 'p', text: 'Gli organi sociali in carica alla data di approvazione del presente statuto restano in carica fino alla scadenza naturale del mandato, salvo dimissioni, revoca, decadenza o diversa deliberazione dell’assemblea adottata nel rispetto della legge e del presente statuto.' },
+      { kind: 'p', text: 'Il Collegio dei probiviri, ove già nominato e in carica, continua a svolgere le proprie funzioni fino alla scadenza del mandato, nel rispetto del presente statuto. La composizione del Consiglio direttivo prevista dall’articolo 18 si applica dal primo rinnovo successivo.' },
+      { kind: 'p', text: 'Gli associati iscritti alla data di approvazione del presente statuto conservano la qualità di associato e l’anzianità di iscrizione maturata, purché risultino in possesso dei requisiti previsti dal presente statuto e dalla normativa vigente.' },
     ],
   },
 ];
@@ -480,7 +513,7 @@ export const REGOLAMENTO: Chapter[] = [
         blocks: [
           {
             kind: 'p',
-            text: 'In base a quanto previsto all’art. 6 dello Statuto Sociale, l’Assemblea dei Soci emana il presente Regolamento Interno per la disciplina e l’organizzazione delle attività dell’Associazione.',
+            text: 'In base a quanto previsto all’art. 27 dello Statuto Sociale, l’Assemblea dei Soci emana il presente Regolamento Interno per la disciplina e l’organizzazione delle attività dell’Associazione.',
           },
         ],
       },
@@ -564,7 +597,7 @@ export const REGOLAMENTO: Chapter[] = [
           },
           {
             kind: 'p',
-            text: 'Nei casi di impedimento o di impossibilità a partecipare al Consiglio non è possibile delegare un altro Consigliere a fare le sue veci. Un membro facente parte delle cariche sociali dell’Associazione decade se ottiene un incarico politico a qualsiasi livello o per una delle cause elencate nel seguente art. 10 o per quanto esposto nell’art. 8 dello Statuto.',
+            text: 'Nei casi di impedimento o di impossibilità a partecipare al Consiglio non è possibile delegare un altro Consigliere a fare le sue veci. Un membro facente parte delle cariche sociali dell’Associazione decade se ottiene un incarico politico a qualsiasi livello o per una delle cause elencate nel seguente art. 10 o per quanto esposto nell’art. 9 dello Statuto.',
           },
         ],
       },
@@ -579,7 +612,7 @@ export const REGOLAMENTO: Chapter[] = [
           { kind: 'list', items: ['Presidente', 'Vice Presidente', 'Segretario', 'Tesoriere'] },
           {
             kind: 'p',
-            text: 'Solo i membri del Consiglio Direttivo (come da Statuto Sociale) possono ricoprire i Ruoli Primari e nessun membro può ricoprire più di un ruolo primario.',
+            text: 'Solo i membri del Consiglio Direttivo (come da Statuto Sociale) possono ricoprire i Ruoli Primari.',
           },
         ],
       },
@@ -607,7 +640,7 @@ export const REGOLAMENTO: Chapter[] = [
             kind: 'list',
             items: [
               'sostituisce il Presidente in caso di sua assenza;',
-              'svolge funzioni di Tesoriere (incaricato della gestione contabile e amministrativa) in caso di assenza del Tesoriere.',
+              'può ricevere deleghe operative o incarichi particolari stabiliti dallo statuto dell’associazione o deliberati dal consiglio direttivo.',
             ],
           },
         ],
@@ -753,7 +786,7 @@ export const REGOLAMENTO: Chapter[] = [
           },
           {
             kind: 'p',
-            text: 'Solo in caso di candidature pervenute insufficienti a coprire il numero minimo dei componenti del Direttivo (stabilito dall’art. 14 dello Statuto), vanno accettate eventuali candidature emerse nel corso dell’Assemblea, dalle persone fisicamente presenti, fino al raggiungimento del minimo di candidature a consigliere.',
+            text: 'Solo in caso di candidature pervenute insufficienti a coprire il numero minimo dei componenti del Direttivo (stabilito dall’art. 18 dello Statuto), vanno accettate eventuali candidature emerse nel corso dell’Assemblea, dalle persone fisicamente presenti, fino al raggiungimento del minimo di candidature a consigliere.',
           },
           {
             kind: 'p',
@@ -773,7 +806,7 @@ export const REGOLAMENTO: Chapter[] = [
           },
           {
             kind: 'p',
-            text: 'Nelle candidature per le cariche sociali non sono ammessi i soci che non sono in regola con i pagamenti, o che posseggano, al momento dell’invio della candidatura, un incarico politico a qualsiasi livello (visto l’art. 1 comma 1 dello Statuto).',
+            text: 'Nelle candidature per le cariche sociali non sono ammessi i soci che non sono in regola con i pagamenti, o che posseggano, al momento dell’invio della candidatura, un incarico politico a qualsiasi livello (visto l’art. 1 comma 2 dello Statuto).',
           },
         ],
       },
@@ -783,7 +816,7 @@ export const REGOLAMENTO: Chapter[] = [
         blocks: [
           {
             kind: 'p',
-            text: 'I soci dell’Associazione sono definiti all’art. 4 dello Statuto. I requisiti generali per il loro accoglimento sono i seguenti:',
+            text: 'I soci dell’Associazione sono definiti all’art. 6 dello Statuto. I requisiti generali per il loro accoglimento sono i seguenti:',
           },
           {
             kind: 'list',
@@ -849,7 +882,7 @@ export const REGOLAMENTO: Chapter[] = [
           },
           {
             kind: 'p',
-            text: 'Il socio escluso può ricorrere per iscritto contro il provvedimento entro trenta giorni al Collegio dei Probiviri (ai sensi dell’art. 6 dello Statuto).',
+            text: 'Il socio escluso può ricorrere per iscritto contro il provvedimento entro trenta giorni al Collegio dei Probiviri (ai sensi dell’art. 7 dello Statuto).',
           },
         ],
       },
@@ -861,6 +894,7 @@ export const REGOLAMENTO: Chapter[] = [
             kind: 'p',
             text: 'Per quanto non espressamente esplicitato in questo Regolamento fa fede lo Statuto dell’Associazione.',
           },
+          { kind: 'p', text: 'Villafranca, 09/11/2026' },
         ],
       },
     ],

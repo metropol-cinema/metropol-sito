@@ -483,14 +483,16 @@
   :root[data-tema^='contrasto'] .vignette {
     box-shadow: none;
   }
-  /* ----- Il marchio sui fondi chiari --------------------------------------
-     In testata e in fondo c'è la versione monocromatica BIANCA del marchio:
-     giusta sul nero, invisibile sulla carta. Invece di caricare una seconda
-     immagine la si rovescia — è monocromatica, quindi invertirla dà l'identico
-     marchio in nero e non costa un byte in più. */
+  /* ----- Le lettere del marchio -------------------------------------------
+     Il turchese della bobina non cambia mai (components/marchio.tsx). Le
+     lettere nel file ufficiale sono nere: sulla carta restano così, sul nero
+     della sala diventano bianche o sparirebbero. */
+  .marchio {
+    color: #fff;
+  }
   :root[data-tema='chiaro'] .marchio,
   :root[data-tema='contrasto-chiaro'] .marchio {
-    filter: invert(1);
+    color: #1a171b;
   }
 
   /* Bordi visibili ovunque: in alto contrasto i contorni sono informazione. */

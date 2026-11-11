@@ -76,6 +76,8 @@ const nextConfig = {
       ['/venerdi-del-metropol', '/venerdi'],
       ['/dove-siamo', '/info#dove-siamo'],
       ['/newsletter', '/#iscriviti-newsletter'],
+      // Il link della convocazione spedita ai soci: la pagina non c'è più.
+      ['/associazione/assemblea-2026', '/associazione/statuto'],
     ].map(([source, destination]) => ({ source, destination, statusCode: 301 }));
   },
 };

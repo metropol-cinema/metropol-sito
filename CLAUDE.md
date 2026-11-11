@@ -58,7 +58,7 @@ in dashboard. `planHero` in `app/page.tsx` traduce ogni riga in slide:
 | Riga della timeline | Diventa |
 | --- | --- |
 | `current_programming` | **una slide per film della settimana** (non una sola), in ordine di proiezione più vicina |
-| `future_programming`  | il pannello `HeroUpcoming` coi film in arrivo |
+| `future_programming`  | il pannello `HeroUpcoming` coi film in arrivo, **solo se la settimana è vuota** |
 | `video` / `image`     | la slide media caricata |
 
 Regole di contorno:
@@ -74,8 +74,11 @@ Regole di contorno:
 - `priority` va solo alla prima slide: il backdrop è l'immagine più pesante
   della pagina.
 
-La sezione "Prossimamente" sotto la settimana non si ripete se la timeline la
-mette già nell'hero (`upcomingInHero`).
+**Film in arrivo e film della settimana non convivono nella home** (nov 2026,
+decisione dell'utente): se `current_programming` ha prodotto slide, la riga
+`future_programming` si salta e i film in arrivo si raggiungono solo dalla
+pagina `/prossimamente` (voce di menu). Il pannello torna nell'hero quando la
+settimana è vuota.
 
 **Il quadro settimana LUN→DOM è stato tolto** (ago 2026, decisione dell'utente):
 si proietta da ottobre a maggio e quasi solo nel fine settimana, quindi mostrava
@@ -288,9 +291,10 @@ sottofondo Next toglie il segnale, e fa bene: lì non sta aspettando nessuno.
   scontornati dalla locandina dell'associazione.
 - Date/ore SEMPRE in `Europe/Rome` (l'API è in UTC) — usa gli helper del client.
 - `prices` è **per proiezione**: niente assunzioni di prezzo unico per film.
-- **Marchio**: `public/loghi/metropol-marchio-bianco.png` (versione
-  monocromatica) in testata e piè di pagina — sul nero è quella giusta e porta
-  già il nome per esteso, quindi niente wordmark accanto.
+- **Marchio**: `components/marchio.tsx`, i tracciati del PDF ufficiale, in
+  testata e piè di pagina; porta già il nome per esteso, quindi niente wordmark
+  accanto. Bobina sempre turchese `#3B9DB5`; le lettere, nere nel file, sono
+  bianche sui temi scuri e nere su quelli chiari (`.marchio` in globals.css).
   `metropol-logo-colori.png` è il marchio da carta intestata (nero + petrolio
   `#3898B0`): serve solo a comporre `app/opengraph-image.png`, l'anteprima di
   condivisione. `app/icon.png` è la bobina del marchio, ritagliata per colore.
