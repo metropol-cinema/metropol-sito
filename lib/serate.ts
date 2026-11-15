@@ -14,6 +14,11 @@ export type FilmSerata = {
   /** «Mediometraggio», «Cortometraggio»… */
   formato: string;
   anno?: number;
+  durataMinuti?: number;
+  /** Festival, selezioni: una riga sopra il titolo. */
+  riconoscimento?: string;
+  /** Locandina in `public/`, con le sue misure vere (servono a next/image). */
+  locandina?: { src: string; width: number; height: number };
   /** Capoversi della scheda, nell'ordine. */
   testo: string[];
   /**
@@ -44,7 +49,7 @@ export const SERATA_21_NOVEMBRE: Serata = {
   slug: '21-novembre',
   titolo: 'Nulla è successo · Il disappunto',
   presentazione: [
-    'Due ragazzi di Villafranca hanno girato un mediometraggio, e sabato 21 novembre lo presentano in sala insieme al cortometraggio di un loro amico.',
+    'Cristian Levantino ed Edoardo Rossi, due ragazzi di Villafranca, hanno girato un mediometraggio, e sabato 21 novembre lo presentano in sala insieme al cortometraggio del loro amico Davide Ronzio.',
     'La serata non è organizzata dall’Associazione: il Metropol la sostiene e le apre la sala, perché il cinema fatto qui merita di essere visto qui.',
   ],
   inizio: '2026-11-21T21:00:00+01:00',
@@ -55,11 +60,26 @@ export const SERATA_21_NOVEMBRE: Serata = {
       id: 'nulla-e-successo',
       titolo: 'Nulla è successo',
       formato: 'Mediometraggio',
+      anno: 2026,
+      durataMinuti: 29,
+      locandina: { src: '/serate/21-novembre/locandina-nulla-e-successo.webp', width: 971, height: 1197 },
       testo: [
         'Una notte. Una strada di montagna. Due sconosciuti.',
         'A volte basta un istante perché tutto cambi.',
       ],
-      crediti: [],
+      crediti: [
+        { ruolo: 'Regia', nomi: 'Cristian Levantino ed Edoardo Rossi' },
+        { ruolo: 'Con', nomi: 'Jacopo Iebba, Claudio Gasperini e Gaia Marangoni' },
+        { ruolo: 'Sceneggiatura', nomi: 'Cristian Levantino, Edoardo Rossi e Mattia Rosolen' },
+        { ruolo: 'Fotografia', nomi: 'Chiara Coghi' },
+        { ruolo: 'Operatori', nomi: 'Alessio Fornasier ed Enea Rovaglia' },
+        { ruolo: 'Montaggio', nomi: 'Cristian Levantino ed Edoardo Rossi' },
+        { ruolo: 'Suono', nomi: 'Leonardo Campioni e Marco Santoro' },
+        { ruolo: 'Colorist', nomi: 'Pietro Della Giustina' },
+        { ruolo: 'Trucco', nomi: 'Gaia Marangoni' },
+        { ruolo: 'Backstage', nomi: 'Nicola Maccarini' },
+        { ruolo: 'Produzione', nomi: 'way2DREAM' },
+      ],
       youtubeId: '5xuqCpidbUY',
       fotogramma: '/serate/21-novembre/nulla-e-successo.webp',
       instagram: { account: 'way2dream.prod', url: 'https://www.instagram.com/way2dream.prod/' },
@@ -69,11 +89,24 @@ export const SERATA_21_NOVEMBRE: Serata = {
       titolo: 'Il disappunto',
       formato: 'Cortometraggio',
       anno: 2026,
+      riconoscimento: 'Selezione ufficiale Underground Film Festival',
+      locandina: { src: '/serate/21-novembre/locandina-il-disappunto.webp', width: 862, height: 1078 },
       testo: [
         'Un asteroide è in rotta di collisione con la Terra. Nell’ultimo giorno sul pianeta Eva, una donna con una lunga carriera politica alle spalle, aspetta un servizio esclusivo che le promette una morte «dignitosa» prima dell’impatto.',
         'Ma l’arrivo di una sconosciuta in fuga trasforma gli ultimi momenti di vita in uno scontro sul diritto di scegliere.',
       ],
-      crediti: [],
+      crediti: [
+        { ruolo: 'Scritto e diretto da', nomi: 'Davide Ronzio' },
+        { ruolo: 'Con', nomi: 'Valentina Econimo, Giorgia Ciavardini e Mario Volpe' },
+        { ruolo: 'Soggetto', nomi: 'Davide Ronzio, Federico Ferri e Roberto Bocchi' },
+        { ruolo: 'Aiuto regia', nomi: 'Roberto Bocchi' },
+        { ruolo: 'Fotografia', nomi: 'Davide Ronzio, con Roberto Bocchi' },
+        { ruolo: 'Operatori', nomi: 'Chiara Goffi, Giuseppe Sanzeri e Nicolò Saran' },
+        { ruolo: 'Scenografia', nomi: 'Federico Ferri' },
+        { ruolo: 'Segretario di edizione', nomi: 'Federico Ferri' },
+        { ruolo: 'Fonico', nomi: 'Cristian Levantino' },
+        { ruolo: 'Effetti visivi', nomi: 'Alice Pancari' },
+      ],
       youtubeId: 'plZp1Mw-dHs',
       fotogramma: '/serate/21-novembre/il-disappunto.webp',
       instagram: { account: 'davide.ronzio', url: 'https://www.instagram.com/davide.ronzio/' },

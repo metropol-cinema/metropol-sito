@@ -1,4 +1,4 @@
-import { ArrowDown, CalendarPlus, Clock, Instagram, MapPin, Ticket } from 'lucide-react';
+import { ArrowDown, Award, CalendarPlus, Clock, Instagram, MapPin, Ticket } from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 
@@ -30,14 +30,25 @@ function SchedaFilm({ film }: { film: FilmSerata }) {
     <article
       id={film.id}
       aria-labelledby={`${film.id}-titolo`}
-      className="grid scroll-mt-24 gap-6 rounded-2xl border border-cinema-border bg-cinema-surface p-5 sm:p-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-10"
+      className="scroll-mt-24 rounded-2xl border border-cinema-border bg-cinema-surface p-5 sm:p-8"
     >
-      <Trailer youtubeId={film.youtubeId} title={film.titolo} posterUrl={film.fotogramma} />
+      <div className="grid gap-6 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-10">
+        {film.locandina && (
+          <Image
+            src={film.locandina.src}
+            alt={`Locandina di ${film.titolo}`}
+            width={film.locandina.width}
+            height={film.locandina.height}
+            sizes="(min-width: 1024px) 15rem, (min-width: 640px) 11rem, 60vw"
+            className="w-3/5 max-w-[15rem] self-start rounded-xl shadow-lg shadow-black/40 sm:w-full"
+          />
+        )}
 
       <div className="min-w-0">
         <p className="eyebrow">
-          {film.formato}
-          {film.anno ? ` · ${film.anno}` : ''}
+          {[film.formato, film.anno, film.durataMinuti && `${film.durataMinuti} min`]
+            .filter(Boolean)
+            .join(' · ')}
         </p>
         <h3
           id={`${film.id}-titolo`}
@@ -45,24 +56,17 @@ function SchedaFilm({ film }: { film: FilmSerata }) {
         >
           {film.titolo}
         </h3>
+        {film.riconoscimento && (
+          <p className="mt-3 inline-flex items-center gap-1.5 rounded border border-cinema-ticket-ink/60 px-2 py-1 font-utility text-xs font-bold uppercase tracking-wide text-cinema-ticket-ink">
+            <Award className="h-3.5 w-3.5" aria-hidden="true" />
+            {film.riconoscimento}
+          </p>
+        )}
         <div className="mt-5 space-y-3 text-base leading-relaxed text-cinema-text-muted">
           {film.testo.map((capoverso) => (
             <p key={capoverso}>{capoverso}</p>
           ))}
         </div>
-
-        {film.crediti.length > 0 && (
-          <dl className="mt-5 space-y-1 text-sm">
-            {film.crediti.map(({ ruolo, nomi }) => (
-              <div key={ruolo} className="flex flex-wrap gap-x-2">
-                <dt className="font-utility font-semibold uppercase tracking-wider text-cinema-text-subtle">
-                  {ruolo}
-                </dt>
-                <dd className="text-cinema-text">{nomi}</dd>
-              </div>
-            ))}
-          </dl>
-        )}
 
         {film.instagram && (
           <a
@@ -74,6 +78,24 @@ function SchedaFilm({ film }: { film: FilmSerata }) {
             <Instagram className="h-4 w-4" aria-hidden="true" />@{film.instagram.account}
             <span className="sr-only"> su Instagram (si apre in una nuova scheda)</span>
           </a>
+        )}
+      </div>
+      </div>
+
+      <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)] lg:gap-10">
+        <Trailer youtubeId={film.youtubeId} title={film.titolo} posterUrl={film.fotogramma} />
+
+        {film.crediti.length > 0 && (
+          <dl className="grid content-start gap-x-4 gap-y-2 text-sm sm:grid-cols-[auto_minmax(0,1fr)]">
+            {film.crediti.map(({ ruolo, nomi }) => (
+              <div key={ruolo} className="contents">
+                <dt className="font-utility text-xs font-semibold uppercase tracking-wider text-cinema-text-subtle sm:pt-0.5">
+                  {ruolo}
+                </dt>
+                <dd className="mb-1 text-cinema-text sm:mb-0">{nomi}</dd>
+              </div>
+            ))}
+          </dl>
         )}
       </div>
     </article>
@@ -101,7 +123,12 @@ export default function Serata21NovembrePage() {
       address: SITE.venueAddress,
       geo: { '@type': 'GeoCoordinates', latitude: SITE.venueGeo.lat, longitude: SITE.venueGeo.lng },
     },
-    workPresented: SERATA.films.map((f) => ({ '@type': 'Movie', name: f.titolo })),
+    workPresented: SERATA.films.map((f) => ({
+      '@type': 'Movie',
+      name: f.titolo,
+      ...(f.locandina && { image: `${URL_SITO}${f.locandina.src}` }),
+      ...(f.durataMinuti && { duration: `PT${f.durataMinuti}M` }),
+    })),
   };
 
   return (
