@@ -58,7 +58,7 @@ export function FilmPosterCard({
       {/* Un film annunciato può non avere ancora orari: meglio dirlo che
           lasciare la riga vuota. */}
       <p className="mt-1 font-utility text-[0.68rem] font-semibold uppercase tracking-wider text-cinema-ticket-ink">
-        {first ? `Dal ${formatDayIt(first.startsAt)}` : 'Date in arrivo'}
+        {first ? `Da ${formatDayIt(first.startsAt)}` : 'Date in arrivo'}
       </p>
       {film.isAccessible && <AccessibleBadge className="mt-1.5" />}
     </Link>
