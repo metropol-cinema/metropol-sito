@@ -7,6 +7,8 @@
  * home sparisce, e la pagina resta raggiungibile ma parla al passato.
  */
 
+import { IN_PRODUZIONE } from '@/lib/ambiente';
+
 export type FilmSerata = {
   /** Ancora della scheda nella pagina, e chiave React. */
   id: string;
@@ -37,6 +39,14 @@ export type Serata = {
   titolo: string;
   /** Riga d'apertura, prima dei film. */
   presentazione: string[];
+  /**
+   * Prima di questo istante, in produzione, la serata non esiste: pagina 404,
+   * niente fascia, niente sitemap. Così si pubblica in anticipo e compare da
+   * sola. L'anteprima la mostra sempre, per poterla controllare.
+   * Le pagine sono ISR a 10 minuti: dopo l'ora indicata può servire qualche
+   * minuto (e una visita) perché compaia.
+   */
+  pubblicaDal: string;
   /** Inizio, con fuso esplicito: il 21 novembre è ora solare (+01:00). */
   inizio: string;
   /** Da qui la serata è passata: la fascia in home sparisce. */
@@ -52,6 +62,7 @@ export const SERATA_21_NOVEMBRE: Serata = {
     'Cristian Levantino ed Edoardo Rossi, due ragazzi di Villafranca, hanno girato un mediometraggio, e sabato 21 novembre lo presentano in sala insieme al cortometraggio del loro amico Davide Ronzio.',
     'La serata non è organizzata dall’Associazione: il Metropol la sostiene e le apre la sala, perché il cinema fatto qui merita di essere visto qui.',
   ],
+  pubblicaDal: '2026-11-16T00:00:00+01:00',
   inizio: '2026-11-21T21:00:00+01:00',
   fine: '2026-11-22T00:00:00+01:00',
   ingresso: 'Ingresso libero',
@@ -113,6 +124,17 @@ export const SERATA_21_NOVEMBRE: Serata = {
     },
   ],
 };
+
+/** In produzione la serata si vede solo da `pubblicaDal`; altrove sempre. */
+export function serataPubblicata(serata: Serata, adesso = new Date()): boolean {
+  if (!IN_PRODUZIONE) return true;
+  return adesso.getTime() >= new Date(serata.pubblicaDal).getTime();
+}
+
+/** La fascia in home: pubblicata e non ancora passata. */
+export function serataInEvidenza(serata: Serata, adesso = new Date()): boolean {
+  return serataPubblicata(serata, adesso) && !serataPassata(serata, adesso);
+}
 
 export function serataPassata(serata: Serata, adesso = new Date()): boolean {
   return adesso.getTime() >= new Date(serata.fine).getTime();

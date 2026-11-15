@@ -2,11 +2,12 @@ import { NextResponse } from 'next/server';
 
 import { URL_SITO } from '@/lib/ambiente';
 import { screeningCalendar } from '@/lib/calendario';
-import { SERATA_21_NOVEMBRE as SERATA } from '@/lib/serate';
+import { SERATA_21_NOVEMBRE as SERATA, serataPubblicata } from '@/lib/serate';
 import { SITE } from '@/lib/site';
 
 /** «Aggiungi al calendario» della serata: tutto viene da `lib/serate.ts`, niente dall'indirizzo. */
 export function GET() {
+  if (!serataPubblicata(SERATA)) return new NextResponse('Non trovato', { status: 404 });
   const url = `${URL_SITO}/serate/${SERATA.slug}`;
   const body = screeningCalendar({
     uid: `serata-${SERATA.slug}-2026@cinemametropol.it`,
