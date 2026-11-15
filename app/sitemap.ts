@@ -14,6 +14,7 @@ const PAGINE = [
   '/prossimamente',
   '/venerdi',
   '/cinecompleanni',
+  '/serate/21-novembre',
   '/info',
   '/sala',
   '/accessibilita',
