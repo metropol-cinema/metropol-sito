@@ -1,6 +1,7 @@
 import { ArrowDown, Award, CalendarPlus, Clock, Instagram, MapPin, Ticket } from 'lucide-react';
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import { notFound } from 'next/navigation';
 
 import { Trailer } from '@/components/trailer';
 import { URL_SITO } from '@/lib/ambiente';
@@ -10,6 +11,7 @@ import {
   dataSerata,
   oraSerata,
   serataPassata,
+  serataPubblicata,
   type FilmSerata,
 } from '@/lib/serate';
 import { SITE } from '@/lib/site';
@@ -103,6 +105,7 @@ function SchedaFilm({ film }: { film: FilmSerata }) {
 }
 
 export default function Serata21NovembrePage() {
+  if (!serataPubblicata(SERATA)) notFound();
   const passata = serataPassata(SERATA);
   const url = `${URL_SITO}/serate/${SERATA.slug}`;
 

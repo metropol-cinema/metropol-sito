@@ -3,6 +3,7 @@ import type { MetadataRoute } from 'next';
 import { URL_SITO } from '@/lib/ambiente';
 import { fetchCorsi } from '@/lib/corsi-client';
 import { fetchProgrammazione } from '@/lib/programmazione-client';
+import { SERATA_21_NOVEMBRE, serataPubblicata } from '@/lib/serate';
 
 // Le schede film e corso cambiano col gestionale: rifatta ogni ora basta.
 export const revalidate = 3600;
@@ -14,7 +15,6 @@ const PAGINE = [
   '/prossimamente',
   '/venerdi',
   '/cinecompleanni',
-  '/serate/21-novembre',
   '/info',
   '/sala',
   '/accessibilita',
@@ -46,6 +46,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...PAGINE.map((pagina) => ({ url: `${URL_SITO}${pagina === '/' ? '' : pagina}` })),
+    // La serata entra nella mappa solo da quando è pubblicata.
+    ...(serataPubblicata(SERATA_21_NOVEMBRE)
+      ? [{ url: `${URL_SITO}/serate/${SERATA_21_NOVEMBRE.slug}` }]
+      : []),
     ...films.map((film) => ({ url: `${URL_SITO}/film/${film.id}` })),
     ...corsi.map((corso) => ({ url: `${URL_SITO}/corsi/${corso.slug}` })),
   ];
