@@ -2,6 +2,7 @@ import { Clock, MapPin, Ticket } from 'lucide-react';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
+import { FasciaSerata } from '@/components/fascia-serata';
 import { FilmRow } from '@/components/film-row';
 import { HeroCarousel } from '@/components/hero-carousel';
 import { HeroClosed } from '@/components/hero-closed';
@@ -19,6 +20,7 @@ import {
   splitWeekUpcoming,
   type PublicFilm,
 } from '@/lib/programmazione-client';
+import { SERATA_21_NOVEMBRE, serataPassata } from '@/lib/serate';
 import { BOX_OFFICE_NOTE, SITE } from '@/lib/site';
 import { fetchSlideshow, type SlideshowItem } from '@/lib/slideshow-client';
 import { formatEuro } from '@/lib/utils';
@@ -254,6 +256,9 @@ export default async function HomePage() {
           stanno già sopra gli orari di ogni film — e con proiezioni solo nel
           fine settimana mostrava quattro caselle spente su sette. */}
       <div className="h-px w-full marquee-rule" aria-hidden="true" />
+
+      {/* Serata speciale fuori da Cinebot: fino a fine giornata, poi sparisce. */}
+      {!serataPassata(SERATA_21_NOVEMBRE) && <FasciaSerata serata={SERATA_21_NOVEMBRE} />}
 
       {/* «Diventa socio» a campagna aperta. Non quando l'hero è `HeroClosed`,
           che il bottone lo porta già: due inviti uno sotto l'altro. */}
