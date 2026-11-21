@@ -20,7 +20,7 @@ import {
   splitWeekUpcoming,
   type PublicFilm,
 } from '@/lib/programmazione-client';
-import { SERATA_21_NOVEMBRE, serataInEvidenza } from '@/lib/serate';
+import { SERATE, serataInEvidenza } from '@/lib/serate';
 import { BOX_OFFICE_NOTE, SITE } from '@/lib/site';
 import { fetchSlideshow, type SlideshowItem } from '@/lib/slideshow-client';
 import { formatEuro } from '@/lib/utils';
@@ -258,7 +258,9 @@ export default async function HomePage() {
       <div className="h-px w-full marquee-rule" aria-hidden="true" />
 
       {/* Serata speciale fuori da Cinebot: dalla data di pubblicazione a fine serata. */}
-      {serataInEvidenza(SERATA_21_NOVEMBRE) && <FasciaSerata serata={SERATA_21_NOVEMBRE} />}
+      {SERATE.filter((serata) => serataInEvidenza(serata)).map((serata) => (
+        <FasciaSerata key={serata.slug} serata={serata} />
+      ))}
 
       {/* «Diventa socio» a campagna aperta. Non quando l'hero è `HeroClosed`,
           che il bottone lo porta già: due inviti uno sotto l'altro. */}
