@@ -1,0 +1,29 @@
+import { NextResponse } from 'next/server';
+
+import { URL_SITO } from '@/lib/ambiente';
+import { screeningCalendar } from '@/lib/calendario';
+import { SERATA_8_DICEMBRE as SERATA, serataPubblicata } from '@/lib/serate';
+import { SITE } from '@/lib/site';
+
+/** «Aggiungi al calendario» del concerto: tutto viene da `lib/serate.ts`, niente dall'indirizzo. */
+export function GET() {
+  if (!serataPubblicata(SERATA)) return new NextResponse('Non trovato', { status: 404 });
+  const url = `${URL_SITO}/serate/${SERATA.slug}`;
+  const body = screeningCalendar({
+    uid: `serata-${SERATA.slug}-2026@cinemametropol.it`,
+    title: `${SERATA.titolo}: ${SERATA.spettacolo} al ${SITE.name}`,
+    startsAt: SERATA.inizio,
+    durationMinutes: null,
+    location: `${SITE.venueName}, ${SITE.venueAddress}`,
+    description: `${SERATA.ingresso}.\n${url}`,
+    url,
+  });
+
+  return new NextResponse(body, {
+    headers: {
+      'content-type': 'text/calendar; charset=utf-8',
+      'content-disposition': 'inline; filename="metropol-8-dicembre.ics"',
+      'x-robots-tag': 'noindex',
+    },
+  });
+}
