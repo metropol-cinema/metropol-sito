@@ -180,7 +180,7 @@ export const SERATA_8_DICEMBRE: Concerto = {
     'Il giorno dell’Immacolata la sala del Metropol si accende di musica: il Movie Trio porta in concerto «Cinema Story», un viaggio nella storia del cinema raccontato dalle immagini e dalle colonne sonore che tutti abbiamo nelle orecchie.',
     'Chitarre, voce e tromba, da Charlie Chaplin a Ennio Morricone, passando per Hollywood, Fellini e i premi Oscar italiani.',
   ],
-  pubblicaDal: '2026-11-23T00:00:00+01:00',
+  pubblicaDal: '2026-11-22T00:00:00+01:00',
   inizio: '2026-12-08T18:00:00+01:00',
   fine: '2026-12-09T00:00:00+01:00',
   ingresso: 'Ingresso libero',

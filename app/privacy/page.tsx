@@ -352,6 +352,22 @@ export default function PrivacyPage() {
             tuo browser. Se cancelli i dati del sito sparisce anche la memoria
             della tua scelta, e te la richiederemo.
           </p>
+          {/* Gli altri domini (soci, sondaggi, noleggio, cassa) stanno nel
+              gestionale e hanno la loro pagina: solo cookie tecnici, niente
+              Analytics. Qui si rimanda e basta, perché le due liste non si
+              mescolino. L'indirizzo non sta in lib/site.ts apposta: quel file
+              diverge su preprod e ogni riga in più è un conflitto. */}
+          <p className="mt-4 text-sm leading-relaxed text-cinema-text-subtle">
+            L&apos;area soci, i sondaggi, i voti sui film e il noleggio usano solo
+            cookie tecnici, senza statistiche: li trovi elencati{' '}
+            <a
+              href="https://soci.cinemametropol.it/cookie"
+              className="underline underline-offset-2 hover:text-cinema-ticket-ink"
+            >
+              in questa pagina
+            </a>
+            .
+          </p>
         </section>
 
         <section aria-labelledby="fornitori">
