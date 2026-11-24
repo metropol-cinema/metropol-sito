@@ -330,9 +330,6 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
           />
         )}
 
-        {/* Sotto gli orari: chi è arrivato qui ha appena visto il giorno che gli
-            va bene, ed è il momento di dirgli che ci si può festeggiare. */}
-        <BannerCineCompleanno showtimes={film.showtimes} className="mt-10" />
       </section>
 
       {capoversi.length > 0 && (
@@ -373,6 +370,13 @@ export default async function FilmPage({ params }: { params: Promise<{ id: strin
           </div>
         </section>
       )}
+
+      {/* In fondo alla scheda, dopo la fotogallery (scelta di Mauro, 24 nov
+          2026): prima viene il film, poi la proposta di festeggiarci. Il
+          banner sparisce da solo se il film non è per bambini. */}
+      <div className="container">
+        <BannerCineCompleanno showtimes={film.showtimes} className="mb-12" />
+      </div>
 
       {/* Anche in fondo: la pagina è lunga, e chi ha finito di leggerla è qui. */}
       <p className="container pb-12">
